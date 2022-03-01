@@ -3,7 +3,6 @@ package com.example.example;
 import javafx.scene.paint.Color;
 
 public class Choice {
-    // nei men skjekker med discord strx, skjekk med folka dr
     Choice() {
 
     }

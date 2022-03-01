@@ -33,6 +33,7 @@ public class HelloApplication extends Application {
         choiceBox.createChoices(20, "There is a dragon in front of you what do you do", Color.GREEN);
         choiceBox.addOptionPrevious(522, 20, 2, "slay it", Color.GREEN,0);
         choiceBox.addOption(5425, 20, "seduce the dragon", Color.GREEN, 0);
+         */
 
         launch();
     }

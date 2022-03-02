@@ -7,12 +7,12 @@ public class Choice {
 
     }
 
-    public void createChoices(int id, String content, Color color) {
-        System.out.println("createChoices works!");
+    public void createDialog(int id, String content, Color color) {
+        System.out.println(content);
     }
 
     public void addOption(int id, int boxId, String content, Color color, int nextScene) {
-        System.out.println("addOption works!");
+        System.out.println(id + boxId + content + nextScene);
     }
 
     public void addOptionPrevious(int id, int boxId, int pChoiceId, String content, Color color, int nextScene) {

@@ -6,15 +6,27 @@ public class CharCreator {
 
     }
 
-    public void create(String name) {
+    public void addNameOption (String name) {
 
     }
 
-    public void addStat(String name, int minValue, int maxValue, int numberOfDice, int diceType) {
+    public void addStat (String statName, int minValue, int maxValue) {
 
     }
 
-    public void addAttribute(String name, int minValue, int maxValue, int startingValue) {
+    public  void setStat (String statName, int value) {
+
+    }
+
+    public void setStatGenerationDice (String statName, int numOfDice, int diceSides) {
+
+    }
+
+    public void setStatGenerationManual (String statName) {
+
+    }
+
+    public void addAttribute(String name, int startingValue) {
 
     }
 }

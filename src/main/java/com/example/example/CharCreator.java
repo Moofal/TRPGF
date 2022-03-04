@@ -10,7 +10,7 @@ public class CharCreator {
 
     }
 
-    public void addNameOption (String name) {
+    public void addNameOption () {
         /**
          * Lar spilleren velge et navn til karakteren sin.
          */

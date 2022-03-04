@@ -22,7 +22,7 @@ public class Screen {
 
     public void tableScreen () {
         /**
-         *
+         * Lager skjermen der spillet blir spilt.
          */
 
     }

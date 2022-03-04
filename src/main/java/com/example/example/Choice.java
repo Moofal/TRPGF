@@ -3,6 +3,7 @@ package com.example.example;
 import javafx.scene.paint.Color;
 
 public class Choice {
+
     Choice() {
 
     }

@@ -1,9 +1,8 @@
 package com.example.example;
-
+import com.example.example.dialog.Dialog;
+import com.example.example.dialog.DialogWrapper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -22,19 +21,20 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
 
+        Dialog dialog = new Dialog();
+        DialogWrapper dialogWrapper = new DialogWrapper();
+        dialog.addOption(1, 1, "Something", Color.RED, 1);
+        dialogWrapper.createDialog(1, "Content", Color.AQUA);
+        dialogWrapper.createDialog(2, "Content2", Color.AQUA);
+
+        System.out.println(dialogWrapper.getDialogChoiceList());
+
+        //dialogBox.addOptionStatCheck(3, 1, "let me drink 100 beers", Color.GREEN, 200, "Strength", 15);
+        //dialogBox.createChoices(20, "There is a dragon in front of you what do you do", Color.GREEN);
+        //dialogBox.addOptionPrevious(522, 20, 2, "slay it", Color.GREEN,0);
+        //dialogBox.addOption(5425, 20, "seduce the dragon", Color.GREEN, 0);
 
 
-        /*
-        Choice choiceBox = new Choice();
-        choiceBox.createChoices(1, "Would u like a room", Color.GREEN);
-        choiceBox.addOption(1, 1, "Innkeeper blah blah", Color.GREEN, 3);
-        choiceBox.addOption(2, 1, "yes 50 please", Color.GREEN, 4);
-        choiceBox.addOptionStatCheck(3, 1, "let me drink 100 beers", Color.GREEN, 200, "Strength", 15); // var for å vise fram
-        choiceBox.createChoices(20, "There is a dragon in front of you what do you do", Color.GREEN);
-        choiceBox.addOptionPrevious(522, 20, 2, "slay it", Color.GREEN,0);
-        choiceBox.addOption(5425, 20, "seduce the dragon", Color.GREEN, 0);
-         */
-
-        launch();
+        //launch();
     }
 }

@@ -6,7 +6,7 @@ public class CharCreator {
      * Denne klassen lar deg bestemme hva som kommer til å være på character creation screenen.
      */
 
-    CharCreator() {
+    public CharCreator() {
 
     }
 

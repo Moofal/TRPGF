@@ -1,5 +1,17 @@
 package com.example.example;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Objects;
 
 
 public class Screen {
@@ -7,24 +19,57 @@ public class Screen {
      * Denne klassen blir brukt til å lage GUI som spilleren kommer til å bruke.
      */
 
-    Screen() {
+    public Screen() {
 
     }
 
-    public void startingScreen (String gameTitle, String startingText) {
+    private Stage stage;
+    private Scene scene, scene2, scene1;
+    private Parent root;
+
+    public Scene test(Stage window) {
+        Label label = new Label("Scene 1");
+        Button button = new Button();
+        button.setText("Chage to 2");
+        button.setOnAction(e -> window.setScene(scene2));
+
+        AnchorPane layout = new AnchorPane();
+        layout.getChildren().addAll(label, button);
+
+        scene1 = new Scene(layout, 400 , 300);
+
+        return scene1;
+    }
+
+    public void startingScreen (Stage setStage, String gameTitle, String startingText) throws IOException {
         /**
          * Dette er den første skjermen som spilleren kommer til å se.
          * @param gameTitle er navnet på spillet.
          * @param startingText er intro teksten som bli vist fram til spilleren.
          */
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("StartingScreen.fxml")));
+        stage = setStage;
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
 
     }
 
-    public void tableScreen () {
+    public Scene tableScreen(Stage window) {
         /**
          * Lager skjermen der spillet blir spilt.
          */
+        Label label = new Label("Scene 1");
+        Button button = new Button();
+        button.setText("Chage to 1");
+        button.setOnAction(e -> window.setScene(scene1));
 
+        AnchorPane layout = new AnchorPane();
+        layout.getChildren().addAll(label, button);
+
+        scene2 = new Scene(layout, 400 , 300);
+
+        return scene2;
     }
 
     public void characterScreen (String displayedText) {

@@ -1,0 +1,88 @@
+{
+  "dialog":[
+    {
+      "id": "1",
+      "content": "Content 1",
+      "options": [
+        {
+          "id": "1",
+          "content": "Content 1, dialog 2",
+          "next": "2"
+        },
+        {
+          "id": "2",
+          "content": "Content 1, dialog 3",
+          "next": "3"
+        },
+        {
+          "id": "3",
+          "content": "Content 1, dialog 4",
+          "next": "4"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "content": "Content 2",
+      "options": [
+        {
+          "id": "1",
+          "content": "Content 2, dialog 1",
+          "next": "1"
+        },
+        {
+          "id": "2",
+          "content": "Content 2, dialog 3",
+          "next": "3"
+        },
+        {
+          "id": "3",
+          "content": "Content 2, dialog 4",
+          "next": "4"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "content": "Content 3",
+      "options": [
+        {
+          "id": "1",
+          "content": "Content 3, dialog 1",
+          "next": "1"
+        },
+        {
+          "id": "2",
+          "content": "Content 3, dialog 2",
+          "next": "2"
+        },
+        {
+          "id": "3",
+          "content": "Content 3, dialog 4",
+          "next": "4"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "content": "Content 4",
+      "options": [
+        {
+          "id": "1",
+          "content": "Content 4, dialog 1",
+          "next": "1"
+        },
+        {
+          "id": "2",
+          "content": "Content 4, dialog 2",
+          "next": "2"
+        },
+        {
+          "id": "3",
+          "content": "Content 4, dialog 3",
+          "next": "3"
+        }
+      ]
+    }
+  ]
+}

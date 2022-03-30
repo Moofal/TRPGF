@@ -9,12 +9,10 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        javafx.scene.Scene scene = new javafx.scene.Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
-
-        stage.setScene(scene);
-        stage.show();
+        Screen screen = new Screen();
+        screen.startingScreen(stage,"Lord of the rings", "One ring to bind them and rule them all");
+        screen.tableScreen(stage);
+        screen.characterScreen("Make your character!");
     }
 
     public static void main(String[] args) {
@@ -35,6 +33,6 @@ public class HelloApplication extends Application {
 
         System.out.println(dialog.getDialogArrayList());
 
-        //launch();
+        launch();
     }
 }

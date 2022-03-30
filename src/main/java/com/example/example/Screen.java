@@ -89,8 +89,8 @@ public class Screen {
         verticalLine.setEndY(720.0f);
 
 
-        currentDialog = getDialog("1");
-        String dialogString = currentDialog.getString("content");
+        currentDialog = getDialog(1);
+        String dialogString = currentDialog.getString("CONTENT");
 
         Text dialog = new Text(dialogString);
         dialog.setWrappingWidth(625);
@@ -109,34 +109,41 @@ public class Screen {
         dialogHistory.setPrefSize(640,360);
 
 
-        currentOptions = currentDialog.getJSONArray("options");
+        currentOptions = currentDialog.getJSONArray("dialogChoiceList");
 
-        Text options = new Text();
-        options.setText(formatOptions(currentOptions));
-        options.relocate(30,400);
-        options.setFont(Font.font(20));
-
-
+        VBox vBox = new VBox();
+        vBox.relocate(30,390);
+        double optionY = 390;
+        for (int i = 0; i < currentOptions.length(); i++) {
+            optionY += 20;
+            String text = currentOptions.getJSONObject(i).getString("CONTENT");
+            vBox.getChildren().add(addOption(text, i+1, 30, optionY));
+        }
 
         TextField choice = new TextField();
         choice.setOnAction(e -> {
             try {
-                choseOption(choice, dialog, options, currentOptions);
+                choseOption(layout, vBox, choice, dialog, currentOptions);
+                double Y = 390;
+                for (int i = 0; i < currentOptions.length(); i++) {
+                    Y += 20;
+                    String text = currentOptions.getJSONObject(i).getString("CONTENT");
+                    vBox.getChildren().add(addOption(text, i+1, 30, Y));
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
         choice.relocate(10,640);
-
-        layout.getChildren().addAll(horizontalLine, verticalLine, dialogHistory, dialogScrollPane,
-                options, choice);
+        layout.getChildren().addAll(horizontalLine, verticalLine, dialogHistory,
+                dialogScrollPane, choice, vBox);
         tableScreen = new Scene(layout, 1280, 720);
     }
 
-    private JSONObject getDialog(String dialogID) throws IOException {
-        int index = Integer.parseInt(dialogID)-1;
+    private JSONObject getDialog(int dialogID) throws IOException {
+        int index = dialogID-1;
 
-        Path file = Path.of("src/main/java/com/example/example/dialog.json");
+        Path file = Path.of("src/story.json");
         String input = Files.readString(file);
 
         JSONArray array = new JSONArray(input);
@@ -144,32 +151,32 @@ public class Screen {
         return array.getJSONObject(index);
     }
 
-    private void choseOption(TextField choice, Text dialog, Text options, JSONArray currentOptionsJSON) throws IOException {
+    private void choseOption(Pane layout, VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON) throws IOException {
         String chosenOption = choice.getText().replaceAll("[^1-3]", "");
         choice.setText("");
 
         int index = Integer.parseInt(chosenOption);
-        String nextDialogID = currentOptionsJSON.getJSONObject(index-1).getString("next");
+        int nextDialogID = currentOptionsJSON.getJSONObject(index-1).getInt("NEXT-SCENE");
         currentDialog = getDialog(nextDialogID);
 
         JSONObject nextDialogJSON = getDialog(nextDialogID);
-        String dialogString = nextDialogJSON.getString("content");
+        String dialogString = nextDialogJSON.getString("CONTENT");
         dialog.setText(dialogString);
 
-        JSONArray nextOptions = nextDialogJSON.getJSONArray("options");
-        currentOptions = currentDialog.getJSONArray("options");
-        options.setText(formatOptions(nextOptions));
+        JSONArray nextOptions = nextDialogJSON.getJSONArray("dialogChoiceList");
+        currentOptions = currentDialog.getJSONArray("dialogChoiceList");
+        vBox.getChildren().clear();
 
     }
 
-    private String formatOptions(JSONArray currentOptions) {
-        String option1 = currentOptions.getJSONObject(0).getString("content");
-        String option2 = currentOptions.getJSONObject(1).getString("content");
-        String option3 = currentOptions.getJSONObject(2).getString("content");
+    private Text addOption(String text, int optionNr, double relocateX, double relocateY) {
+        Text options = new Text();
+        options.setId("option");
+        options.setText(optionNr + text);
+        options.relocate(relocateX,relocateY);
+        options.setFont(Font.font(20));
 
-        return "1. " + option1 + "\n" +
-                "2. " + option2 + "\n" +
-                "3. " + option3;
+        return options;
     }
 
     /**

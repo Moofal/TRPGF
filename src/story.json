@@ -1,19 +1,19 @@
 [ {
   "ID" : 1,
-  "CONTENT" : "Content",
+  "CONTENT" : "Content 1",
   "dialogChoiceList" : [ {
     "type" : "Choice",
     "ID" : 1,
-    "CONTENT" : "Something",
+    "CONTENT" : "Something 1",
     "BOXID" : 1,
-    "NEXT-SCENE" : 1,
+    "NEXT-SCENE" : 2,
     "PREV-CHOICE" : 0,
     "STAT" : null,
     "STAT-VAL" : 0
   }, {
     "type" : "Choice",
     "ID" : 2,
-    "CONTENT" : "Something",
+    "CONTENT" : "Something 2",
     "BOXID" : 1,
     "NEXT-SCENE" : 1,
     "PREV-CHOICE" : 0,
@@ -22,7 +22,7 @@
   }, {
     "type" : "Choice",
     "ID" : 3,
-    "CONTENT" : "Something",
+    "CONTENT" : "Something 3",
     "BOXID" : 1,
     "NEXT-SCENE" : 1,
     "PREV-CHOICE" : 0,
@@ -31,7 +31,7 @@
   } ]
 }, {
   "ID" : 2,
-  "CONTENT" : "Content2",
+  "CONTENT" : "Content 2",
   "dialogChoiceList" : [ {
     "type" : "Choice",
     "ID" : 1,

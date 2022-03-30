@@ -1,14 +1,28 @@
-package com.example.example.dialog;
+package com.example.example;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * Denne klassen skal håndtere alt som har med dialog og de textbaserte valgene du kan velge.
  */
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Choice.class, name = "Choice"),
+        @JsonSubTypes.Type(value = Dialog.class, name = "Dialog")
+})
+@JsonPropertyOrder({"ID", "CONTENT", "CHOICES"})
 public class Dialog {
 
-    private ArrayList<Choice> dialogChoiceList = new ArrayList<>();
-    private ArrayList<Dialog> dialogArrayList = new ArrayList<>();
+    public ArrayList<Choice> dialogChoiceList = new ArrayList<>();
+    public ArrayList<Dialog> dialogArrayList = new ArrayList<>();
 
     private int id;
     private String content;
@@ -97,10 +111,12 @@ public class Dialog {
         dialog.dialogChoiceList.add(choice);
     }
 
-    public Dialog getDialogById(int boxId) {
+    @JsonIgnore
+    private Dialog getDialogById(int boxId) {
         return getDialogArrayList().get(boxId - 1);
     }
 
+    @JsonIgnore
     private boolean dialogSizeCheck(Dialog dialog) {
         if ( dialog.dialogChoiceList.size() >= 3) {
             System.out.println("A Dialog cannot have more than 3 options");
@@ -109,6 +125,7 @@ public class Dialog {
         return false;
     }
 
+    @JsonIgnore
     private boolean choiceIdCheck(int id, Dialog dialog) {
         for (Choice choice1 : dialog.dialogChoiceList) {
             if (choice1.getId() == id) {
@@ -119,8 +136,16 @@ public class Dialog {
         return false;
     }
 
+    public void finishStory() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String filePath = "src/story.json";
+        objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(filePath), getDialogArrayList());
+
+    }
+
     //-----------------------------------Getters and Setters-----------------------------------//
 
+    @JsonProperty("ID")
     public int getId() {
         return id;
     }
@@ -129,6 +154,7 @@ public class Dialog {
         this.id = id;
     }
 
+    @JsonProperty("CONTENT")
     public String getContent() {
         return content;
     }
@@ -145,6 +171,7 @@ public class Dialog {
         this.dialogChoiceList = dialogChoiceList;
     }
 
+    @JsonIgnore
     public ArrayList<Dialog> getDialogArrayList() {
         return new ArrayList<>(dialogArrayList);
     }

@@ -1,5 +1,12 @@
-package com.example.example.dialog;
-public class Choice extends Dialog{
+package com.example.example;
+
+import com.example.example.Dialog;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
+
+public class Choice extends Dialog {
 
     /**
      * Denne klassen har choice konstruktøren som trengs til Dialog, og den Extender Dialog.
@@ -10,7 +17,6 @@ public class Choice extends Dialog{
     private int pChoiceId;
     private String stat;
     private int statVal;
-    private int value;
 
     Choice() {
     }
@@ -38,6 +44,7 @@ public class Choice extends Dialog{
 
 //-----------------------------------Getters and Setters-----------------------------------//
 
+    @JsonProperty("BOXID")
     public int getBoxId() {
         return boxId;
     }
@@ -46,12 +53,45 @@ public class Choice extends Dialog{
         this.boxId = boxId;
     }
 
+    @JsonProperty("NEXT-SCENE")
     public int getNextScene() {
         return nextScene;
     }
 
     public void setNextScene(int nextScene) {
         this.nextScene = nextScene;
+    }
+
+    @JsonProperty("PREV-CHOICE")
+    public int getpChoiceId() {
+        return pChoiceId;
+    }
+
+    public void setpChoiceId(int pChoiceId) {
+        this.pChoiceId = pChoiceId;
+    }
+
+    @JsonProperty("STAT")
+    public String getStat() {
+        return stat;
+    }
+
+    public void setStat(String stat) {
+        this.stat = stat;
+    }
+
+    @JsonProperty("STAT-VAL")
+    public int getStatVal() {
+        return statVal;
+    }
+
+    public void setStatVal(int statVal) {
+        this.statVal = statVal;
+    }
+
+    @JsonIgnore @Override
+    public ArrayList<Choice> getDialogChoiceList() {
+        return super.getDialogChoiceList();
     }
 
     //-----------------------------------To String-----------------------------------//
@@ -65,7 +105,6 @@ public class Choice extends Dialog{
                 ", content=" + super.getContent() +
                 ", stat='" + stat + '\'' +
                 ", statVal=" + statVal +
-                ", value=" + value +
                 ", pChoiceId=" + pChoiceId +
                 ", nextScene=" + nextScene +
                 '}';

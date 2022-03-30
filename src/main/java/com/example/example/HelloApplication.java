@@ -1,8 +1,8 @@
 package com.example.example;
-import com.example.example.dialog.Dialog;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 
 public class HelloApplication extends Application {
@@ -15,7 +15,7 @@ public class HelloApplication extends Application {
         screen.characterScreen("Make your character!");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Dialog dialog = new Dialog();
 
@@ -32,6 +32,8 @@ public class HelloApplication extends Application {
         dialog.addOptionReward(5425, 3, "seduce the dragon", 0, "Strength", 1);
 
         System.out.println(dialog.getDialogArrayList());
+
+        dialog.finishStory();
 
         launch();
     }

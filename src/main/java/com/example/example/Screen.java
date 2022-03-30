@@ -1,4 +1,5 @@
 package com.example.example;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,12 +39,13 @@ public class Screen {
         return scene1;
     }
 
-    public void startingScreen (Stage setStage, String gameTitle, String startingText) throws IOException {
+    public void startingScreen (Stage setStage, String gameTitle, String startingText) {
         /**
          * Dette er den første skjermen som spilleren kommer til å se.
          * @param gameTitle er navnet på spillet.
          * @param startingText er intro teksten som bli vist fram til spilleren.
          */
+
 
 
     }

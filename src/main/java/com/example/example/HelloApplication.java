@@ -16,7 +16,9 @@ public class HelloApplication extends Application {
         Screen screen = new Screen();
         //screen.startingScreen(stage,"Game title", "ello there");
         stage.setTitle("title");
-        stage.setScene(screen.test());
+        Scene scene1 = screen.test(stage);
+        Scene scene2 = screen.tableScreen(stage);
+        stage.setScene(scene1);
         stage.show();
     }
 

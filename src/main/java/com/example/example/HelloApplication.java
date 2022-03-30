@@ -10,9 +10,10 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Screen screen = new Screen();
-        screen.startingScreen(stage,"Lord of the rings", "One ring to bind them and rule them all");
+        screen.startingScreen(stage, "Lord of the rings", "One ring to bind them and rule them all");
         screen.tableScreen(stage);
-        screen.characterScreen("Make your character!");
+        screen.characterScreen(stage, "Make your character!");
+        screen.endingScreen(stage,1,"The end", true, true);
     }
 
     public static void main(String[] args) throws IOException {

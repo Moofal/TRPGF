@@ -1,5 +1,7 @@
 package com.example.example;
 
+
+
 public class CharCreator {
 
     /**
@@ -14,6 +16,7 @@ public class CharCreator {
      * Lar spilleren velge et navn til karakteren sin.
      */
     public void addNameOption () {
+
     }
 
     /**
@@ -42,6 +45,7 @@ public class CharCreator {
      * @param diceSides er hovr mange sider som terningene skal ha.
      */
     public void setStatGenerationDice (String statName, int numOfDice, int diceSides) {
+
     }
 
     /**
@@ -49,6 +53,7 @@ public class CharCreator {
      * @param statName er hvilken stat dette gjelller.
      */
     public void setStatGenerationManual (String statName) {
+
     }
 
     /**
@@ -58,5 +63,6 @@ public class CharCreator {
      * @param startingValue verdier som atributten starter som.
      */
     public void addAttribute(String attributeName, int startingValue) {
+
     }
 }

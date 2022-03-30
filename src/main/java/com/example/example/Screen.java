@@ -32,7 +32,7 @@ public class Screen {
 
     }
 
-    private Scene startingScreen, tableScreen, characterCreatorScreen;
+    private Scene startingScreen, tableScreen, characterCreatorScreen, endingScreen;
 
     private JSONObject currentDialog;
     private JSONArray currentOptions;
@@ -60,7 +60,7 @@ public class Screen {
 
         Button nextScreenButton = new Button("Next");
         nextScreenButton.relocate(630, 200);
-        nextScreenButton.setOnAction(e -> window.setScene(characterCreatorScreen));
+        nextScreenButton.setOnAction(e -> window.setScene(tableScreen));
 
 
         layout.getChildren().addAll(title,text, nextScreenButton);
@@ -139,9 +139,7 @@ public class Screen {
         Path file = Path.of("src/main/java/com/example/example/dialog.json");
         String input = Files.readString(file);
 
-        JSONObject obj = new JSONObject(input);
-
-        JSONArray array = obj.getJSONArray("dialog");
+        JSONArray array = new JSONArray(input);
 
         return array.getJSONObject(index);
     }
@@ -178,7 +176,7 @@ public class Screen {
      * Denne skjermen lar deg lage en character creation screen.
      * @param displayedText er text som viser på denne skjermen,
      */
-    public void characterScreen (String displayedText) {
+    public void characterScreen(Stage window, String displayedText) {
         Pane characterCreationPane = new Pane();
 
         Label displayedTextLabel = new Label(displayedText);
@@ -187,31 +185,74 @@ public class Screen {
         displayedTextLabel.setWrapText(true);
         displayedTextLabel.relocate(500, 50);
 
-        Label statLabel = new Label();
-        statLabel.setText("sdf");
-        statLabel.setFont(Font.font("Arial", 15));
-        statLabel.relocate(104,83);
+        double x = 100,y = 100;
+        for (int i = 0; i < 6; i++) {
+            x+=50;
+            createStats(characterCreationPane, "Stat", x, y);
+        }
 
-        TextField stat1 = new TextField();
-        stat1.setPrefColumnCount(2);
-        stat1.relocate(100, 100);
+        TextField name = new TextField();
+        name.relocate(300,300);
+        if (true) {
+            characterCreationPane.getChildren().add(name);
+        }
 
-        characterCreationPane.getChildren().addAll(displayedTextLabel, stat1);
-        characterCreationPane.getChildren().add(statLabel);
+        Button doneButton = new Button("Done");
+        doneButton.relocate(630, 200);
+        doneButton.setOnAction(e -> window.setScene(tableScreen));
+
+        characterCreationPane.getChildren().addAll(displayedTextLabel);
+
         characterCreatorScreen = new Scene(characterCreationPane, 1280, 720);
+    }
+
+    private void createStats(Pane characterPane, String statName, double relocateX, double relocateY) {
+        Label statLabel = new Label();
+        statLabel.setText(statName);
+        statLabel.setFont(Font.font("Arial", 15));
+        statLabel.relocate(relocateX+4,relocateY-17);
+
+        TextField stat = new TextField();
+        stat.setPrefColumnCount(2);
+        stat.relocate(relocateX, relocateY);
+
+        characterPane.getChildren().add(statLabel);
+        characterPane.getChildren().add(stat);
     }
 
     /**
      * Dette er slutskjermen til spillet, du kan ha flere forskjellige slutskjermer.
      * @param endingScreenId er verdien som lar deg velge å bruke denne bestemte slutskjermen.
      * @param sceneText er teksten som blir vist fram på denne skjermen.
-     * @param textColor er fargen som teksten i sceneText kommer til å ha.
      * @param startOver er en boolean verdi der true betyr at starting over knappen blir vist,
      *                  den knappen lar spiller såarte spillet på nytt.
      * @param exit er en boolean verdi der true betyr at exit knappen blir vist,
      *             den knappen avslutter spillet og lukker det.
      */
-    public void endingScreen (int endingScreenId, String sceneText, Color textColor, boolean startOver, boolean exit) {
+    public void endingScreen(Stage window, int endingScreenId, String sceneText, boolean startOver, boolean exit) {
+        Pane endingPane = new Pane();
 
+        Text endingText = new Text(sceneText);
+        endingText.setFont(Font.font("Arial", 20));
+        endingText.relocate(500,100);
+        endingPane.getChildren().add(endingText);
+
+        Button startOverButton = new Button("Start Over");
+        startOverButton.relocate(300, 200);
+        startOverButton.setOnAction(e -> window.setScene(startingScreen));
+
+        if (startOver) {
+            endingPane.getChildren().add(startOverButton);
+        }
+
+        Button exitButton = new Button("Exit");
+        exitButton.relocate(600, 200);
+        exitButton.setOnAction(e -> window.close());
+
+        if (exit) {
+            endingPane.getChildren().add(exitButton);
+        }
+
+        endingScreen = new Scene(endingPane, 1280, 720);
     }
 }

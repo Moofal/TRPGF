@@ -34,6 +34,15 @@ public class HelloApplication extends Application {
 
         dialog.finishStory();
 
+        CharCreator charCreator = new CharCreator();
+
+        charCreator.addNameOption();
+        charCreator.addStat("Wisdom",0,20);
+        charCreator.setStatGenerationManual("Wisdom");
+        charCreator.addStat("Con",0,20);
+        charCreator.setStatGenerationDice("Con", 4,6);
+        charCreator.finishCharacter();
+
         launch();
     }
 }

@@ -60,7 +60,7 @@ public class Screen {
 
         Button nextScreenButton = new Button("Next");
         nextScreenButton.relocate(630, 200);
-        nextScreenButton.setOnAction(e -> window.setScene(tableScreen));
+        nextScreenButton.setOnAction(e -> window.setScene(characterCreatorScreen));
 
 
         layout.getChildren().addAll(title,text, nextScreenButton);

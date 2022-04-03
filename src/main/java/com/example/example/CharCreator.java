@@ -1,22 +1,101 @@
 package com.example.example;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+
+/**
+ * Denne klassen lar deg bestemme hva som kommer til å være på character creation screenen.
+ */
 public class CharCreator {
-
-    /**
-     * Denne klassen lar deg bestemme hva som kommer til å være på character creation screenen.
-     */
 
     public CharCreator() {
 
     }
 
+    private static class Stat {
+        String name;
+        String generationType;
+        int value;
+        int minValue;
+        int maxValue;
+
+        public Stat(String name, int minValue, int maxValue) {
+            this.name = name;
+            this.minValue = minValue;
+            this.maxValue = maxValue;
+        }
+
+        public void setGenerationType(String generationType) {
+            this.generationType = generationType;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
+        }
+
+        public int getMinValue() {
+            return minValue;
+        }
+
+        public int getMaxValue() {
+            return maxValue;
+        }
+    }
+
+    private static class Character {
+        String name;
+        boolean nameOption;
+        ArrayList <Stat> stats = new ArrayList<>();
+        HashMap<String, Integer> attributes = new HashMap<>();
+
+        public Character() {
+            this.nameOption = false;
+        }
+
+        public void setNameOption(boolean nameOption) {
+            this.nameOption = nameOption;
+        }
+
+        public void addStat (Stat stat) {
+            stats.add(stat);
+        }
+
+        public void addAttribute(String attributeName, Integer startingValue) {
+            attributes.put(attributeName, startingValue);
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public ArrayList<Stat> getStats() {
+            return stats;
+        }
+
+        public HashMap<String, Integer> getAttributes() {
+            return attributes;
+        }
+    }
+
+    Character character = new Character();
+
     /**
      * Lar spilleren velge et navn til karakteren sin.
      */
     public void addNameOption () {
+        character.setNameOption(true);
+    }
 
+    public void setName (String name) {
+        character.setName(name);
     }
 
     /**
@@ -26,7 +105,7 @@ public class CharCreator {
      * @param maxValue er den største verdien staten kan ha.
      */
     public void addStat (String statName, int minValue, int maxValue) {
-
+        character.addStat(new Stat(statName, minValue, maxValue));
     }
 
     /**
@@ -35,7 +114,11 @@ public class CharCreator {
      * @param value er verdien du setter staten til.
      */
     public  void setStat (String statName, int value) {
-
+        for (Stat stat: character.getStats()) {
+            if (Objects.equals(stat.name, statName)) {
+                stat.setValue(value);
+            }
+        }
     }
 
     /**
@@ -45,7 +128,11 @@ public class CharCreator {
      * @param diceSides er hovr mange sider som terningene skal ha.
      */
     public void setStatGenerationDice (String statName, int numOfDice, int diceSides) {
-
+        for (Stat stat: character.getStats()) {
+            if (Objects.equals(stat.name, statName)) {
+                stat.setGenerationType(numOfDice+"d"+diceSides);
+            }
+        }
     }
 
     /**
@@ -53,7 +140,11 @@ public class CharCreator {
      * @param statName er hvilken stat dette gjelller.
      */
     public void setStatGenerationManual (String statName) {
-
+        for (Stat stat: character.getStats()) {
+            if (Objects.equals(stat.name, statName)) {
+                stat.setGenerationType("Manual");
+            }
+        }
     }
 
     /**
@@ -63,6 +154,29 @@ public class CharCreator {
      * @param startingValue verdier som atributten starter som.
      */
     public void addAttribute(String attributeName, int startingValue) {
+        character.addAttribute(attributeName, startingValue);
+    }
+
+    public void finishCharacter() throws IOException {
+        FileWriter charCreationSettingsFile = new FileWriter("src/CharCreatSettings.json");
+        JSONObject options = new JSONObject();
+
+        options.put("Name Option", character.nameOption);
+
+        JSONArray stats = new JSONArray();
+        for (Stat stat: character.getStats()) {
+            JSONObject jsonStat = new JSONObject();
+            jsonStat.put("Max Value",stat.getMaxValue());
+            jsonStat.put("Min Value",stat.getMinValue());
+            jsonStat.put("Generation Type", stat.generationType);
+            jsonStat.put("Value", stat.value);
+            jsonStat.put("Name", stat.name);
+            stats.put(jsonStat);
+        }
+        options.put("Stats", stats);
+
+        charCreationSettingsFile.write(options.toString());
+        charCreationSettingsFile.close();
 
     }
 }

@@ -1,15 +1,12 @@
 package com.example.example;
 
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -18,9 +15,11 @@ import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 
 /**
@@ -33,7 +32,7 @@ public class Screen {
     }
 
     private Scene startingScreen, tableScreen, characterCreatorScreen, endingScreen;
-
+    VBox characterStatInfo = new VBox();
     private JSONObject currentDialog;
     private JSONArray currentOptions;
 
@@ -111,33 +110,37 @@ public class Screen {
 
         currentOptions = currentDialog.getJSONArray("dialogChoiceList");
 
-        VBox vBox = new VBox();
-        vBox.relocate(30,390);
+        VBox optionsVBox = new VBox();
+        optionsVBox.relocate(30,390);
+        setCurrentOptions(optionsVBox);
+
+        TextField choice = new TextField();
+        choice.setOnAction(e -> {
+            try {
+                choseOption(layout, optionsVBox, choice, dialog, currentOptions);
+                setCurrentOptions(optionsVBox);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+        choice.relocate(10,640);
+
+
+        characterStatInfo.relocate(700,500);
+        displayCharacterStats(characterStatInfo);
+
+        layout.getChildren().addAll(horizontalLine, verticalLine, dialogHistory,
+                dialogScrollPane, choice, optionsVBox, characterStatInfo);
+        tableScreen = new Scene(layout, 1280, 720);
+    }
+
+    private void setCurrentOptions(VBox vBox) {
         double optionY = 390;
         for (int i = 0; i < currentOptions.length(); i++) {
             optionY += 20;
             String text = currentOptions.getJSONObject(i).getString("CONTENT");
             vBox.getChildren().add(addOption(text, i+1, 30, optionY));
         }
-
-        TextField choice = new TextField();
-        choice.setOnAction(e -> {
-            try {
-                choseOption(layout, vBox, choice, dialog, currentOptions);
-                double Y = 390;
-                for (int i = 0; i < currentOptions.length(); i++) {
-                    Y += 20;
-                    String text = currentOptions.getJSONObject(i).getString("CONTENT");
-                    vBox.getChildren().add(addOption(text, i+1, 30, Y));
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
-        choice.relocate(10,640);
-        layout.getChildren().addAll(horizontalLine, verticalLine, dialogHistory,
-                dialogScrollPane, choice, vBox);
-        tableScreen = new Scene(layout, 1280, 720);
     }
 
     private JSONObject getDialog(int dialogID) throws IOException {
@@ -149,6 +152,32 @@ public class Screen {
         JSONArray array = new JSONArray(input);
 
         return array.getJSONObject(index);
+    }
+
+    private JSONObject getCharacterInfo() {
+        try {
+            Path characterPath = Path.of("src/Character.json");
+            String input = Files.readString(characterPath);
+            return new JSONObject(input);
+        } catch (IOException e) {
+            System.out.println(e+"\n Could not find Character.json file");
+        }
+        return null;
+    }
+
+    private void displayCharacterStats(VBox characterStatInfo) {
+        characterStatInfo.getChildren().clear();
+        JSONObject character = getCharacterInfo();
+        assert character != null;
+        JSONArray stats = character.getJSONArray("Stats");
+
+        for (int i=0; i<stats.length(); i++) {
+            JSONObject stat = stats.getJSONObject(i);
+            String info =stat.getString("Name")+" "+stat.getInt("Value");
+            Text statText = new Text();
+            statText.setText(info);
+            characterStatInfo.getChildren().add(statText);
+        }
     }
 
     private void choseOption(Pane layout, VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON) throws IOException {
@@ -183,7 +212,7 @@ public class Screen {
      * Denne skjermen lar deg lage en character creation screen.
      * @param displayedText er text som viser på denne skjermen,
      */
-    public void characterScreen(Stage window, String displayedText) {
+    public void characterScreen(Stage window, String displayedText) throws IOException {
         Pane characterCreationPane = new Pane();
 
         Label displayedTextLabel = new Label(displayedText);
@@ -192,28 +221,68 @@ public class Screen {
         displayedTextLabel.setWrapText(true);
         displayedTextLabel.relocate(500, 50);
 
+        Path characterFile = Path.of("src/Character.json");
+        String characterInput = Files.readString(characterFile);
+        JSONObject character = new JSONObject(characterInput);
+
+        Path settingsFile = Path.of("src/CharCreatSettings.json");
+        String settingsInput = Files.readString(settingsFile);
+        JSONObject settings = new JSONObject(settingsInput);
+
+        JSONArray arrayOfStats = settings.getJSONArray("Stats");
+
         double x = 100,y = 100;
-        for (int i = 0; i < 6; i++) {
-            x+=50;
-            createStats(characterCreationPane, "Stat", x, y);
+        ArrayList<TextField> storedArray = new ArrayList<>();
+        for (int i = 0; i < arrayOfStats.length(); i++) {
+            x+=60;
+            JSONObject statObject = arrayOfStats.getJSONObject(i);
+            String statName = statObject.getString("Name");
+            createStatTextField(characterCreationPane, statName, x, y, storedArray);
         }
 
         TextField name = new TextField();
         name.relocate(300,300);
-        if (true) {
+        if (settings.getBoolean("Name Option")) {
             characterCreationPane.getChildren().add(name);
         }
 
         Button doneButton = new Button("Done");
         doneButton.relocate(630, 200);
-        doneButton.setOnAction(e -> window.setScene(tableScreen));
+        doneButton.setOnAction(e -> {
+            try {
+                characterCreated(window, character, name, storedArray);
+                displayCharacterStats(characterStatInfo);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
-        characterCreationPane.getChildren().addAll(displayedTextLabel);
+        characterCreationPane.getChildren().addAll(displayedTextLabel, doneButton);
 
         characterCreatorScreen = new Scene(characterCreationPane, 1280, 720);
     }
 
-    private void createStats(Pane characterPane, String statName, double relocateX, double relocateY) {
+    private void characterCreated(Stage window, JSONObject character, TextField name, ArrayList<TextField> storedArray) throws IOException {
+        JSONArray stats = character.getJSONArray("Stats");
+        for (int i=0; i<storedArray.size(); i++) {
+            JSONObject jsonStat = stats.getJSONObject(i);
+            int newValue = Integer.parseInt(storedArray.get(i).getText());
+            jsonStat.put("Value", newValue);
+        }
+        character.put("Name", name.getText());
+
+        try {
+            FileWriter characterFile = new FileWriter("src/Character.json");
+            characterFile.write(character.toString());
+            characterFile.close();
+        } catch (IOException e) {
+            System.out.println(e+" Could not find Character.json");
+        }
+
+        window.setScene(tableScreen);
+    }
+
+    private void createStatTextField(Pane characterPane, String statName, double relocateX, double relocateY, ArrayList<TextField> storedArray) {
         Label statLabel = new Label();
         statLabel.setText(statName);
         statLabel.setFont(Font.font("Arial", 15));
@@ -223,6 +292,7 @@ public class Screen {
         stat.setPrefColumnCount(2);
         stat.relocate(relocateX, relocateY);
 
+        storedArray.add(stat);
         characterPane.getChildren().add(statLabel);
         characterPane.getChildren().add(stat);
     }

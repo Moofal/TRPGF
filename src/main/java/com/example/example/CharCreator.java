@@ -158,12 +158,8 @@ public class CharCreator {
     }
 
     public void finishCharacter() throws IOException {
-        FileWriter charCreationSettingsFile = new FileWriter("src/CharCreatSettings.json");
-        JSONObject options = new JSONObject();
-
-        options.put("Name Option", character.nameOption);
-
         JSONArray stats = new JSONArray();
+
         for (Stat stat: character.getStats()) {
             JSONObject jsonStat = new JSONObject();
             jsonStat.put("Max Value",stat.getMaxValue());
@@ -173,10 +169,27 @@ public class CharCreator {
             jsonStat.put("Name", stat.name);
             stats.put(jsonStat);
         }
-        options.put("Stats", stats);
 
+        writeCharacterCreationToJSON(stats);
+        writeCharacterToJSON(stats);
+    }
+
+    private void writeCharacterCreationToJSON(JSONArray stats) throws IOException {
+        JSONObject options = new JSONObject();
+        options.put("Stats", stats);
+        options.put("Name Option", character.nameOption);
+        FileWriter charCreationSettingsFile = new FileWriter("src/CharCreatSettings.json");
         charCreationSettingsFile.write(options.toString());
         charCreationSettingsFile.close();
+    }
 
+    private void writeCharacterToJSON(JSONArray stats) throws IOException {
+        JSONObject character = new JSONObject();
+        character.put("Name", "");
+        character.put("Stats", stats);
+
+        FileWriter characterFile = new FileWriter("src/Character.json");
+        characterFile.write(character.toString());
+        characterFile.close();
     }
 }

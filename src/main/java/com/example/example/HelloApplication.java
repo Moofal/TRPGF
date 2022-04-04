@@ -11,8 +11,8 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws Exception {
         Screen screen = new Screen();
         screen.startingScreen(stage, "Lord of the rings", "One ring to bind them and rule them all");
-        screen.tableScreen(stage);
         screen.characterScreen(stage, "Make your character!");
+        screen.tableScreen(stage);
         screen.endingScreen(stage,1,"The end", true, true);
     }
 
@@ -39,6 +39,8 @@ public class HelloApplication extends Application {
         charCreator.addNameOption();
         charCreator.addStat("Wisdom",0,20);
         charCreator.setStatGenerationManual("Wisdom");
+        charCreator.addStat("Str",0,20);
+        charCreator.setStatGenerationManual("Str");
         charCreator.addStat("Con",0,20);
         charCreator.setStatGenerationDice("Con", 4,6);
         charCreator.finishCharacter();

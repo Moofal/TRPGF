@@ -10,14 +10,6 @@ import java.util.ArrayList;
 /**
  * Denne klassen skal håndtere alt som har med dialog og de textbaserte valgene du kan velge.
  */
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = Choice.class, name = "Choice"),
-        @JsonSubTypes.Type(value = Dialog.class, name = "Dialog")
-})
 @JsonPropertyOrder({"ID", "CONTENT", "CHOICES"})
 public class Dialog {
 
@@ -56,6 +48,7 @@ public class Dialog {
     public void addOption(int id, int boxId, String content, int nextDialog) {
         Dialog dialog = getDialogById(boxId);
         Choice choice = new Choice(id, content, boxId, nextDialog);
+        choice.setType("Normal Choice");
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;
         dialog.dialogChoiceList.add(choice);
@@ -72,6 +65,7 @@ public class Dialog {
     public void addOptionPrevious(int id, int boxId, int pChoiceId, String content, int nextDialog) {
         Dialog dialog = getDialogById(boxId);
         Choice choice = new Choice(id, content, boxId, nextDialog, pChoiceId);
+        choice.setType("Previous Choice");
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;
         dialog.dialogChoiceList.add(choice);
@@ -89,6 +83,7 @@ public class Dialog {
     public void addOptionWithReq(int id, int boxId, String content, int nextDialog, String stat, int statVal) {
         Dialog dialog = getDialogById(boxId);
         Choice choice = new Choice(id, content, boxId, nextDialog, stat, statVal);
+        choice.setType("Choice with Requirement");
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;
         dialog.dialogChoiceList.add(choice);
@@ -106,6 +101,7 @@ public class Dialog {
     public void addOptionReward(int id, int boxId, String content, int nextDialog, String stat, int value) {
         Dialog dialog = getDialogById(boxId);
         Choice choice = new Choice(id, content, boxId, nextDialog, stat, value);
+        choice.setType("Choice with a reward");
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;
         dialog.dialogChoiceList.add(choice);

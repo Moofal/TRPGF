@@ -2,16 +2,16 @@
   "ID" : 1,
   "CONTENT" : "Content 1",
   "dialogChoiceList" : [ {
-    "type" : "Choice",
+    "TYPE" : "Previous Choice",
     "ID" : 1,
     "CONTENT" : "Something 1",
     "BOXID" : 1,
     "NEXT-SCENE" : 2,
-    "PREV-CHOICE" : 0,
+    "PREV-CHOICE" : 1,
     "STAT" : null,
     "STAT-VAL" : 0
   }, {
-    "type" : "Choice",
+    "TYPE" : "Normal Option",
     "ID" : 2,
     "CONTENT" : "Something 2",
     "BOXID" : 1,
@@ -20,7 +20,7 @@
     "STAT" : null,
     "STAT-VAL" : 0
   }, {
-    "type" : "Choice",
+    "TYPE" : "Normal Option",
     "ID" : 3,
     "CONTENT" : "Something 3",
     "BOXID" : 1,
@@ -33,7 +33,7 @@
   "ID" : 2,
   "CONTENT" : "Content 2",
   "dialogChoiceList" : [ {
-    "type" : "Choice",
+    "TYPE" : "Normal Option",
     "ID" : 1,
     "CONTENT" : "Something",
     "BOXID" : 2,
@@ -42,7 +42,7 @@
     "STAT" : null,
     "STAT-VAL" : 0
   }, {
-    "type" : "Choice",
+    "TYPE" : "Normal Option",
     "ID" : 2,
     "CONTENT" : "Something",
     "BOXID" : 2,
@@ -55,7 +55,7 @@
   "ID" : 3,
   "CONTENT" : "There is a dragon in front of you what do you do",
   "dialogChoiceList" : [ {
-    "type" : "Choice",
+    "TYPE" : "Choice with Requirement",
     "ID" : 1,
     "CONTENT" : "Conect3rw",
     "BOXID" : 3,
@@ -64,7 +64,7 @@
     "STAT" : "Strenght",
     "STAT-VAL" : 15
   }, {
-    "type" : "Choice",
+    "TYPE" : "Previous Choice",
     "ID" : 522,
     "CONTENT" : "slay it",
     "BOXID" : 3,
@@ -73,7 +73,7 @@
     "STAT" : null,
     "STAT-VAL" : 0
   }, {
-    "type" : "Choice",
+    "TYPE" : "Choice with a reward",
     "ID" : 5425,
     "CONTENT" : "seduce the dragon",
     "BOXID" : 3,

@@ -3,15 +3,19 @@ package com.example.example;
 import com.example.example.Dialog;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.util.ArrayList;
 
+@JsonPropertyOrder("TYPE")
 public class Choice extends Dialog {
 
     /**
      * Denne klassen har choice konstruktøren som trengs til Dialog, og den Extender Dialog.
      */
 
+    private String type;
     private int boxId;
     private int nextScene;
     private int pChoiceId;
@@ -21,10 +25,10 @@ public class Choice extends Dialog {
     Choice() {
     }
 
-    public Choice(int id, String content, int boxId, int nextDialog) {
+    public Choice(int id, String content, int boxId, int nextScene) {
         super(id, content);
         this.boxId = boxId;
-        this.nextScene = nextDialog;
+        this.nextScene = nextScene;
     }
 
     public Choice(int id, String content, int boxId, int nextScene, int pChoiceId) {
@@ -43,6 +47,15 @@ public class Choice extends Dialog {
     }
 
 //-----------------------------------Getters and Setters-----------------------------------//
+
+    @JsonProperty("TYPE")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     @JsonProperty("BOXID")
     public int getBoxId() {
@@ -89,6 +102,7 @@ public class Choice extends Dialog {
         this.statVal = statVal;
     }
 
+
     @JsonIgnore @Override
     public ArrayList<Choice> getDialogChoiceList() {
         return super.getDialogChoiceList();
@@ -100,6 +114,7 @@ public class Choice extends Dialog {
     @Override
     public String toString() {
         return "{" +
+                " type=" + type +
                 " id=" + super.getId() +
                 ", boxId=" + boxId +
                 ", content=" + super.getContent() +

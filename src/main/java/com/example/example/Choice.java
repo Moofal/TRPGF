@@ -1,10 +1,8 @@
 package com.example.example;
 
-import com.example.example.Dialog;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.util.ArrayList;
 
@@ -17,36 +15,47 @@ public class Choice extends Dialog {
 
     private String type;
     private int boxId;
-    private int nextScene;
+    private int successScene;
+    private int failScene;
     private int pChoiceId;
     private String stat;
     private int statVal;
+    private int rewardValue;
 
     Choice() {
     }
 
-    public Choice(int id, String content, int boxId, int nextScene) {
+    public Choice(int id, String content, int boxId, int successScene) {
         super(id, content);
         this.boxId = boxId;
-        this.nextScene = nextScene;
+        this.successScene = successScene;
     }
 
-    public Choice(int id, String content, int boxId, int nextScene, int pChoiceId) {
+    public Choice(int id, String content, int boxId, int successScene, int pChoiceId) {
         super(id, content);
         this.boxId = boxId;
-        this.nextScene = nextScene;
+        this.successScene = successScene;
         this.pChoiceId = pChoiceId;
     }
 
-    public Choice(int id, String content, int boxId, int nextScene, String stat, int statVal) {
+    public Choice(int id, String content, int boxId, int successScene, String stat, int rewardValue) {
         super(id, content);
         this.boxId = boxId;
-        this.nextScene = nextScene;
+        this.successScene = successScene;
+        this.stat = stat;
+        this.rewardValue = rewardValue;
+    }
+
+    public Choice(int id, String content, int boxId, int successScene, int failScene, String stat, int statVal) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
         this.stat = stat;
         this.statVal = statVal;
     }
 
-//-----------------------------------Getters and Setters-----------------------------------//
+    //-----------------------------------Getters and Setters-----------------------------------//
 
     @JsonProperty("TYPE")
     public String getType() {
@@ -66,13 +75,22 @@ public class Choice extends Dialog {
         this.boxId = boxId;
     }
 
-    @JsonProperty("NEXT-SCENE")
-    public int getNextScene() {
-        return nextScene;
+    @JsonProperty("SUCCESS-SCENE")
+    public int getSuccessScene() {
+        return successScene;
     }
 
-    public void setNextScene(int nextScene) {
-        this.nextScene = nextScene;
+    public void setSuccessScene(int successScene) {
+        this.successScene = successScene;
+    }
+
+    @JsonProperty("FAIL-SCENE")
+    public int getFailScene() {
+        return failScene;
+    }
+
+    public void setFailScene(int failScene) {
+        this.failScene = failScene;
     }
 
     @JsonProperty("PREV-CHOICE")
@@ -93,7 +111,7 @@ public class Choice extends Dialog {
         this.stat = stat;
     }
 
-    @JsonProperty("STAT-VAL")
+    @JsonProperty("STAT-REQ-VAL")
     public int getStatVal() {
         return statVal;
     }
@@ -102,6 +120,14 @@ public class Choice extends Dialog {
         this.statVal = statVal;
     }
 
+    @JsonProperty("REWARD-VAL")
+    public int getRewardValue() {
+        return rewardValue;
+    }
+
+    public void setRewardValue(int rewardValue) {
+        this.rewardValue = rewardValue;
+    }
 
     @JsonIgnore @Override
     public ArrayList<Choice> getDialogChoiceList() {
@@ -121,7 +147,7 @@ public class Choice extends Dialog {
                 ", stat='" + stat + '\'' +
                 ", statVal=" + statVal +
                 ", pChoiceId=" + pChoiceId +
-                ", nextScene=" + nextScene +
+                ", nextScene=" + successScene +
                 '}';
     }
 }

@@ -76,13 +76,14 @@ public class Dialog {
      * @param id er id'en til dette valget
      * @param boxId er id'en til dialogen den er knyttet til
      * @param content er teksten til denne dialogen feks: "i will help you inkeeper!"
-     * @param nextDialog er id'en til den neste dialogen hvis du velger dette valget.
+     * @param successDialog TODO
+     * @param failDialog TODO
      * @param stat er statten som skal bli skjekket.
      * @param statVal er verdien til statten.
      */
-    public void addOptionWithReq(int id, int boxId, String content, int nextDialog, String stat, int statVal) {
+    public void addOptionWithReq(int id, int boxId, String content, int successDialog, int failDialog, String stat, int statVal) {
         Dialog dialog = getDialogById(boxId);
-        Choice choice = new Choice(id, content, boxId, nextDialog, stat, statVal);
+        Choice choice = new Choice(id, content, boxId, successDialog, failDialog, stat, statVal);
         choice.setType("Choice with Requirement");
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;

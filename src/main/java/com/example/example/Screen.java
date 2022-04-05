@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 /**
@@ -117,7 +118,7 @@ public class Screen {
         TextField choice = new TextField();
         choice.setOnAction(e -> {
             try {
-                choseOption(layout, optionsVBox, choice, dialog, currentOptions);
+                attemptOption(layout, optionsVBox, choice, dialog, currentOptions);
                 setCurrentOptions(optionsVBox);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -180,22 +181,54 @@ public class Screen {
         }
     }
 
-    private void choseOption(Pane layout, VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON) throws IOException {
+    private void attemptOption(Pane layout, VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON) throws IOException {
         String chosenOption = choice.getText().replaceAll("[^1-3]", "");
         choice.setText("");
-
         int index = Integer.parseInt(chosenOption);
-        int nextDialogID = currentOptionsJSON.getJSONObject(index-1).getInt("NEXT-SCENE");
-        currentDialog = getDialog(nextDialogID);
+        JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index-1);
+        String optionType = chosenOptionObject.getString("TYPE");
 
+        switch (optionType) {
+            case "Normal Choice":
+                optionChosen(vBox, dialog, chosenOptionObject);
+                break;
+            case "Previous Choice":
+                break;
+            case "Choice with Requirement":
+                JSONArray characterStats = Objects.requireNonNull(getCharacterInfo()).getJSONArray("Stats");
+                String requiredStatName = chosenOptionObject.getString("STAT");
+                int requiredStatValue = chosenOptionObject.getInt("STAT-VAL");
+                JSONObject requiredStat = null;
+                for (int i=0; i<characterStats.length(); i++) {
+                    String statName = characterStats.getJSONObject(i).getString("Name");
+                    if (Objects.equals(statName,requiredStatName)) {
+                        requiredStat = characterStats.getJSONObject(i);
+                    }
+                }
+                assert requiredStat != null;
+                if (requiredStat.getInt("Value") >= requiredStatValue) {
+                    optionChosen(vBox, dialog, chosenOptionObject);
+                }
+                break;
+            case "Choice with a reward":
+                break;
+        }
+    }
+
+    private void optionChosen(VBox vBox, Text dialog, JSONObject chosenOptionObject) throws IOException {
+        // The dialog option had no requirements
+        // Getting the id of the next dialog from the chosen option
+        int nextDialogID = chosenOptionObject.getInt("NEXT-SCENE");
+
+        // Setting the dialog text box to be the new dialog text
         JSONObject nextDialogJSON = getDialog(nextDialogID);
         String dialogString = nextDialogJSON.getString("CONTENT");
         dialog.setText(dialogString);
-
-        JSONArray nextOptions = nextDialogJSON.getJSONArray("dialogChoiceList");
+        // Setting the dialog options to be the options for the new dialog
+        currentDialog = getDialog(nextDialogID);
         currentOptions = currentDialog.getJSONArray("dialogChoiceList");
+        // This removes the old dialog options text
         vBox.getChildren().clear();
-
     }
 
     private Text addOption(String text, int optionNr, double relocateX, double relocateY) {

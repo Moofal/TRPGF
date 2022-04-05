@@ -2,16 +2,16 @@
   "ID" : 1,
   "CONTENT" : "Content 1",
   "dialogChoiceList" : [ {
-    "TYPE" : "Previous Choice",
+    "TYPE" : "Normal Choice",
     "ID" : 1,
     "CONTENT" : "Something 1",
     "BOXID" : 1,
     "NEXT-SCENE" : 2,
-    "PREV-CHOICE" : 1,
+    "PREV-CHOICE" : 0,
     "STAT" : null,
     "STAT-VAL" : 0
   }, {
-    "TYPE" : "Normal Option",
+    "TYPE" : "Normal Choice",
     "ID" : 2,
     "CONTENT" : "Something 2",
     "BOXID" : 1,
@@ -20,7 +20,7 @@
     "STAT" : null,
     "STAT-VAL" : 0
   }, {
-    "TYPE" : "Normal Option",
+    "TYPE" : "Normal Choice",
     "ID" : 3,
     "CONTENT" : "Something 3",
     "BOXID" : 1,
@@ -33,7 +33,7 @@
   "ID" : 2,
   "CONTENT" : "Content 2",
   "dialogChoiceList" : [ {
-    "TYPE" : "Normal Option",
+    "TYPE" : "Normal Choice",
     "ID" : 1,
     "CONTENT" : "Something",
     "BOXID" : 2,
@@ -42,7 +42,7 @@
     "STAT" : null,
     "STAT-VAL" : 0
   }, {
-    "TYPE" : "Normal Option",
+    "TYPE" : "Normal Choice",
     "ID" : 2,
     "CONTENT" : "Something",
     "BOXID" : 2,

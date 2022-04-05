@@ -6,28 +6,34 @@
     "ID" : 1,
     "CONTENT" : "Something 1",
     "BOXID" : 1,
-    "NEXT-SCENE" : 2,
+    "SUCCESS-SCENE" : 2,
+    "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
     "STAT" : null,
-    "STAT-VAL" : 0
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 0
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 2,
     "CONTENT" : "Something 2",
     "BOXID" : 1,
-    "NEXT-SCENE" : 1,
+    "SUCCESS-SCENE" : 1,
+    "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
     "STAT" : null,
-    "STAT-VAL" : 0
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 0
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 3,
     "CONTENT" : "Something 3",
     "BOXID" : 1,
-    "NEXT-SCENE" : 1,
+    "SUCCESS-SCENE" : 1,
+    "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
     "STAT" : null,
-    "STAT-VAL" : 0
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 0
   } ]
 }, {
   "ID" : 2,
@@ -37,19 +43,23 @@
     "ID" : 1,
     "CONTENT" : "Something",
     "BOXID" : 2,
-    "NEXT-SCENE" : 1,
+    "SUCCESS-SCENE" : 1,
+    "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
     "STAT" : null,
-    "STAT-VAL" : 0
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 0
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 2,
     "CONTENT" : "Something",
     "BOXID" : 2,
-    "NEXT-SCENE" : 1,
+    "SUCCESS-SCENE" : 1,
+    "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
     "STAT" : null,
-    "STAT-VAL" : 0
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 0
   } ]
 }, {
   "ID" : 3,
@@ -59,27 +69,33 @@
     "ID" : 1,
     "CONTENT" : "Conect3rw",
     "BOXID" : 3,
-    "NEXT-SCENE" : 54,
+    "SUCCESS-SCENE" : 54,
+    "FAIL-SCENE" : 2,
     "PREV-CHOICE" : 0,
     "STAT" : "Strenght",
-    "STAT-VAL" : 15
+    "STAT-REQ-VAL" : 15,
+    "REWARD-VAL" : 0
   }, {
     "TYPE" : "Previous Choice",
     "ID" : 522,
     "CONTENT" : "slay it",
     "BOXID" : 3,
-    "NEXT-SCENE" : 0,
+    "SUCCESS-SCENE" : 0,
+    "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 2,
     "STAT" : null,
-    "STAT-VAL" : 0
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 0
   }, {
     "TYPE" : "Choice with a reward",
     "ID" : 5425,
     "CONTENT" : "seduce the dragon",
     "BOXID" : 3,
-    "NEXT-SCENE" : 0,
+    "SUCCESS-SCENE" : 0,
+    "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
     "STAT" : "Strength",
-    "STAT-VAL" : 1
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 1
   } ]
 } ]

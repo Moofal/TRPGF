@@ -33,7 +33,8 @@ public class Screen {
     }
 
     private Scene startingScreen, tableScreen, characterCreatorScreen, endingScreen;
-    VBox characterStatInfo = new VBox();
+    private final VBox characterStatInfo = new VBox();
+    private Pane tableScreenLayout;
     private JSONObject currentDialog;
     private JSONArray currentOptions;
 
@@ -75,7 +76,7 @@ public class Screen {
      * Lager skjermen der spillet blir spilt.
      */
     public void tableScreen(Stage window) {
-        Pane layout = new Pane();
+        tableScreenLayout = new Pane();
 
         Line horizontalLine = new Line();
         horizontalLine.setStartX(0.0f);
@@ -120,7 +121,7 @@ public class Screen {
         TextField choice = new TextField();
         choice.setOnAction(e -> {
             try {
-                attemptOption(layout, optionsVBox, choice, dialog, currentOptions);
+                attemptOption(optionsVBox, choice, dialog, currentOptions);
                 setCurrentOptions(optionsVBox);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -129,12 +130,25 @@ public class Screen {
         choice.relocate(10,640);
 
 
-        characterStatInfo.relocate(700,500);
-        displayCharacterStats(characterStatInfo);
+        updateAllCharacterInfoOnTableScreen(tableScreenLayout);
 
-        layout.getChildren().addAll(horizontalLine, verticalLine, dialogHistory,
+        tableScreenLayout.getChildren().addAll(horizontalLine, verticalLine, dialogHistory,
                 dialogScrollPane, choice, optionsVBox, characterStatInfo);
-        tableScreen = new Scene(layout, 1280, 720);
+        tableScreen = new Scene(tableScreenLayout, 1280, 720);
+    }
+
+    private void updateAllCharacterInfoOnTableScreen(Pane layout) {
+        updateCharacterNameOnTableScreen(layout);
+
+        updateCharacterStatsOnTableScreen(characterStatInfo);
+    }
+
+    private void updateCharacterNameOnTableScreen(Pane layout) {
+        String characterName = Objects.requireNonNull(getCharacterInfo()).getString("Name");
+        Text characterNameOnBord = new Text(characterName);
+        characterNameOnBord.setFont(Font.font("Arial",20));
+        characterNameOnBord.relocate(800,450);
+        layout.getChildren().add(characterNameOnBord);
     }
 
     private JSONObject getDialog(int dialogID) {
@@ -183,7 +197,7 @@ public class Screen {
         return options;
     }
 
-    private void displayCharacterStats(VBox characterStatInfo) {
+    private void updateCharacterStatsOnTableScreen(VBox characterStatInfo) {
         characterStatInfo.getChildren().clear();
         JSONObject character = getCharacterInfo();
         assert character != null;
@@ -196,9 +210,10 @@ public class Screen {
             statText.setText(info);
             characterStatInfo.getChildren().add(statText);
         }
+        characterStatInfo.relocate(700,500);
     }
 
-    private void attemptOption(Pane layout, VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON) throws IOException {
+    private void attemptOption(VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON) throws IOException {
         String chosenOption = choice.getText().replaceAll("[^1-3]", "");
         choice.setText("");
 
@@ -245,7 +260,7 @@ public class Screen {
             FileWriter characterFile = new FileWriter("src/Character.json");
             characterFile.write(character.toString());
             characterFile.close();
-            displayCharacterStats(characterStatInfo);
+            updateCharacterStatsOnTableScreen(characterStatInfo);
         } catch (IOException e) {
             System.out.println(e+" Could not find Character.json");
         }
@@ -263,7 +278,6 @@ public class Screen {
                 requiredStat = characterStats.getJSONObject(i);
             }
         }
-
 
         assert requiredStat != null;
         if (requiredStat.getInt("Value") >= requiredStatValue) {
@@ -292,10 +306,9 @@ public class Screen {
     }
 
 
-
-
     /**
      * Denne skjermen lar deg lage en character creation screen.
+     * @param window trengs for å kunne bytte screen etter karater er lagd.
      * @param displayedText er text som viser på denne skjermen,
      */
     public void characterScreen(Stage window, String displayedText) throws IOException {
@@ -331,13 +344,21 @@ public class Screen {
         if (settings.getBoolean("Name Option")) {
             characterCreationPane.getChildren().add(name);
         }
-
+        Text errorText = new Text();
         Button doneButton = new Button("Done");
         doneButton.relocate(630, 200);
         doneButton.setOnAction(e -> {
+            errorText.setText("");
+            if (name.getText().trim().isEmpty()) {
+                errorText.setText("Please make a name");
+                errorText.relocate(300, 340);
+                errorText.setFont(Font.font("Arial", 20));
+                characterCreationPane.getChildren().add(errorText);
+                return;
+            }
             try {
-                characterCreated(window, character, name, storedArray);
-                displayCharacterStats(characterStatInfo);
+                characterCreated(window, character, name, storedArray, errorText);
+                updateAllCharacterInfoOnTableScreen(tableScreenLayout);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -363,12 +384,19 @@ public class Screen {
         characterPane.getChildren().add(stat);
     }
 
-    private void characterCreated(Stage window, JSONObject character, TextField name, ArrayList<TextField> storedArray) throws IOException {
+    private void characterCreated(Stage window, JSONObject character, TextField name,
+                                  ArrayList<TextField> storedArray, Text errorText) throws IOException {
         JSONArray stats = character.getJSONArray("Stats");
         for (int i=0; i<storedArray.size(); i++) {
             JSONObject jsonStat = stats.getJSONObject(i);
-            int newValue = Integer.parseInt(storedArray.get(i).getText());
-            jsonStat.put("Value", newValue);
+            if (!storedArray.get(i).getText().trim().isEmpty()) {
+                //if (newValue er større enn maxValue)
+                int newValue = Integer.parseInt(storedArray.get(i).getText());
+                jsonStat.put("Value", newValue);
+            } else {
+                errorText.setText("Please fill in all stats");
+                return;
+            }
         }
         character.put("Name", name.getText());
 

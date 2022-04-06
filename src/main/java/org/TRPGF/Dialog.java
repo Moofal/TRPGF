@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Denne klassen skal håndtere alt som har med dialog og de textbaserte valgene du kan velge.
+ * DENNE KLASSES HÅNDTERER ALT MED DIALOG
  */
 @JsonPropertyOrder({"ID", "CONTENT", "CHOICES"})
 public class Dialog {

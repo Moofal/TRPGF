@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.ArrayList;
 
+/**
+ * DENNE KLASSEN BRUKES BARE AV DIALOG, IKKE FOR BRUK I MAIN
+ */
+
 @JsonPropertyOrder("TYPE")
 public class Choice extends Dialog {
-
-    /**
-     * Denne klassen har choice konstruktøren som trengs til Dialog, og den Extender Dialog.
-     */
 
     private String type;
     private int boxId;

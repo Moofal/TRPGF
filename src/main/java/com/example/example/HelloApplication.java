@@ -28,7 +28,7 @@ public class HelloApplication extends Application {
         dialog.addOption(1, 2, "Something", 1);
         dialog.addOption(2, 2, "Something", 1);
         dialog.createDialog(3, "There is a dragon in front of you what do you do");
-        dialog.addOptionWithReq(1, 3, "Conect3rw", 54, "Strenght", 15);
+        dialog.addOptionWithReq(1, 3, "Conect3rw", 54, 2 ,"Strenght", 15);
         dialog.addOptionPrevious(522, 3, 2, "slay it",0);
         dialog.addOptionReward(5425, 3, "seduce the dragon", 0, "Strength", 1);
 
@@ -45,6 +45,7 @@ public class HelloApplication extends Application {
         charCreator.setStatGenerationDice("Con", 4,6);
         charCreator.finishCharacter();
 
-        launch();
+        //launch();
+        System.exit(0);
     }
 }

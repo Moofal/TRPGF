@@ -1,4 +1,4 @@
-module com.example.example {
+module org.TRPGF {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.base;
@@ -6,6 +6,6 @@ module com.example.example {
     requires org.json;
     requires com.fasterxml.jackson.databind;
 
-    opens com.example.example to javafx.fxml;
-    exports com.example.example;
+    opens org.TRPGF to javafx.fxml;
+    exports org.TRPGF;
 }

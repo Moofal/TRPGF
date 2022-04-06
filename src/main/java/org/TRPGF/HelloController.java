@@ -1,4 +1,4 @@
-package com.example.example;
+package org.TRPGF;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

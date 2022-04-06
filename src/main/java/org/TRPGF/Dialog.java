@@ -1,4 +1,4 @@
-package com.example.example;
+package org.TRPGF;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -76,8 +76,8 @@ public class Dialog {
      * @param id er id'en til dette valget
      * @param boxId er id'en til dialogen den er knyttet til
      * @param content er teksten til denne dialogen feks: "i will help you inkeeper!"
-     * @param successDialog TODO
-     * @param failDialog TODO
+     * @param successDialog er id'en til den nye dialog boxen hvis karakteren har større eller lik statval
+     * @param failDialog er id'en til den nye dialog boxen hvis karakteren ikke har større eller lik statval
      * @param stat er statten som skal bli skjekket.
      * @param statVal er verdien til statten.
      */

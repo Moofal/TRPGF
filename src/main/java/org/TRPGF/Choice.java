@@ -1,4 +1,4 @@
-package com.example.example;
+package org.TRPGF;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

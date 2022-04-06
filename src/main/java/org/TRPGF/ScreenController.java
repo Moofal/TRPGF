@@ -1,4 +1,4 @@
-package com.example.example;
+package org.TRPGF;
 
 public class ScreenController {
 }

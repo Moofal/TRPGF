@@ -1,4 +1,4 @@
-package com.example.example;
+package org.TRPGF;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -239,6 +239,20 @@ public class Screen {
         }
     }
 
+    private void optionChosen(VBox vBox, Text dialog, int nextDialogID) {
+        // Setting the dialog text box to be the new dialog text
+        JSONObject nextDialogJSON = getDialog(nextDialogID);
+        assert nextDialogJSON != null;
+        String dialogString = nextDialogJSON.getString("CONTENT");
+        dialog.setText(dialogString);
+        // Setting the dialog options to be the options for the new dialog
+        currentDialog = getDialog(nextDialogID);
+        assert currentDialog != null;
+        currentOptions = currentDialog.getJSONArray("dialogChoiceList");
+        // This removes the old dialog options text
+        vBox.getChildren().clear();
+    }
+
     private void updateCharacterJson(JSONObject chosenOptionObject) {
         String statIncreased = chosenOptionObject.getString("STAT");
         int statIncreasedAmount = chosenOptionObject.getInt("REWARD-VAL");
@@ -289,20 +303,6 @@ public class Screen {
             nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
             optionChosen(vBox, dialog, nextDialogID);
         }
-    }
-
-    private void optionChosen(VBox vBox, Text dialog, int nextDialogID) {
-        // Setting the dialog text box to be the new dialog text
-        JSONObject nextDialogJSON = getDialog(nextDialogID);
-        assert nextDialogJSON != null;
-        String dialogString = nextDialogJSON.getString("CONTENT");
-        dialog.setText(dialogString);
-        // Setting the dialog options to be the options for the new dialog
-        currentDialog = getDialog(nextDialogID);
-        assert currentDialog != null;
-        currentOptions = currentDialog.getJSONArray("dialogChoiceList");
-        // This removes the old dialog options text
-        vBox.getChildren().clear();
     }
 
 

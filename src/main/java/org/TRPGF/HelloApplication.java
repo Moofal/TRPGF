@@ -1,4 +1,4 @@
-package com.example.example;
+package org.TRPGF;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

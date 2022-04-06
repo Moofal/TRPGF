@@ -4,7 +4,7 @@
   "dialogChoiceList" : [ {
     "TYPE" : "Normal Choice",
     "ID" : 1,
-    "CONTENT" : "Something 1",
+    "CONTENT" : "Go to 2",
     "BOXID" : 1,
     "SUCCESS-SCENE" : 2,
     "FAIL-SCENE" : 0,
@@ -15,9 +15,9 @@
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 2,
-    "CONTENT" : "Something 2",
+    "CONTENT" : "Go to 3",
     "BOXID" : 1,
-    "SUCCESS-SCENE" : 1,
+    "SUCCESS-SCENE" : 3,
     "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
     "STAT" : null,
@@ -26,7 +26,7 @@
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 3,
-    "CONTENT" : "Something 3",
+    "CONTENT" : "Stay here",
     "BOXID" : 1,
     "SUCCESS-SCENE" : 1,
     "FAIL-SCENE" : 0,
@@ -41,7 +41,7 @@
   "dialogChoiceList" : [ {
     "TYPE" : "Normal Choice",
     "ID" : 1,
-    "CONTENT" : "Something",
+    "CONTENT" : "Go to 1",
     "BOXID" : 2,
     "SUCCESS-SCENE" : 1,
     "FAIL-SCENE" : 0,
@@ -52,9 +52,9 @@
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 2,
-    "CONTENT" : "Something",
+    "CONTENT" : "Go to 3",
     "BOXID" : 2,
-    "SUCCESS-SCENE" : 1,
+    "SUCCESS-SCENE" : 3,
     "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
     "STAT" : null,
@@ -67,34 +67,23 @@
   "dialogChoiceList" : [ {
     "TYPE" : "Choice with Requirement",
     "ID" : 1,
-    "CONTENT" : "Conect3rw",
+    "CONTENT" : "Need 15 str",
     "BOXID" : 3,
-    "SUCCESS-SCENE" : 54,
-    "FAIL-SCENE" : 2,
+    "SUCCESS-SCENE" : 2,
+    "FAIL-SCENE" : 1,
     "PREV-CHOICE" : 0,
-    "STAT" : "Strenght",
+    "STAT" : "Str",
     "STAT-REQ-VAL" : 15,
     "REWARD-VAL" : 0
   }, {
-    "TYPE" : "Previous Choice",
-    "ID" : 522,
-    "CONTENT" : "slay it",
-    "BOXID" : 3,
-    "SUCCESS-SCENE" : 0,
-    "FAIL-SCENE" : 0,
-    "PREV-CHOICE" : 2,
-    "STAT" : null,
-    "STAT-REQ-VAL" : 0,
-    "REWARD-VAL" : 0
-  }, {
     "TYPE" : "Choice with a reward",
-    "ID" : 5425,
-    "CONTENT" : "seduce the dragon",
+    "ID" : 2,
+    "CONTENT" : "str+1",
     "BOXID" : 3,
-    "SUCCESS-SCENE" : 0,
+    "SUCCESS-SCENE" : 1,
     "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
-    "STAT" : "Strength",
+    "STAT" : "Str",
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 1
   } ]

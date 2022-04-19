@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * DENNE KLASSES HÅNDTERER ALT MED DIALOG
+ * This class handles everything with dialog.
  */
 @JsonPropertyOrder({"ID", "CONTENT", "CHOICES"})
 public class Dialog {
@@ -29,10 +29,10 @@ public class Dialog {
 
     /**
      * Lager en dialog
-     * @param id er id'en til denne dialogen
-     * @param content er teksten til denne dialogen feks: "Adventurer i need help!"
+     * @param id is the id for this dialog box
+     * @param content is the text for this dialog for example: "Adventurer i need help!"
      */
-    public void createDialog(int id, String content) {
+    public void createDialogBox(int id, String content) {
         Dialog dialog = new Dialog(id, content);
         dialogArrayList.add(dialog);
 
@@ -41,13 +41,13 @@ public class Dialog {
     /**
      * Lager et svarsmultighet til dialogen den er knyttet til.
      * @param id er id'en til dette valget
-     * @param boxId er id'en til dialogen den er knyttet til
+     * @param dialogBoxId er id'en til createDialogBox den er knyttet til
      * @param content er teksten til denne dialogen feks: "i will help you inkeeper!"
      * @param nextDialog er id'en til den neste dialogen hvis du velger dette valget.
      */
-    public void addOption(int id, int boxId, String content, int nextDialog) {
-        Dialog dialog = getDialogById(boxId);
-        Choice choice = new Choice(id, content, boxId, nextDialog);
+    public void addOption(int id, int dialogBoxId, String content, int nextDialog) {
+        Dialog dialog = getDialogById(dialogBoxId);
+        Choice choice = new Choice(id, content, dialogBoxId, nextDialog);
         choice.setType("Normal Choice");
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;
@@ -57,14 +57,14 @@ public class Dialog {
     /**
      * Lager et svarsmultighet til dialogen den er knyttet til, men denne har en "prerequisite" som vil si at du må velge A for å svare B
      * @param id er id'en til dette valget
-     * @param boxId er id'en til dialogen den er knyttet til
+     * @param dialogBoxId er id'en til createDialogBox den er knyttet til
      * @param pChoiceId er id'en tildet forrige valget som du måtte velge for å gjøre dette valget, feks: du måtte ha valgt 1, for å velge valg 30
      * @param content er teksten til denne dialogen feks: "i will help you inkeeper!"
      * @param nextDialog er id'en til den neste dialogen hvis du velger dette valget.
      */
-    public void addOptionPrevious(int id, int boxId, int pChoiceId, String content, int nextDialog) {
-        Dialog dialog = getDialogById(boxId);
-        Choice choice = new Choice(id, content, boxId, nextDialog, pChoiceId);
+    public void addOptionPrevious(int id, int dialogBoxId, int pChoiceId, String content, int nextDialog) {
+        Dialog dialog = getDialogById(dialogBoxId);
+        Choice choice = new Choice(id, content, dialogBoxId, nextDialog, pChoiceId);
         choice.setType("Previous Choice");
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;
@@ -74,16 +74,16 @@ public class Dialog {
     /**
      * Lager et svarsmultighet til dialogen den er knyttet til, men denne har en stat check, så du må ha mer enn statVal for å passere
      * @param id er id'en til dette valget
-     * @param boxId er id'en til dialogen den er knyttet til
+     * @param dialogBoxId er id'en til createDialogBox den er knyttet til
      * @param content er teksten til denne dialogen feks: "i will help you inkeeper!"
      * @param successDialog er id'en til den nye dialog boxen hvis karakteren har større eller lik statval
      * @param failDialog er id'en til den nye dialog boxen hvis karakteren ikke har større eller lik statval
      * @param stat er statten som skal bli skjekket.
      * @param statVal er verdien til statten.
      */
-    public void addOptionWithReq(int id, int boxId, String content, int successDialog, int failDialog, String stat, int statVal) {
-        Dialog dialog = getDialogById(boxId);
-        Choice choice = new Choice(id, content, boxId, successDialog, failDialog, stat, statVal);
+    public void addOptionWithRequirement(int id, int dialogBoxId, String content, int successDialog, int failDialog, String stat, int statVal) {
+        Dialog dialog = getDialogById(dialogBoxId);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal);
         choice.setType("Choice with Requirement");
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;
@@ -93,15 +93,15 @@ public class Dialog {
     /**
      * Lager et svarsmultighet til dialogen den er knyttet til, men denne gir deg en gave hvis du velger den.
      * @param id er id'en til dette valget
-     * @param boxId er id'en til dialogen den er knyttet til
+     * @param dialogBoxId er id'en til createDialogBox den er knyttet til
      * @param content er teksten til denne dialogen feks: "i will help you inkeeper!"
      * @param nextDialog er id'en til den neste dialogen hvis du velger dette valget.
      * @param stat er statten som skal bli skjekket.
      * @param value er verdien statten skal øke med.
      */
-    public void addOptionReward(int id, int boxId, String content, int nextDialog, String stat, int value) {
-        Dialog dialog = getDialogById(boxId);
-        Choice choice = new Choice(id, content, boxId, nextDialog, stat, value);
+    public void addOptionWithReward(int id, int dialogBoxId, String content, int nextDialog, String stat, int value) {
+        Dialog dialog = getDialogById(dialogBoxId);
+        Choice choice = new Choice(id, content, dialogBoxId, nextDialog, stat, value);
         choice.setType("Choice with a reward");
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;
@@ -109,8 +109,8 @@ public class Dialog {
     }
 
     @JsonIgnore
-    private Dialog getDialogById(int boxId) {
-        return getDialogArrayList().get(boxId - 1);
+    private Dialog getDialogById(int dialogBoxId) {
+        return getDialogArrayList().get(dialogBoxId - 1);
     }
 
     @JsonIgnore

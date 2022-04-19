@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
 
 /**
- * DENNE KLASSEN BRUKES BARE AV DIALOG, IKKE FOR BRUK I MAIN
+ * This class gets used by Dialog.java as a constructor class
  */
 
 @JsonPropertyOrder("TYPE")

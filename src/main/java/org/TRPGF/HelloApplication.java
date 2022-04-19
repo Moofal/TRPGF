@@ -34,17 +34,17 @@ public class HelloApplication extends Application {
 
         dialog.finishStory();
 
-        CharCreator charCreator = new CharCreator();
+        CharacterCreator characterCreator = new CharacterCreator();
 
-        charCreator.addNameOption();
-        charCreator.addStat("Wisdom",0,20);
-        charCreator.setStatGenerationManual("Wisdom");
-        charCreator.addStat("Str",0,20);
-        charCreator.setStatGenerationManual("Str");
-        charCreator.addStat("Con",0,20);
-        charCreator.setStatGenerationDice("Con", 4,6);
+        characterCreator.addNameOption();
+        characterCreator.addStat("Wisdom",0,20);
+        characterCreator.setStatGenerationManual("Wisdom");
+        characterCreator.addStat("Str",0,20);
+        characterCreator.setStatGenerationManual("Str");
+        characterCreator.addStat("Con",0,20);
+        characterCreator.setStatGenerationDice("Con", 4,6);
 
-        charCreator.finishCharacter();
+        characterCreator.finishCharacter();
 
         launch();
     }

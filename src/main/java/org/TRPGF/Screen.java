@@ -24,7 +24,7 @@ import java.util.Objects;
 
 
 /**
- * Denne klassen blir brukt til å lage GUI som spilleren kommer til å bruke.
+ * This class is used to create the GUI that the player is going to use.
  */
 public class Screen {
 
@@ -39,9 +39,12 @@ public class Screen {
     private JSONArray currentOptions;
 
     /**
-     * Dette er den første skjermen som spilleren kommer til å se.
-     * @param gameTitle er navnet på spillet.
-     * @param startingText er intro teksten som bli vist fram til spilleren.
+     * This is the starting screen.
+     * Here you can show the title of the game and some intro text
+     * @param window this is the stage that all the scene are placed on.
+     * @param gameTitle is the title/name of the game.
+     * @param startingText this is the intro text that the player will see.
+     * I advise you use a text file and a file reader to avoid long text strings in your code.
      */
     public void startingScreen (Stage window, String gameTitle, String startingText) {
         window.setTitle(gameTitle);
@@ -73,7 +76,9 @@ public class Screen {
 
 
     /**
-     * Lager skjermen der spillet blir spilt.
+     * This creates the table screen where the actual game is played.
+     * Here the dialog and character info is displayed and choices are made
+     * @param window this is the stage that all the scene are placed on.
      */
     public void tableScreen(Stage window) {
         tableScreenLayout = new Pane();
@@ -307,9 +312,10 @@ public class Screen {
 
 
     /**
-     * Denne skjermen lar deg lage en character creation screen.
-     * @param window trengs for å kunne bytte screen etter karater er lagd.
-     * @param displayedText er text som viser på denne skjermen,
+     * This creates the character creation screen.
+     * is what comes after the starting screen
+     * @param window this is the stage that all the scene are placed on.
+     * @param displayedText text that is shows on this screen.
      */
     public void characterScreen(Stage window, String displayedText) throws IOException {
         Pane characterCreationPane = new Pane();
@@ -413,13 +419,14 @@ public class Screen {
 
 
     /**
-     * Dette er slutskjermen til spillet, du kan ha flere forskjellige slutskjermer.
-     * @param endingScreenId er verdien som lar deg velge å bruke denne bestemte slutskjermen.
-     * @param sceneText er teksten som blir vist fram på denne skjermen.
-     * @param startOver er en boolean verdi der true betyr at starting over knappen blir vist,
-     *                  den knappen lar spiller såarte spillet på nytt.
-     * @param exit er en boolean verdi der true betyr at exit knappen blir vist,
-     *             den knappen avslutter spillet og lukker det.
+     * For creating ending screens, you can have multiple of these.
+     * @param window this is the stage that all the scene are placed on.
+     * @param endingScreenId is the id of this endingScreen..
+     * @param sceneText the text that is shown on this ending screen.
+     * @param startOver is a boolean value that lets you dice if you want there to be a staring over button
+     *                  that leads to the starting screen.
+     * @param exit is a boolean value that lets you dice if you want there to be an exit button
+     *             that closes the application.
      */
     public void endingScreen(Stage window, int endingScreenId, String sceneText, boolean startOver, boolean exit) {
         Pane endingPane = new Pane();

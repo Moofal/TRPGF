@@ -4,7 +4,6 @@ package org.TRPGF;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,11 +11,12 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**
- * Denne klassen lar deg bestemme hva som kommer til å være på character creation screenen.
+ * This class lets you decide on what will be on the character creator screen
+ * and what stats / attributes the character wil have and how the values are decided.
  */
-public class CharCreator {
+public class CharacterCreator {
 
-    public CharCreator() {
+    public CharacterCreator() {
 
     }
 
@@ -88,7 +88,7 @@ public class CharCreator {
     Character character = new Character();
 
     /**
-     * Lar spilleren velge et navn til karakteren sin.
+     * Adding the option for the player to choose a name
      */
     public void addNameOption () {
         character.setNameOption(true);
@@ -99,19 +99,19 @@ public class CharCreator {
     }
 
     /**
-     * Lager en stat som karakteren får.
-     * @param statName er navnet på statten.
-     * @param minValue er den minste verdien staten kan ha.
-     * @param maxValue er den største verdien staten kan ha.
+     * Creates a stat for the character
+     * @param statName is the name of the stat.
+     * @param minValue is the lowest value the stat can have.
+     * @param maxValue is the highest value the stat can have.
      */
     public void addStat (String statName, int minValue, int maxValue) {
         character.addStat(new Stat(statName, minValue, maxValue));
     }
 
     /**
-     * Lar deg bestemme verdien til en stat du har allerede laget.
-     * @param statName er navnet til staten du setter.
-     * @param value er verdien du setter staten til.
+     * Lets you deice the value of a stat you have already crated.
+     * @param statName is the name of the stat you are deciding value of.
+     * @param value is the value you are assigning it.
      */
     public  void setStat (String statName, int value) {
         for (Stat stat: character.getStats()) {
@@ -122,10 +122,10 @@ public class CharCreator {
     }
 
     /**
-     * Her bestemmer du at vardien til en bestemt stat skal genereres via terninger.
-     * @param statName er navnet til staten som blir brukt.
-     * @param numOfDice er hvor mange terninger som skal bli brukt.
-     * @param diceSides er hovr mange sider som terningene skal ha.
+     * Set the stat to have its value generated with dice
+     * @param statName is the name of the stat.
+     * @param numOfDice how many dice are used to generate the value.
+     * @param diceSides how many sides does the dice have.
      */
     public void setStatGenerationDice (String statName, int numOfDice, int diceSides) {
         for (Stat stat: character.getStats()) {
@@ -136,8 +136,8 @@ public class CharCreator {
     }
 
     /**
-     * Her bestemmer du at en bestemt stat skal bli bestemmet av spilleren selv.
-     * @param statName er hvilken stat dette gjelller.
+     * Decide that the value of a stat is to be set bu the player
+     * @param statName is the name of the stat.
      */
     public void setStatGenerationManual (String statName) {
         for (Stat stat: character.getStats()) {
@@ -148,10 +148,10 @@ public class CharCreator {
     }
 
     /**
-     * Legger til en atribute til karakteren.
-     * Atributter er skjulte verdier som spilleren ikke kan se men som du kan manipulere.
-     * @param attributeName navnet på atributten.
-     * @param startingValue verdier som atributten starter som.
+     * Add A attribute to the character.
+     * Attribute are hidden values the the players can not use but you can manipulate
+     * @param attributeName the name of the attribute.
+     * @param startingValue the value it starts with.
      */
     public void addAttribute(String attributeName, int startingValue) {
         character.addAttribute(attributeName, startingValue);

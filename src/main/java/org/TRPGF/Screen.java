@@ -324,7 +324,7 @@ public class Screen {
         displayedTextLabel.setFont(Font.font("Arial",20));
         displayedTextLabel.setMaxSize(300, 200);
         displayedTextLabel.setWrapText(true);
-        displayedTextLabel.relocate(500, 50);
+        displayedTextLabel.relocate(540, 50);
 
         Path characterFile = Path.of("src/Character.json");
         String characterInput = Files.readString(characterFile);
@@ -336,7 +336,7 @@ public class Screen {
 
         JSONArray arrayOfStats = settings.getJSONArray("Stats");
 
-        double x = 100,y = 100;
+        double x = 480,y = 200;
         ArrayList<TextField> storedArray = new ArrayList<>();
         for (int i = 0; i < arrayOfStats.length(); i++) {
             x+=60;
@@ -345,32 +345,39 @@ public class Screen {
             createStatTextField(characterCreationPane, statName, x, y, storedArray);
         }
 
-        TextField name = new TextField();
-        name.relocate(300,300);
+        Label characterNameInputLabel = new Label("Character Name");
+        characterNameInputLabel.relocate(550,275);
+        characterNameInputLabel.setFont(Font.font("Arial",20));
+
+        TextField characterNameInput = new TextField();
+        characterNameInput.relocate(550,300);
+
         if (settings.getBoolean("Name Option")) {
-            characterCreationPane.getChildren().add(name);
+            characterCreationPane.getChildren().addAll(characterNameInput,characterNameInputLabel);
         }
+
         Text errorText = new Text();
+        errorText.relocate(550, 340);
+        errorText.setFont(Font.font("Arial", 20));
+
         Button doneButton = new Button("Done");
-        doneButton.relocate(630, 200);
+        doneButton.relocate(630, 400);
+
         doneButton.setOnAction(e -> {
             errorText.setText("");
-            if (name.getText().trim().isEmpty()) {
+            if (characterNameInput.getText().trim().isEmpty()) {
                 errorText.setText("Please make a name");
-                errorText.relocate(300, 340);
-                errorText.setFont(Font.font("Arial", 20));
-                characterCreationPane.getChildren().add(errorText);
                 return;
             }
             try {
-                characterCreated(window, character, name, storedArray, errorText);
+                characterCreated(window, character, characterNameInput, storedArray, errorText);
                 updateAllCharacterInfoOnTableScreen(tableScreenLayout);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
 
-        characterCreationPane.getChildren().addAll(displayedTextLabel, doneButton);
+        characterCreationPane.getChildren().addAll(displayedTextLabel, doneButton, errorText);
 
         characterCreatorScreen = new Scene(characterCreationPane, 1280, 720);
     }
@@ -395,9 +402,15 @@ public class Screen {
         JSONArray stats = character.getJSONArray("Stats");
         for (int i=0; i<storedArray.size(); i++) {
             JSONObject jsonStat = stats.getJSONObject(i);
+            // Checks if the input for the stat is empty
             if (!storedArray.get(i).getText().trim().isEmpty()) {
-                //if (newValue er større enn maxValue)
                 int newValue = Integer.parseInt(storedArray.get(i).getText());
+                // Checks if the value of a given stat is wrong
+                if (newValue < jsonStat.getInt("Min Value") || newValue >jsonStat.getInt("Max Value")) {
+                    String statName = jsonStat.getString("Name");
+                    errorText.setText("The value of "+statName+" is ether too high or too low");
+                    return;
+                }
                 jsonStat.put("Value", newValue);
             } else {
                 errorText.setText("Please fill in all stats");
@@ -411,7 +424,7 @@ public class Screen {
             characterFile.write(character.toString());
             characterFile.close();
         } catch (IOException e) {
-            System.out.println(e+" Could not find Character.json");
+            errorText.setText(e+" Could not find the Character.json file.");
         }
 
         window.setScene(tableScreen);

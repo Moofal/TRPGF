@@ -75,6 +75,7 @@ public class Screen {
     }
 
 
+    /*TODO: AttributeOptions, custom pane, dice checks for options*/
     /**
      * This creates the table screen where the actual game is played.
      * Here the dialog and character info is displayed and choices are made
@@ -142,6 +143,7 @@ public class Screen {
         tableScreen = new Scene(tableScreenLayout, 1280, 720);
     }
 
+
     private void updateAllCharacterInfoOnTableScreen(Pane layout) {
         updateCharacterNameOnTableScreen(layout);
 
@@ -154,52 +156,6 @@ public class Screen {
         characterNameOnBord.setFont(Font.font("Arial",20));
         characterNameOnBord.relocate(800,450);
         layout.getChildren().add(characterNameOnBord);
-    }
-
-    private JSONObject getDialog(int dialogID) {
-        try {
-            int index = dialogID-1;
-
-            Path file = Path.of("src/story.json");
-            String input = Files.readString(file);
-
-            JSONArray array = new JSONArray(input);
-
-            return array.getJSONObject(index);
-        } catch (IOException e) {
-            System.out.println(e + "src/story.json");
-        }
-        return null;
-    }
-
-    private JSONObject getCharacterInfo() {
-        try {
-            Path characterPath = Path.of("src/Character.json");
-            String input = Files.readString(characterPath);
-            return new JSONObject(input);
-        } catch (IOException e) {
-            System.out.println(e+"\n Could not find Character.json file");
-        }
-        return null;
-    }
-
-    private void setCurrentOptions(VBox vBox) {
-        double optionY = 390;
-        for (int i = 0; i < currentOptions.length(); i++) {
-            optionY += 20;
-            String text = currentOptions.getJSONObject(i).getString("CONTENT");
-            vBox.getChildren().add(addOption(text, i+1, 30, optionY));
-        }
-    }
-
-    private Text addOption(String text, int optionNr, double relocateX, double relocateY) {
-        Text options = new Text();
-        options.setId("option");
-        options.setText(optionNr + text);
-        options.relocate(relocateX,relocateY);
-        options.setFont(Font.font(20));
-
-        return options;
     }
 
     private void updateCharacterStatsOnTableScreen(VBox characterStatInfo) {
@@ -217,6 +173,7 @@ public class Screen {
         }
         characterStatInfo.relocate(700,500);
     }
+
 
     private void attemptOption(VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON) throws IOException {
         String chosenOption = choice.getText().replaceAll("[^1-3]", "");
@@ -242,20 +199,6 @@ public class Screen {
                 optionChosen(vBox, dialog, nextDialogID);
                 break;
         }
-    }
-
-    private void optionChosen(VBox vBox, Text dialog, int nextDialogID) {
-        // Setting the dialog text box to be the new dialog text
-        JSONObject nextDialogJSON = getDialog(nextDialogID);
-        assert nextDialogJSON != null;
-        String dialogString = nextDialogJSON.getString("CONTENT");
-        dialog.setText(dialogString);
-        // Setting the dialog options to be the options for the new dialog
-        currentDialog = getDialog(nextDialogID);
-        assert currentDialog != null;
-        currentOptions = currentDialog.getJSONArray("dialogChoiceList");
-        // This removes the old dialog options text
-        vBox.getChildren().clear();
     }
 
     private void updateCharacterJson(JSONObject chosenOptionObject) {
@@ -310,7 +253,71 @@ public class Screen {
         }
     }
 
+    private void optionChosen(VBox vBox, Text dialog, int nextDialogID) {
+        // Setting the dialog text box to be the new dialog text
+        JSONObject nextDialogJSON = getDialog(nextDialogID);
+        assert nextDialogJSON != null;
+        String dialogString = nextDialogJSON.getString("CONTENT");
+        dialog.setText(dialogString);
+        // Setting the dialog options to be the options for the new dialog
+        currentDialog = getDialog(nextDialogID);
+        assert currentDialog != null;
+        currentOptions = currentDialog.getJSONArray("dialogChoiceList");
+        // This removes the old dialog options text
+        vBox.getChildren().clear();
+    }
 
+
+    private JSONObject getDialog(int dialogID) {
+        try {
+            int index = dialogID-1;
+
+            Path file = Path.of("src/story.json");
+            String input = Files.readString(file);
+
+            JSONArray array = new JSONArray(input);
+
+            return array.getJSONObject(index);
+        } catch (IOException e) {
+            System.out.println(e + "src/story.json");
+        }
+        return null;
+    }
+
+    private JSONObject getCharacterInfo() {
+        try {
+            Path characterPath = Path.of("src/Character.json");
+            String input = Files.readString(characterPath);
+            return new JSONObject(input);
+        } catch (IOException e) {
+            System.out.println(e+"\n Could not find Character.json file");
+        }
+        return null;
+    }
+
+    private void setCurrentOptions(VBox vBox) {
+        double optionY = 390;
+        for (int i = 0; i < currentOptions.length(); i++) {
+            optionY += 20;
+            String text = currentOptions.getJSONObject(i).getString("CONTENT");
+            vBox.getChildren().add(addOption(text, i+1, 30, optionY));
+        }
+    }
+
+    private Text addOption(String text, int optionNr, double relocateX, double relocateY) {
+        Text options = new Text();
+        options.setId("option");
+        options.setText(optionNr + text);
+        options.relocate(relocateX,relocateY);
+        options.setFont(Font.font(20));
+
+        return options;
+    }
+
+
+    /*
+    * TODO: Dice generation, setStat
+    * */
     /**
      * This creates the character creation screen.
      * is what comes after the starting screen

@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 
 /**
@@ -315,9 +316,7 @@ public class Screen {
     }
 
 
-    /*
-    * TODO: Dice generation, setStat
-    * */
+
     /**
      * This creates the character creation screen.
      * is what comes after the starting screen
@@ -348,8 +347,7 @@ public class Screen {
         for (int i = 0; i < arrayOfStats.length(); i++) {
             x+=60;
             JSONObject statObject = arrayOfStats.getJSONObject(i);
-            String statName = statObject.getString("Name");
-            createStatTextField(characterCreationPane, statName, x, y, storedArray);
+            createStatGenerationMethod(characterCreationPane, statObject, x, y, storedArray);
         }
 
         Label characterNameInputLabel = new Label("Character Name");
@@ -389,36 +387,79 @@ public class Screen {
         characterCreatorScreen = new Scene(characterCreationPane, 1280, 720);
     }
 
-    private void createStatTextField(Pane characterPane, String statName, double relocateX, double relocateY, ArrayList<TextField> storedArray) {
+    private void createStatGenerationMethod(Pane characterPane, JSONObject statObject, double relocateX, double relocateY, ArrayList<TextField> storedArray) {
+        String statName = statObject.getString("Name");
+
         Label statLabel = new Label();
         statLabel.setText(statName);
         statLabel.setFont(Font.font("Arial", 15));
         statLabel.relocate(relocateX+4,relocateY-17);
 
         TextField stat = new TextField();
-        stat.setPrefColumnCount(2);
-        stat.relocate(relocateX, relocateY);
 
+        Label valueLabel = new Label();
+        valueLabel.setFont(Font.font("Arial", 15));
+        valueLabel.relocate(relocateX+4,relocateY);
+
+        switch (statObject.getString("Generation Type")) {
+            case "Dice":
+                valueLabel.setText("0");
+
+                String dice = statObject.getString("Dice");
+                Button generateStatValue = new Button("Roll "+dice);
+                generateStatValue.relocate(relocateX,relocateY+40);
+
+                generateStatValue.setOnAction(e -> {
+                    String[] diceNumbers = dice.split("d",2);
+                    int numOfDice = Integer.parseInt(diceNumbers[0]);
+                    int valOfDice = Integer.parseInt(diceNumbers[1]);
+                    int value = 0;
+                    Random random = new Random();
+                    for (int i=0; i<numOfDice; i++) {
+                        value += random.nextInt(valOfDice)+1;
+                    }
+                    valueLabel.setText(String.valueOf(value));
+                    stat.setText(String.valueOf(value));
+                    characterPane.getChildren().remove(generateStatValue);
+                });
+
+                characterPane.getChildren().addAll(statLabel, valueLabel, generateStatValue);
+                break;
+            case "Manual":
+                stat.setPrefColumnCount(2);
+                stat.relocate(relocateX, relocateY);
+                characterPane.getChildren().addAll(statLabel, stat);
+                break;
+            case "Set":
+                String value = String.valueOf(statObject.getInt("Value"));
+                valueLabel.setText(value);
+                stat.setText(value);
+                characterPane.getChildren().addAll(statLabel, valueLabel);
+                break;
+        }
         storedArray.add(stat);
-        characterPane.getChildren().add(statLabel);
-        characterPane.getChildren().add(stat);
     }
 
     private void characterCreated(Stage window, JSONObject character, TextField name,
                                   ArrayList<TextField> storedArray, Text errorText) throws IOException {
         JSONArray stats = character.getJSONArray("Stats");
-        for (int i=0; i<storedArray.size(); i++) {
+        for (int i=0; i<stats.length(); i++) {
             JSONObject jsonStat = stats.getJSONObject(i);
             // Checks if the input for the stat is empty
             if (!storedArray.get(i).getText().trim().isEmpty()) {
-                int newValue = Integer.parseInt(storedArray.get(i).getText());
-                // Checks if the value of a given stat is wrong
-                if (newValue < jsonStat.getInt("Min Value") || newValue >jsonStat.getInt("Max Value")) {
-                    String statName = jsonStat.getString("Name");
-                    errorText.setText("The value of "+statName+" is ether too high or too low");
+                try {
+                    int newValue = Integer.parseInt(storedArray.get(i).getText());
+                    // Checks if the value of a given stat is wrong
+                    if (newValue < jsonStat.getInt("Min Value") || newValue >jsonStat.getInt("Max Value")) {
+                        String statName = jsonStat.getString("Name");
+                        errorText.setText("The value of "+statName+" is ether too high or too low");
+                        return;
+                    }
+                    jsonStat.put("Value", newValue);
+                } catch (NumberFormatException e) {
+                    errorText.setText("Input must be a integer");
                     return;
                 }
-                jsonStat.put("Value", newValue);
             } else {
                 errorText.setText("Please fill in all stats");
                 return;

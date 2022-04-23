@@ -26,11 +26,18 @@ public class CharacterCreator {
         int value;
         int minValue;
         int maxValue;
+        int numberOfDice;
+        int valueOfDice;
 
         public Stat(String name, int minValue, int maxValue) {
             this.name = name;
             this.minValue = minValue;
             this.maxValue = maxValue;
+        }
+
+        public void setDice (int numDice, int valDice) {
+            this.numberOfDice = numDice;
+            this.valueOfDice = valDice;
         }
 
         public void setGenerationType(String generationType) {
@@ -39,6 +46,14 @@ public class CharacterCreator {
 
         public void setValue(int value) {
             this.value = value;
+        }
+
+        public String getDice() {
+            return numberOfDice+"d"+valueOfDice;
+        }
+
+        public String getGenerationType() {
+            return generationType;
         }
 
         public int getMinValue() {
@@ -116,6 +131,7 @@ public class CharacterCreator {
     public  void setStat (String statName, int value) {
         for (Stat stat: character.getStats()) {
             if (Objects.equals(stat.name, statName)) {
+                stat.setGenerationType("Set");
                 stat.setValue(value);
             }
         }
@@ -130,7 +146,8 @@ public class CharacterCreator {
     public void setStatGenerationDice (String statName, int numOfDice, int diceSides) {
         for (Stat stat: character.getStats()) {
             if (Objects.equals(stat.name, statName)) {
-                stat.setGenerationType(numOfDice+"d"+diceSides);
+                stat.setGenerationType("Dice");
+                stat.setDice(numOfDice, diceSides);
             }
         }
     }
@@ -164,7 +181,10 @@ public class CharacterCreator {
             JSONObject jsonStat = new JSONObject();
             jsonStat.put("Max Value",stat.getMaxValue());
             jsonStat.put("Min Value",stat.getMinValue());
-            jsonStat.put("Generation Type", stat.generationType);
+            jsonStat.put("Generation Type", stat.getGenerationType());
+            if (Objects.equals(stat.getGenerationType(), "Dice")) {
+                jsonStat.put("Dice", stat.getDice());
+            }
             jsonStat.put("Value", stat.value);
             jsonStat.put("Name", stat.name);
             stats.put(jsonStat);

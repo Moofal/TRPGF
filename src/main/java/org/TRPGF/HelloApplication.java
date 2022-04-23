@@ -37,10 +37,16 @@ public class HelloApplication extends Application {
         CharacterCreator characterCreator = new CharacterCreator();
 
         characterCreator.addNameOption();
+
+        characterCreator.addStat("Dex",0,20);
+        characterCreator.setStat("Dex", 10);
+
         characterCreator.addStat("Wisdom",0,20);
         characterCreator.setStatGenerationManual("Wisdom");
+
         characterCreator.addStat("Str",0,20);
         characterCreator.setStatGenerationManual("Str");
+
         characterCreator.addStat("Con",0,20);
         characterCreator.setStatGenerationDice("Con", 4,6);
 

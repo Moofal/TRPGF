@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -52,8 +51,16 @@ public class CharacterCreator {
             return numberOfDice+"d"+valueOfDice;
         }
 
+        public int getValue() {
+            return value;
+        }
+
         public String getGenerationType() {
             return generationType;
+        }
+
+        public String getName() {
+            return name;
         }
 
         public int getMinValue() {
@@ -65,11 +72,29 @@ public class CharacterCreator {
         }
     }
 
+    private static class Attribute  {
+        String name;
+        int value;
+
+        public Attribute(String name, int value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
     private static class Character {
         String name;
         boolean nameOption;
         ArrayList <Stat> stats = new ArrayList<>();
-        HashMap<String, Integer> attributes = new HashMap<>();
+        ArrayList<Attribute> attributes = new ArrayList<>();
 
         public Character() {
             this.nameOption = false;
@@ -83,8 +108,9 @@ public class CharacterCreator {
             stats.add(stat);
         }
 
-        public void addAttribute(String attributeName, Integer startingValue) {
-            attributes.put(attributeName, startingValue);
+        public void addAttribute(String attributeName, int startingValue) {
+            Attribute attribute = new Attribute(attributeName,startingValue);
+            attributes.add(attribute);
         }
 
         public void setName(String name) {
@@ -95,7 +121,7 @@ public class CharacterCreator {
             return stats;
         }
 
-        public HashMap<String, Integer> getAttributes() {
+        public ArrayList<Attribute> getAttributes() {
             return attributes;
         }
     }
@@ -130,7 +156,7 @@ public class CharacterCreator {
      */
     public  void setStat (String statName, int value) {
         for (Stat stat: character.getStats()) {
-            if (Objects.equals(stat.name, statName)) {
+            if (Objects.equals(stat.getName(), statName)) {
                 stat.setGenerationType("Set");
                 stat.setValue(value);
             }
@@ -145,7 +171,7 @@ public class CharacterCreator {
      */
     public void setStatGenerationDice (String statName, int numOfDice, int diceSides) {
         for (Stat stat: character.getStats()) {
-            if (Objects.equals(stat.name, statName)) {
+            if (Objects.equals(stat.getName(), statName)) {
                 stat.setGenerationType("Dice");
                 stat.setDice(numOfDice, diceSides);
             }
@@ -158,7 +184,7 @@ public class CharacterCreator {
      */
     public void setStatGenerationManual (String statName) {
         for (Stat stat: character.getStats()) {
-            if (Objects.equals(stat.name, statName)) {
+            if (Objects.equals(stat.getName(), statName)) {
                 stat.setGenerationType("Manual");
             }
         }
@@ -176,6 +202,7 @@ public class CharacterCreator {
 
     public void finishCharacter() throws IOException {
         JSONArray stats = new JSONArray();
+        JSONArray attributes = new JSONArray();
 
         for (Stat stat: character.getStats()) {
             JSONObject jsonStat = new JSONObject();
@@ -185,13 +212,20 @@ public class CharacterCreator {
             if (Objects.equals(stat.getGenerationType(), "Dice")) {
                 jsonStat.put("Dice", stat.getDice());
             }
-            jsonStat.put("Value", stat.value);
-            jsonStat.put("Name", stat.name);
+            jsonStat.put("Value", stat.getValue());
+            jsonStat.put("Name", stat.getName());
             stats.put(jsonStat);
         }
 
+        for (Attribute attribute: character.getAttributes()) {
+            JSONObject jsonAttribute = new JSONObject();
+            jsonAttribute.put("Name", attribute.getName());
+            jsonAttribute.put("Value", attribute.getValue());
+            attributes.put(jsonAttribute);
+        }
+
         writeCharacterCreationToJSON(stats);
-        writeCharacterToJSON(stats);
+        writeCharacterToJSON(stats, attributes);
     }
 
     private void writeCharacterCreationToJSON(JSONArray stats) throws IOException {
@@ -203,10 +237,11 @@ public class CharacterCreator {
         charCreationSettingsFile.close();
     }
 
-    private void writeCharacterToJSON(JSONArray stats) throws IOException {
+    private void writeCharacterToJSON(JSONArray stats, JSONArray attributes) throws IOException {
         JSONObject character = new JSONObject();
         character.put("Name", "");
         character.put("Stats", stats);
+        character.put("Attributes", attributes);
 
         FileWriter characterFile = new FileWriter("src/Character.json");
         characterFile.write(character.toString());

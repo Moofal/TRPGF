@@ -50,6 +50,8 @@ public class HelloApplication extends Application {
         characterCreator.addStat("Con",0,20);
         characterCreator.setStatGenerationDice("Con", 4,6);
 
+        characterCreator.addAttribute("Good",0);
+
         characterCreator.finishCharacter();
 
         launch();

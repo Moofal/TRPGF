@@ -29,8 +29,9 @@ import java.util.Random;
  */
 public class Screen {
 
-    public Screen() {
-
+    private final Stage stage;
+    public Screen(Stage stage) {
+        this.stage = stage;
     }
 
     private Scene startingScreen, tableScreen, characterCreatorScreen, endingScreen;
@@ -45,13 +46,12 @@ public class Screen {
     /**
      * This is the starting screen.
      * Here you can show the title of the game and some intro text
-     * @param window this is the stage that all the scene are placed on.
      * @param gameTitle is the title/name of the game.
      * @param startingText this is the intro text that the player will see.
      * I advise you use a text file and a file reader to avoid long text strings in your code.
      */
-    public void startingScreen (Stage window, String gameTitle, String startingText) {
-        window.setTitle(gameTitle);
+    public void startingScreen (String gameTitle, String startingText) {
+        stage.setTitle(gameTitle);
         Pane layout = new Pane();
 
         Label title = new Label(gameTitle);
@@ -70,9 +70,9 @@ public class Screen {
         nextScreenButton.relocate(630, 200);
         nextScreenButton.setOnAction(e -> {
             if (characterScreenIsThere) {
-                window.setScene(characterCreatorScreen);
+                stage.setScene(characterCreatorScreen);
             } else {
-                window.setScene(tableScreen);
+                stage.setScene(tableScreen);
             }
         });
 
@@ -80,8 +80,8 @@ public class Screen {
         layout.getChildren().addAll(title,text, nextScreenButton);
         startingScreen = new Scene(layout, 1280 , 720);
 
-        window.setScene(startingScreen);
-        window.show();
+        stage.setScene(startingScreen);
+        stage.show();
     }
 
 
@@ -89,9 +89,8 @@ public class Screen {
     /**
      * This creates the table screen where the actual game is played.
      * Here the dialog and character info is displayed and choices are made
-     * @param window this is the stage that all the scene are placed on.
      */
-    public void tableScreen(Stage window) {
+    public void tableScreen() {
         tableScreenLayout = new Pane();
 
         Line horizontalLine = new Line();
@@ -135,11 +134,7 @@ public class Screen {
         setCurrentOptions(optionsVBox);
 
         TextField choice = new TextField();
-        choice.setOnAction(e -> {
-            if (attemptOption(optionsVBox, choice, dialog, currentOptions)) {
-                setCurrentOptions(optionsVBox);
-            }
-        });
+        choice.setOnAction(e -> attemptOption(optionsVBox, choice, dialog, currentOptions));
         choice.relocate(10,640);
 
 
@@ -182,7 +177,7 @@ public class Screen {
     }
 
 
-    private Boolean attemptOption(VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON)  {
+    private void attemptOption(VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON)  {
         String chosenOption = choice.getText().replaceAll("[^1-3]", "");
         choice.setText("");
 
@@ -191,7 +186,7 @@ public class Screen {
             index = Integer.parseInt(chosenOption);
         } catch (NumberFormatException e) {
             System.out.println(e);
-            return false;
+            return;
         }
         JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index-1);
         String optionType = chosenOptionObject.getString("TYPE");
@@ -201,19 +196,18 @@ public class Screen {
             case "Normal Choice":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 optionChosen(vBox, dialog, nextDialogID);
-                return true;
+                break;
             case "Previous Choice":
-                return true;
+                break;
             case "Choice with Requirement":
                 checkRequirementAndSetScreen(vBox, dialog, chosenOptionObject);
-                return true;
+                break;
             case "Choice with a reward":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 updateCharacterJson(chosenOptionObject);
                 optionChosen(vBox, dialog, nextDialogID);
-                return true;
+                break;
         }
-        return false;
     }
 
     private void updateCharacterJson(JSONObject chosenOptionObject) {
@@ -223,7 +217,7 @@ public class Screen {
         JSONObject character = getCharacterInfo();
         assert character != null;
         JSONArray characterStats = character.getJSONArray("Stats");
-        JSONObject requiredStat = null;
+        JSONObject requiredStat;
         for (int i=0; i<characterStats.length(); i++) {
             String statName = characterStats.getJSONObject(i).getString("Name");
             if (Objects.equals(statName,statIncreased)) {
@@ -280,6 +274,7 @@ public class Screen {
         currentOptions = currentDialog.getJSONArray("dialogChoiceList");
         // This removes the old dialog options text
         vBox.getChildren().clear();
+        setCurrentOptions(vBox);
     }
 
 
@@ -334,10 +329,9 @@ public class Screen {
     /**
      * This creates the character creation screen.
      * is what comes after the starting screen
-     * @param window this is the stage that all the scene are placed on.
      * @param displayedText text that is shows on this screen.
      */
-    public void characterScreen(Stage window, String displayedText) throws IOException {
+    public void characterScreen(String displayedText) throws IOException {
         characterScreenIsThere = true;
         Pane characterCreationPane = new Pane();
 
@@ -390,7 +384,7 @@ public class Screen {
                 return;
             }
             try {
-                characterCreated(window, character, characterNameInput, storedArray, errorText);
+                characterCreated(stage, character, characterNameInput, storedArray, errorText);
                 updateAllCharacterInfoOnTableScreen(tableScreenLayout);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -496,7 +490,6 @@ public class Screen {
 
     /**
      * For creating ending screens, you can have multiple of these.
-     * @param window this is the stage that all the scene are placed on.
      * @param endingScreenId is the id of this endingScreen..
      * @param sceneText the text that is shown on this ending screen.
      * @param startOver is a boolean value that lets you dice if you want there to be a staring over button
@@ -504,7 +497,7 @@ public class Screen {
      * @param exit is a boolean value that lets you dice if you want there to be an exit button
      *             that closes the application.
      */
-    public void endingScreen(Stage window, int endingScreenId, String sceneText, boolean startOver, boolean exit) {
+    public void endingScreen(int endingScreenId, String sceneText, boolean startOver, boolean exit) {
         Pane endingPane = new Pane();
 
         Text endingText = new Text(sceneText);
@@ -514,7 +507,7 @@ public class Screen {
 
         Button startOverButton = new Button("Start Over");
         startOverButton.relocate(300, 200);
-        startOverButton.setOnAction(e -> window.setScene(startingScreen));
+        startOverButton.setOnAction(e -> stage.setScene(startingScreen));
 
         if (startOver) {
             endingPane.getChildren().add(startOverButton);
@@ -522,7 +515,7 @@ public class Screen {
 
         Button exitButton = new Button("Exit");
         exitButton.relocate(600, 200);
-        exitButton.setOnAction(e -> window.close());
+        exitButton.setOnAction(e -> stage.close());
 
         if (exit) {
             endingPane.getChildren().add(exitButton);

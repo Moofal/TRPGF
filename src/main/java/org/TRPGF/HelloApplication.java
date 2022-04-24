@@ -9,14 +9,14 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Screen screen = new Screen();
-        screen.startingScreen(stage, "Kråkevisa", "Og mannen han gjekk seg i Vea skog\n" +
+        Screen screen = new Screen(stage);
+        screen.startingScreen("Kråkevisa", "Og mannen han gjekk seg i Vea skog\n" +
                 "Hei fara i Vea skog\n" +
                 "Då høyrde an ei kråke i lunden gol\n" +
                 "Hei fara faltu riltu raltu ra");
-        screen.characterScreen(stage, "Make your character!");
-        screen.tableScreen(stage);
-        screen.endingScreen(stage,1,"The end", true, true);
+        screen.characterScreen("Make your character!");
+        screen.tableScreen();
+        screen.endingScreen(1,"The end", true, true);
     }
 
     public static void main(String[] args) throws IOException {

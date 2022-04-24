@@ -34,6 +34,9 @@ public class Screen {
     }
 
     private Scene startingScreen, tableScreen, characterCreatorScreen, endingScreen;
+    private boolean characterScreenIsThere = false;
+    // This variable is set here so that both tableScreen and
+    // characterScreen can the stat values shown on the tableScreen
     private final VBox characterStatInfo = new VBox();
     private Pane tableScreenLayout;
     private JSONObject currentDialog;
@@ -65,7 +68,13 @@ public class Screen {
 
         Button nextScreenButton = new Button("Next");
         nextScreenButton.relocate(630, 200);
-        nextScreenButton.setOnAction(e -> window.setScene(characterCreatorScreen));
+        nextScreenButton.setOnAction(e -> {
+            if (characterScreenIsThere) {
+                window.setScene(characterCreatorScreen);
+            } else {
+                window.setScene(tableScreen);
+            }
+        });
 
 
         layout.getChildren().addAll(title,text, nextScreenButton);
@@ -127,11 +136,8 @@ public class Screen {
 
         TextField choice = new TextField();
         choice.setOnAction(e -> {
-            try {
-                attemptOption(optionsVBox, choice, dialog, currentOptions);
+            if (attemptOption(optionsVBox, choice, dialog, currentOptions)) {
                 setCurrentOptions(optionsVBox);
-            } catch (IOException ex) {
-                ex.printStackTrace();
             }
         });
         choice.relocate(10,640);
@@ -176,30 +182,38 @@ public class Screen {
     }
 
 
-    private void attemptOption(VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON) throws IOException {
+    private Boolean attemptOption(VBox vBox, TextField choice, Text dialog, JSONArray currentOptionsJSON)  {
         String chosenOption = choice.getText().replaceAll("[^1-3]", "");
         choice.setText("");
 
-        int index = Integer.parseInt(chosenOption);
+        int index;
+        try {
+            index = Integer.parseInt(chosenOption);
+        } catch (NumberFormatException e) {
+            System.out.println(e);
+            return false;
+        }
         JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index-1);
         String optionType = chosenOptionObject.getString("TYPE");
 
+        int nextDialogID;
         switch (optionType) {
             case "Normal Choice":
-                int nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 optionChosen(vBox, dialog, nextDialogID);
-                break;
+                return true;
             case "Previous Choice":
-                break;
+                return true;
             case "Choice with Requirement":
                 checkRequirementAndSetScreen(vBox, dialog, chosenOptionObject);
-                break;
+                return true;
             case "Choice with a reward":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 updateCharacterJson(chosenOptionObject);
                 optionChosen(vBox, dialog, nextDialogID);
-                break;
+                return true;
         }
+        return false;
     }
 
     private void updateCharacterJson(JSONObject chosenOptionObject) {
@@ -324,6 +338,7 @@ public class Screen {
      * @param displayedText text that is shows on this screen.
      */
     public void characterScreen(Stage window, String displayedText) throws IOException {
+        characterScreenIsThere = true;
         Pane characterCreationPane = new Pane();
 
         Label displayedTextLabel = new Label(displayedText);

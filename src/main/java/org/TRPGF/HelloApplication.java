@@ -10,7 +10,10 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Screen screen = new Screen();
-        screen.startingScreen(stage, "Lord of the rings", "One ring to bind them and rule them all");
+        screen.startingScreen(stage, "Kråkevisa", "Og mannen han gjekk seg i Vea skog\n" +
+                "Hei fara i Vea skog\n" +
+                "Då høyrde an ei kråke i lunden gol\n" +
+                "Hei fara faltu riltu raltu ra");
         screen.characterScreen(stage, "Make your character!");
         screen.tableScreen(stage);
         screen.endingScreen(stage,1,"The end", true, true);
@@ -20,10 +23,13 @@ public class HelloApplication extends Application {
 
         Dialog dialog = new Dialog();
 
-        dialog.createDialogBox(1, "Content 1");
-        dialog.addOption(1, 1, "Go to 2", 2);
-        dialog.addOption(2, 1, "Go to 3", 3);
-        dialog.addOption(3, 1, "Stay here", 1);
+        dialog.createDialogBox(1, "Og mannen han tenkte med sjølve seg\n" +
+                "Hei fara med sjølve seg\n" +
+                "Eg meine den kråka vil drepa meg\n" +
+                "Hei fara faltu riltu raltu ra");
+        dialog.addOption(1, 1, "Angrep kråka", 2);
+        dialog.addOption(2, 1, "Løp for liver", 3);
+        dialog.addOption(3, 1, "observer", 1);
         dialog.createDialogBox(2, "Content 2");
         dialog.addOption(1, 2, "Go to 1", 1);
         dialog.addOption(2, 2, "Go to 3", 3);

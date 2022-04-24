@@ -1,10 +1,10 @@
 [ {
   "ID" : 1,
-  "CONTENT" : "Content 1",
+  "CONTENT" : "Og mannen han tenkte med sjølve seg\nHei fara med sjølve seg\nEg meine den kråka vil drepa meg\nHei fara faltu riltu raltu ra",
   "dialogChoiceList" : [ {
     "TYPE" : "Normal Choice",
     "ID" : 1,
-    "CONTENT" : "Go to 2",
+    "CONTENT" : "Angrep kråka",
     "BOXID" : 1,
     "SUCCESS-SCENE" : 2,
     "FAIL-SCENE" : 0,
@@ -15,7 +15,7 @@
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 2,
-    "CONTENT" : "Go to 3",
+    "CONTENT" : "Løp for liver",
     "BOXID" : 1,
     "SUCCESS-SCENE" : 3,
     "FAIL-SCENE" : 0,
@@ -26,7 +26,7 @@
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 3,
-    "CONTENT" : "Stay here",
+    "CONTENT" : "observer",
     "BOXID" : 1,
     "SUCCESS-SCENE" : 1,
     "FAIL-SCENE" : 0,

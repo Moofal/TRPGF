@@ -200,7 +200,7 @@ public class CharacterCreator {
         character.addAttribute(attributeName, startingValue);
     }
 
-    public void finishCharacter() throws IOException {
+    public void finishCharacter() {
         JSONArray stats = new JSONArray();
         JSONArray attributes = new JSONArray();
 
@@ -228,23 +228,33 @@ public class CharacterCreator {
         writeCharacterToJSON(stats, attributes);
     }
 
-    private void writeCharacterCreationToJSON(JSONArray stats) throws IOException {
+    private void writeCharacterCreationToJSON(JSONArray stats) {
         JSONObject options = new JSONObject();
         options.put("Stats", stats);
         options.put("Name Option", character.nameOption);
-        FileWriter charCreationSettingsFile = new FileWriter("src/CharCreatSettings.json");
-        charCreationSettingsFile.write(options.toString());
-        charCreationSettingsFile.close();
+        try {
+            FileWriter charCreationSettingsFile = new FileWriter("src/CharCreatSettings.json");
+            charCreationSettingsFile.write(options.toString());
+            charCreationSettingsFile.close();
+        } catch (IOException e) {
+            System.out.println("Could not find CharCreatSettings.json");
+        }
+
     }
 
-    private void writeCharacterToJSON(JSONArray stats, JSONArray attributes) throws IOException {
+    private void writeCharacterToJSON(JSONArray stats, JSONArray attributes) {
         JSONObject character = new JSONObject();
         character.put("Name", "");
         character.put("Stats", stats);
         character.put("Attributes", attributes);
 
-        FileWriter characterFile = new FileWriter("src/Character.json");
-        characterFile.write(character.toString());
-        characterFile.close();
+        try {
+            FileWriter characterFile = new FileWriter("src/Character.json");
+            characterFile.write(character.toString());
+            characterFile.close();
+        } catch (IOException e) {
+            System.out.println("Could not find Character.json");
+        }
+
     }
 }

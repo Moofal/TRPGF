@@ -8,14 +8,19 @@ import java.io.IOException;
 public class HelloApplication extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Screen screen = new Screen(stage);
+
         screen.startingScreen("Kråkevisa", "Og mannen han gjekk seg i Vea skog\n" +
                 "Hei fara i Vea skog\n" +
                 "Då høyrde an ei kråke i lunden gol\n" +
                 "Hei fara faltu riltu raltu ra");
+
         screen.characterScreen("Make your character!");
+
+        screen.addTableScreenMap("E:\\Arbeid\\SM4\\Rammeverk\\workshop\\TRPGF\\TRPGF\\src\\ball of light.jpg");
         screen.tableScreen();
+
         screen.endingScreen(1,"The end", true, true);
     }
 

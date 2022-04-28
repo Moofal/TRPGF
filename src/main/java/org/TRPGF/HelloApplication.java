@@ -11,14 +11,15 @@ public class HelloApplication extends Application {
     public void start(Stage stage) {
         Screen screen = new Screen(stage);
 
-        screen.startingScreen("Kråkevisa", "Og mannen han gjekk seg i Vea skog\n" +
-                "Hei fara i Vea skog\n" +
-                "Då høyrde an ei kråke i lunden gol\n" +
-                "Hei fara faltu riltu raltu ra");
+        screen.startingScreen("Kråkevisa", "The man went into the woods\n" +
+                "Hey fara into the woods\n" +
+                "When a crow sat in the meadow and crawed\n" +
+                "Hey fara. Faltu riltu raltura");
 
         screen.characterScreen("Make your character!");
 
-        screen.addTableScreenMap("E:\\Arbeid\\SM4\\Rammeverk\\workshop\\TRPGF\\TRPGF\\src\\ball of light.jpg");
+        String path = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7087ef35-84c5-472a-9ac1-c092dd681b70/d313jvn-5b4f00f8-e387-445a-8186-cdb98f203c93.jpg/v1/fill/w_1024,h_768,q_75,strp/middle_earth_map_by_kilbeth-d313jvn.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwic3ViIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl0sIm9iaiI6W1t7InBhdGgiOiIvZi83MDg3ZWYzNS04NGM1LTQ3MmEtOWFjMS1jMDkyZGQ2ODFiNzAvZDMxM2p2bi01YjRmMDBmOC1lMzg3LTQ0NWEtODE4Ni1jZGI5OGYyMDNjOTMuanBnIiwid2lkdGgiOiI8PTEwMjQiLCJoZWlnaHQiOiI8PTc2OCJ9XV19.Ulz1jIp_ifIq6To7pZ-F64LIN7S1tjPvu6wrmiVS-p8";
+        screen.addTableScreenMap("Map", path);
         screen.tableScreen();
 
         screen.endingScreen(1,"The end", true, true);
@@ -28,22 +29,26 @@ public class HelloApplication extends Application {
 
         Dialog dialog = new Dialog();
 
-        dialog.createDialogBox(1, "Og mannen han tenkte med sjølve seg\n" +
-                "Hei fara med sjølve seg\n" +
-                "Eg meine den kråka vil drepa meg\n" +
-                "Hei fara faltu riltu raltu ra");
-        dialog.addOption(1, 1, "Angrep kråka", 2);
-        dialog.addOption(2, 1, "Løp for liver", 3);
-        dialog.addOption(3, 1, "observer", 1);
+        dialog.createDialogBox(1, "The man went into the woods\n" +
+                "Hey fara into the woods\n" +
+                "When a crow sat in the meadow and crawed\n" +
+                "Hey fara. Faltu riltu raltura\n " +
+                "The man thought with himself\n" +
+                "I wonder if that crow wants to kill me?");
+        dialog.addOption(1, 1, "Attack the crow", 2);
+        dialog.addOption(2, 1, "Run for your life", 3);
+        dialog.addOption(3, 1, "Observe", 1);
         dialog.createDialogBox(2, "Content 2");
         dialog.addOption(1, 2, "Go to 1", 1);
         dialog.addOption(2, 2, "Go to 3", 3);
         dialog.createDialogBox(3, "There is a dragon in front of you what do you do");
         dialog.addOptionWithRequirement(1, 3, "Need 15 str", 2, 1, "Str", 15);
-        //dialog.addOptionPrevious(522, 3, 2, "slay it",0);
         dialog.addOptionWithReward(2, 3, "str+1", 1, "Str", 1);
+        //dialog.addOptionPrevious(3, 3, 2, "slay it",3);
 
         dialog.finishStory();
+
+
 
         CharacterCreator characterCreator = new CharacterCreator();
 
@@ -59,7 +64,7 @@ public class HelloApplication extends Application {
         characterCreator.setStatGenerationManual("Str");
 
         characterCreator.addStat("Con",0,20);
-        characterCreator.setStatGenerationDice("Con", 4,6);
+        characterCreator.setStatGenerationDice("Con", 3,6);
 
         characterCreator.addAttribute("Good",0);
 

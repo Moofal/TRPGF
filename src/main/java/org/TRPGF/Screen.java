@@ -132,18 +132,13 @@ public class Screen {
         dialogHistory.setContent(dialogText);
 
         JSONObject tableScreenSettings = getTableScreenSettings();
-
-
-        assert tableScreenSettings != null;
-        String mapPath = tableScreenSettings.getString("Map");
-        Image map = new Image(mapPath);
-        ImageView mapView = new ImageView();
-        mapView.setImage(map);
-        mapView.relocate(640,0);
-        mapView.maxHeight(640);
-        mapView.maxWidth(360);
+        
 
         currentOptions = currentDialog.getJSONArray("dialogChoiceList");
+
+        Label optionsLabel = new Label("Options:");
+        optionsLabel.relocate(15,365);
+        optionsLabel.setFont(Font.font("Arial", 20));
 
         VBox optionsVBox = new VBox();
         optionsVBox.relocate(30,390);
@@ -151,7 +146,19 @@ public class Screen {
 
         TextField choice = new TextField();
         choice.setOnAction(e -> attemptOption(optionsVBox, choice, dialog, currentOptions, currentDialog, dialogText));
-        choice.relocate(10,640);
+        choice.relocate(20,600);
+
+
+        ImageView dialogImageView = new ImageView();
+        dialogImageView.relocate(640,0);
+        dialogImageView.maxHeight(640);
+        dialogImageView.maxWidth(360);
+
+        /* TODO: legg til funksjon som skjekker om next dialog og starting dialog har image link, hvis de har setImage
+        *if (!currentDialog.getString("").isEmpty()) {
+         *   Image dialogImage = new Image("");
+          *  dialogImageView.setImage(dialogImage);
+        }*/
 
 
         updateAllCharacterInfoOnTableScreen(tableScreenLayout);
@@ -162,32 +169,46 @@ public class Screen {
         ToggleGroup paneToggle = new ToggleGroup();
 
         RadioMenuItem dialogHistoryMenuToggle = new RadioMenuItem("Dialog History");
-        RadioMenuItem showMapMenuToggle = new RadioMenuItem("Map");
+        RadioMenuItem showImageMenuToggle = new RadioMenuItem("Image");
 
         dialogHistoryMenuToggle.setToggleGroup(paneToggle);
-        showMapMenuToggle.setToggleGroup(paneToggle);
+        showImageMenuToggle.setToggleGroup(paneToggle);
 
         dialogHistoryMenuToggle.setOnAction(e -> {
             toggleDialogHistory(tableScreenLayout, dialogHistory, dialogHistoryMenuToggle);
-            toggleMap(tableScreenLayout, showMapMenuToggle, mapView);
+            toggleDialogImage(tableScreenLayout, showImageMenuToggle, dialogImageView);
 
         });
-        showMapMenuToggle.setOnAction(e -> {
-            toggleMap(tableScreenLayout, showMapMenuToggle, mapView);
+        showImageMenuToggle.setOnAction(e -> {
+            toggleDialogImage(tableScreenLayout, showImageMenuToggle, dialogImageView);
             toggleDialogHistory(tableScreenLayout, dialogHistory, dialogHistoryMenuToggle);
         });
 
-        menu.getItems().addAll(dialogHistoryMenuToggle,showMapMenuToggle);
+        SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
+
+        assert tableScreenSettings != null;
+        String mapPath = tableScreenSettings.getString("Map");
+        String mapName = tableScreenSettings.getString("Map Name");
+        
+        MenuItem mapBox = new MenuItem("Map");
+        mapBox.setOnAction(e -> displayMapBox(mapName,mapPath));
+
+        menu.getItems().addAll(dialogHistoryMenuToggle,showImageMenuToggle);
+
+        if (!Objects.equals(mapPath,"")) {
+            menu.getItems().addAll(separatorMenuItem,mapBox);
+        }
 
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(menu);
         menuBar.relocate(641,361);
 
-        tableScreenLayout.getChildren().addAll(horizontalLine, verticalLine,
-                dialogScrollPane, choice, optionsVBox, characterStatInfo, menuBar);
+        tableScreenLayout.getChildren().addAll(horizontalLine, verticalLine, dialogScrollPane, choice,
+                optionsVBox, characterStatInfo, menuBar,optionsLabel);
         tableScene = new Scene(tableScreenLayout, 1280, 720);
     }
 
+    // Reading from file
     private JSONObject getTableScreenSettings() {
         try {
             Path tableScreenPath = Path.of("src/TableScreenSettings.json");
@@ -198,110 +219,83 @@ public class Screen {
         }
         return null;
     }
+    private JSONObject getDialog(int dialogID) {
+        try {
+            int index = dialogID-1;
 
-    private void toggleMap(Pane tableScreenLayout, RadioMenuItem showMapMenuToggle, ImageView mapView) {
-        if (showMapMenuToggle.isSelected()) {
-            tableScreenLayout.getChildren().add(mapView);
-        } else {
-            tableScreenLayout.getChildren().remove(mapView);
+            Path file = Path.of("src/story.json");
+            String input = Files.readString(file);
+
+            JSONArray array = new JSONArray(input);
+
+            return array.getJSONObject(index);
+        } catch (IOException e) {
+            System.out.println(e + "src/story.json");
         }
+        return null;
+    }
+    private JSONObject getCharacterInfo() {
+        try {
+            Path characterPath = Path.of("src/Character.json");
+            String input = Files.readString(characterPath);
+            return new JSONObject(input);
+        } catch (IOException e) {
+            System.out.println(e+"\n Could not find Character.json file");
+        }
+        return null;
+    }
+    private JSONObject getDialogHistory() {
+        try {
+            Path file = Path.of("src/DialogHistory.json");
+            String input = Files.readString(file);
+
+            return new JSONObject(input);
+        } catch (IOException e) {
+            System.out.println(e + "src/DialogHistory.json");
+        }
+        return null;
     }
 
-    /**
-     * Adds a map to your game for the player.
-     * The image must be a BMP, GIF, JPEG or PNG.
-     * Max height: 640px, max width: 360px.
-     * @param imageFilePath The file path for the image.
-     */
-    public void addTableScreenMap(String imageFilePath){
-        JSONObject options = new JSONObject();
-        options.put("Map", imageFilePath);
+    // Writing to file
+    private void writeToDialogHistory(JSONObject currentDialog) {
+        JSONObject dialogHistoryObject = new JSONObject();
+        JSONArray arrayOfDialog = new JSONArray();
+        arrayOfDialog.put(currentDialog);
+        dialogHistoryObject.put("Dialog History", arrayOfDialog);
         try {
-            FileWriter charCreationSettingsFile = new FileWriter("src/TableScreenSettings.json");
-            charCreationSettingsFile.write(options.toString());
+            FileWriter charCreationSettingsFile = new FileWriter("src/DialogHistory.json");
+            charCreationSettingsFile.write(dialogHistoryObject.toString());
             charCreationSettingsFile.close();
         } catch (IOException e) {
-            System.out.println("Could not find CharCreatSettings.json");
+            System.out.println("Could not find DialogHistory.json");
         }
     }
+    private void updateCharacterJson(JSONObject chosenOptionObject) {
+        String statIncreased = chosenOptionObject.getString("STAT");
+        int statIncreasedAmount = chosenOptionObject.getInt("REWARD-VAL");
 
-    private void toggleDialogHistory(Pane tableScreenLayout, ScrollPane dialogHistory, RadioMenuItem dialogHistoryMenuToggle) {
-        if (dialogHistoryMenuToggle.isSelected()) {
-            tableScreenLayout.getChildren().add(dialogHistory);
-        } else {
-            tableScreenLayout.getChildren().remove(dialogHistory);
-        }
-    }
-
-
-    private void updateAllCharacterInfoOnTableScreen(Pane layout) {
-        updateCharacterNameOnTableScreen(layout);
-
-        updateCharacterStatsOnTableScreen(characterStatInfo);
-    }
-
-    private void updateCharacterNameOnTableScreen(Pane layout) {
-        String characterName = Objects.requireNonNull(getCharacterInfo()).getString("Name");
-        Text characterNameOnBord = new Text(characterName);
-        characterNameOnBord.setFont(Font.font("Arial",20));
-        characterNameOnBord.relocate(800,450);
-        layout.getChildren().add(characterNameOnBord);
-    }
-
-    private void updateCharacterStatsOnTableScreen(VBox characterStatInfo) {
-        characterStatInfo.getChildren().clear();
         JSONObject character = getCharacterInfo();
         assert character != null;
-        JSONArray stats = character.getJSONArray("Stats");
-
-        for (int i=0; i<stats.length(); i++) {
-            JSONObject stat = stats.getJSONObject(i);
-            String info =stat.getString("Name")+" "+stat.getInt("Value");
-            Text statText = new Text();
-            statText.setText(info);
-            characterStatInfo.getChildren().add(statText);
+        JSONArray characterStats = character.getJSONArray("Stats");
+        JSONObject requiredStat;
+        for (int i=0; i<characterStats.length(); i++) {
+            String statName = characterStats.getJSONObject(i).getString("Name");
+            if (Objects.equals(statName,statIncreased)) {
+                requiredStat = characterStats.getJSONObject(i);
+                int currentStatValue = requiredStat.getInt("Value");
+                int newValue = currentStatValue+statIncreasedAmount;
+                requiredStat.put("Value", newValue);
+            }
         }
-        characterStatInfo.relocate(700,500);
-    }
-
-
-    private void attemptOption(VBox optionsVBox, TextField choice, Text dialog, JSONArray currentOptionsJSON, JSONObject currentDialog, Text dialogHistory)  {
-        String chosenOption = choice.getText().replaceAll("[^1-3]", "");
-        choice.setText("");
-
-        int index;
         try {
-            index = Integer.parseInt(chosenOption);
-        } catch (NumberFormatException e) {
-            System.out.println(e);
-            return;
-        }
-        index -= 1;
-        JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index);
-        String optionType = chosenOptionObject.getString("TYPE");
-
-        int nextDialogID;
-        switch (optionType) {
-            case "Normal Choice":
-                nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                optionChosen(optionsVBox, dialog, nextDialogID);
-                updateDialogHistory(currentDialog, dialogHistory, index);
-                break;
-            case "Previous Choice":
-                break;
-            case "Choice with Requirement":
-                checkRequirementAndSetScreen(optionsVBox, dialog, chosenOptionObject);
-                updateDialogHistory(currentDialog, dialogHistory, index);
-                break;
-            case "Choice with a reward":
-                nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                updateCharacterJson(chosenOptionObject);
-                optionChosen(optionsVBox, dialog, nextDialogID);
-                updateDialogHistory(currentDialog, dialogHistory, index);
-                break;
+            FileWriter characterFile = new FileWriter("src/Character.json");
+            characterFile.write(character.toString());
+            characterFile.close();
+            updateCharacterStatsOnTableScreen(characterStatInfo);
+        } catch (IOException e) {
+            System.out.println(e+" Could not find Character.json");
         }
     }
-
     private void updateDialogHistory(JSONObject currentDialog, Text dialogText, int index) {
         StringBuilder dialog;
         JSONObject newDialog;
@@ -333,59 +327,92 @@ public class Screen {
         writeToDialogHistory(newDialog);
     }
 
-    private void writeToDialogHistory(JSONObject currentDialog) {
-        JSONObject dialogHistoryObject = new JSONObject();
-        JSONArray arrayOfDialog = new JSONArray();
-        arrayOfDialog.put(currentDialog);
-        dialogHistoryObject.put("Dialog History", arrayOfDialog);
-        try {
-            FileWriter charCreationSettingsFile = new FileWriter("src/DialogHistory.json");
-            charCreationSettingsFile.write(dialogHistoryObject.toString());
-            charCreationSettingsFile.close();
-        } catch (IOException e) {
-            System.out.println("Could not find DialogHistory.json");
-        }
+    // Character info on table screen
+    private void updateAllCharacterInfoOnTableScreen(Pane layout) {
+        updateCharacterNameOnTableScreen(layout);
+
+        updateCharacterStatsOnTableScreen(characterStatInfo);
     }
-
-    private JSONObject getDialogHistory() {
-        try {
-            Path file = Path.of("src/DialogHistory.json");
-            String input = Files.readString(file);
-
-            return new JSONObject(input);
-        } catch (IOException e) {
-            System.out.println(e + "src/DialogHistory.json");
-        }
-        return null;
+    private void updateCharacterNameOnTableScreen(Pane layout) {
+        String characterName = Objects.requireNonNull(getCharacterInfo()).getString("Name");
+        Text characterNameOnBord = new Text(characterName);
+        characterNameOnBord.setFont(Font.font("Arial",20));
+        characterNameOnBord.relocate(800,450);
+        layout.getChildren().add(characterNameOnBord);
     }
-
-    private void updateCharacterJson(JSONObject chosenOptionObject) {
-        String statIncreased = chosenOptionObject.getString("STAT");
-        int statIncreasedAmount = chosenOptionObject.getInt("REWARD-VAL");
-
+    private void updateCharacterStatsOnTableScreen(VBox characterStatInfo) {
+        characterStatInfo.getChildren().clear();
         JSONObject character = getCharacterInfo();
         assert character != null;
-        JSONArray characterStats = character.getJSONArray("Stats");
-        JSONObject requiredStat;
-        for (int i=0; i<characterStats.length(); i++) {
-            String statName = characterStats.getJSONObject(i).getString("Name");
-            if (Objects.equals(statName,statIncreased)) {
-                requiredStat = characterStats.getJSONObject(i);
-                int currentStatValue = requiredStat.getInt("Value");
-                int newValue = currentStatValue+statIncreasedAmount;
-                requiredStat.put("Value", newValue);
-            }
+        JSONArray stats = character.getJSONArray("Stats");
+
+        for (int i=0; i<stats.length(); i++) {
+            JSONObject stat = stats.getJSONObject(i);
+            String info = stat.getString("Name")+" "+stat.getInt("Value");
+            Text statText = new Text();
+            statText.setText(info);
+            characterStatInfo.getChildren().add(statText);
         }
-        try {
-            FileWriter characterFile = new FileWriter("src/Character.json");
-            characterFile.write(character.toString());
-            characterFile.close();
-            updateCharacterStatsOnTableScreen(characterStatInfo);
-        } catch (IOException e) {
-            System.out.println(e+" Could not find Character.json");
+        characterStatInfo.relocate(700,500);
+    }
+
+    // Menu toggles
+    private void toggleDialogHistory(Pane tableScreenLayout, ScrollPane dialogHistory, RadioMenuItem dialogHistoryMenuToggle) {
+        if (dialogHistoryMenuToggle.isSelected()) {
+            try {
+                tableScreenLayout.getChildren().add(dialogHistory);
+            } catch (IllegalArgumentException ignored) {}
+        } else {
+            tableScreenLayout.getChildren().remove(dialogHistory);
+        }
+    }
+    private void toggleDialogImage(Pane tableScreenLayout, RadioMenuItem showMapMenuToggle, ImageView imageView) {
+        if (showMapMenuToggle.isSelected()) {
+            try {
+                tableScreenLayout.getChildren().add(imageView);
+            } catch (IllegalArgumentException ignored) {}
+        } else {
+            tableScreenLayout.getChildren().remove(imageView);
         }
     }
 
+    // Option functions
+    private void attemptOption(VBox optionsVBox, TextField choice, Text dialog, JSONArray currentOptionsJSON, JSONObject currentDialog, Text dialogHistory)  {
+        String chosenOption = choice.getText().replaceAll("[^1-3]", "");
+        choice.setText("");
+
+        int index;
+        try {
+            index = Integer.parseInt(chosenOption);
+        } catch (NumberFormatException e) {
+            System.out.println(e);
+            return;
+        }
+        index -= 1;
+        JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index);
+        String optionType = chosenOptionObject.getString("TYPE");
+
+        int nextDialogID;
+        switch (optionType) {
+            case "Normal Choice":
+                nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                optionChosen(optionsVBox, dialog, nextDialogID);
+                break;
+            case "Previous Choice":
+                int previousOptionId = chosenOptionObject.getInt("PREV-CHOICE");
+                //checkIfOptionChosenPreviously(previousOptionId);
+                break;
+            case "Choice with Requirement":
+                checkRequirementAndSetScreen(optionsVBox, dialog, chosenOptionObject);
+                break;
+            case "Choice with a reward":
+                nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                updateCharacterJson(chosenOptionObject);
+                optionChosen(optionsVBox, dialog, nextDialogID);
+                break;
+        }
+        updateDialogHistory(currentDialog, dialogHistory, index);
+    }
     private void checkRequirementAndSetScreen(VBox optionsVBox, Text dialog, JSONObject chosenOptionObject) {
         int nextDialogID;
         JSONArray characterStats = Objects.requireNonNull(getCharacterInfo()).getJSONArray("Stats");
@@ -410,7 +437,6 @@ public class Screen {
             optionChosen(optionsVBox, dialog, nextDialogID);
         }
     }
-
     private void optionChosen(VBox optionsVBox, Text dialog, int nextDialogID) {
         // Setting the dialog text box to be the new dialog text
         JSONObject nextDialogJSON = getDialog(nextDialogID);
@@ -428,35 +454,6 @@ public class Screen {
         optionsVBox.getChildren().clear();
         setCurrentOptions(optionsVBox);
     }
-
-
-    private JSONObject getDialog(int dialogID) {
-        try {
-            int index = dialogID-1;
-
-            Path file = Path.of("src/story.json");
-            String input = Files.readString(file);
-
-            JSONArray array = new JSONArray(input);
-
-            return array.getJSONObject(index);
-        } catch (IOException e) {
-            System.out.println(e + "src/story.json");
-        }
-        return null;
-    }
-
-    private JSONObject getCharacterInfo() {
-        try {
-            Path characterPath = Path.of("src/Character.json");
-            String input = Files.readString(characterPath);
-            return new JSONObject(input);
-        } catch (IOException e) {
-            System.out.println(e+"\n Could not find Character.json file");
-        }
-        return null;
-    }
-
     private void setCurrentOptions(VBox vBox) {
         double optionY = 390;
         for (int i = 0; i < currentOptions.length(); i++) {
@@ -465,17 +462,61 @@ public class Screen {
             vBox.getChildren().add(addOption(text, i+1, 30, optionY));
         }
     }
-
     private Text addOption(String text, int optionNr, double relocateX, double relocateY) {
         Text options = new Text();
         options.setId("option");
-        options.setText(optionNr + text);
+        options.setText(optionNr+ ". " + text);
         options.relocate(relocateX,relocateY);
         options.setFont(Font.font(20));
 
         return options;
     }
 
+    // Map box
+    /**
+     * Adds a map to your game for the player.
+     * The image must be a BMP, GIF, JPEG or PNG.
+     * Max height: 640px, max width: 360px.
+     * @param imageFilePath The file path for the image.
+     */
+    public void addTableScreenMap(String mapName, String imageFilePath){
+        JSONObject options = new JSONObject();
+        options.put("Map", imageFilePath);
+        options.put("Map Name", mapName);
+        try {
+            FileWriter charCreationSettingsFile = new FileWriter("src/TableScreenSettings.json");
+            charCreationSettingsFile.write(options.toString());
+            charCreationSettingsFile.close();
+        } catch (IOException e) {
+            System.out.println("Could not find CharCreatSettings.json");
+        }
+    }
+    private void displayMapBox(String mapName, String mapPath) {
+        Stage window = new Stage();
+
+        Image map;
+        try {
+            map = new Image(mapPath);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Could not find image form path in addTableScreenMap() function.");
+            return;
+        }
+
+        ImageView mapView = new ImageView();
+        mapView.setImage(map);
+        mapView.maxHeight(640);
+        mapView.maxWidth(360);
+
+        Pane pane = new Pane();
+        pane.getChildren().add(mapView);
+
+        Scene scene = new Scene(pane);
+        scene.fillProperty();
+
+        window.setTitle(mapName);
+        window.setScene(scene);
+        window.show();
+    }
 
 
     /**

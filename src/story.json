@@ -1,10 +1,10 @@
 [ {
   "ID" : 1,
-  "CONTENT" : "Og mannen han tenkte med sjølve seg\nHei fara med sjølve seg\nEg meine den kråka vil drepa meg\nHei fara faltu riltu raltu ra",
+  "CONTENT" : "The man went into the woods\nHey fara into the woods\nWhen a crow sat in the meadow and crawed\nHey fara. Faltu riltu raltura\n The man thought with himself\nI wonder if that crow wants to kill me?",
   "dialogChoiceList" : [ {
     "TYPE" : "Normal Choice",
     "ID" : 1,
-    "CONTENT" : "Angrep kråka",
+    "CONTENT" : "Attack the crow",
     "BOXID" : 1,
     "SUCCESS-SCENE" : 2,
     "FAIL-SCENE" : 0,
@@ -15,7 +15,7 @@
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 2,
-    "CONTENT" : "Løp for liver",
+    "CONTENT" : "Run for your life",
     "BOXID" : 1,
     "SUCCESS-SCENE" : 3,
     "FAIL-SCENE" : 0,
@@ -26,7 +26,7 @@
   }, {
     "TYPE" : "Normal Choice",
     "ID" : 3,
-    "CONTENT" : "observer",
+    "CONTENT" : "Observe",
     "BOXID" : 1,
     "SUCCESS-SCENE" : 1,
     "FAIL-SCENE" : 0,

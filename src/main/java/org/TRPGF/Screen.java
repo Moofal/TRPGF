@@ -35,7 +35,7 @@ public class Screen {
 
     private Scene startingScreen, tableScene, characterCreatorScreen, endingScreen;
     private boolean characterScreenIsThere = false;
-    // This variable is set here so that both tableScreen and
+    // This variable is set here so that both tableScreen an
     // characterScreen can the stat values shown on the tableScreen
     private final VBox characterStatInfo = new VBox();
     private Pane tableScreenLayout;

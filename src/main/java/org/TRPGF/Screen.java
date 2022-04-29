@@ -258,13 +258,9 @@ public class Screen {
 
     // Writing to file
     private void writeToDialogHistory(JSONObject currentDialog) {
-        JSONObject dialogHistoryObject = new JSONObject();
-        JSONArray arrayOfDialog = new JSONArray();
-        arrayOfDialog.put(currentDialog);
-        dialogHistoryObject.put("Dialog History", arrayOfDialog);
         try {
             FileWriter charCreationSettingsFile = new FileWriter("src/DialogHistory.json");
-            charCreationSettingsFile.write(dialogHistoryObject.toString());
+            charCreationSettingsFile.write(currentDialog.toString());
             charCreationSettingsFile.close();
         } catch (IOException e) {
             System.out.println("Could not find DialogHistory.json");
@@ -298,22 +294,34 @@ public class Screen {
     }
     private void updateDialogHistory(JSONObject currentDialog, Text dialogText, int index) {
         StringBuilder dialog;
-        JSONObject newDialog;
         JSONArray options;
+
+        JSONObject dialogHistoryObject;
+
         if (Objects.equals(dialogText.getText(), "")) {
             dialog = new StringBuilder(currentDialog.getString("CONTENT"));
             options = currentDialog.getJSONArray("dialogChoiceList");
-            newDialog = currentDialog;
+
+            dialogHistoryObject = new JSONObject();
+            JSONArray arrayOfDialog = new JSONArray();
+            arrayOfDialog.put(currentDialog);
+            dialogHistoryObject.put("Dialog History", arrayOfDialog);
+
+
         } else {
-            JSONObject oldDialogHistory = getDialogHistory();
-            assert oldDialogHistory != null;
-            JSONArray oldDialogArray = oldDialogHistory.getJSONArray("Dialog History");
-            oldDialogArray.put(currentDialog);
-            newDialog = oldDialogHistory;
             options = currentDialog.getJSONArray("dialogChoiceList");
             dialog = new StringBuilder(dialogText.getText());
             dialog.append(currentDialog.getString("CONTENT"));
+
+            dialogHistoryObject = getDialogHistory();
+            assert dialogHistoryObject != null;
+            JSONArray arrayOfDialog = dialogHistoryObject.getJSONArray("Dialog History");
+            arrayOfDialog.put(currentDialog);
+
         }
+
+        writeToDialogHistory(dialogHistoryObject);
+
         String option;
         for (int i=0; i<options.length(); i++) {
             option = options.getJSONObject(i).getString("CONTENT");
@@ -324,7 +332,6 @@ public class Screen {
         }
         dialog.append(" -------------------------------------------------------------- ");
         dialogText.setText(dialog.toString());
-        writeToDialogHistory(newDialog);
     }
 
     // Character info on table screen

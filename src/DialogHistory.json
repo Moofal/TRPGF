@@ -41,36 +41,6 @@
       ],
       "ID": 1,
       "CONTENT": "The man went into the woods\nHey fara into the woods\nWhen a crow sat in the meadow and crawed\nHey fara. Faltu riltu raltura\n The man thought with himself\nI wonder if that crow wants to kill me?"
-    },
-    {
-      "dialogChoiceList": [
-        {
-          "BOXID": 2,
-          "FAIL-SCENE": 0,
-          "STAT": null,
-          "STAT-REQ-VAL": 0,
-          "PREV-CHOICE": 0,
-          "REWARD-VAL": 0,
-          "ID": 1,
-          "CONTENT": "Go to 1",
-          "SUCCESS-SCENE": 1,
-          "TYPE": "Normal Choice"
-        },
-        {
-          "BOXID": 2,
-          "FAIL-SCENE": 0,
-          "STAT": null,
-          "STAT-REQ-VAL": 0,
-          "PREV-CHOICE": 0,
-          "REWARD-VAL": 0,
-          "ID": 2,
-          "CONTENT": "Go to 3",
-          "SUCCESS-SCENE": 3,
-          "TYPE": "Normal Choice"
-        }
-      ],
-      "ID": 2,
-      "CONTENT": "Content 2"
     }
   ]
 }

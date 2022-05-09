@@ -86,5 +86,16 @@
     "STAT" : "Str",
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 1
+  }, {
+    "TYPE" : "Previous Choice",
+    "ID" : 3,
+    "CONTENT" : "slay it",
+    "BOXID" : 3,
+    "SUCCESS-SCENE" : 3,
+    "FAIL-SCENE" : 0,
+    "PREV-CHOICE" : 2,
+    "STAT" : null,
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 0
   } ]
 } ]

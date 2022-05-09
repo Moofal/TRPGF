@@ -42,9 +42,9 @@ public class HelloApplication extends Application{
         dialog.addOption(1, 2, "Go to 1", 1);
         dialog.addOption(2, 2, "Go to 3", 3);
         dialog.createDialogBox(3, "There is a dragon in front of you what do you do");
-        dialog.addOptionWithRequirement(1, 3, "Need 15 str", 2, 1, "Str", 15);
-        dialog.addOptionWithReward(2, 3, "str+1", 1, "Str", 1);
-        //dialog.addOptionPrevious(3, 3, 2, "slay it",3);
+        dialog.addOptionWithRequirement(1, 3, "Need 15 str", "Str", 15, 2, 1);
+        dialog.addOptionWithReward(2, 3, "str+1", "Str", 1, 1);
+        dialog.addOptionPrevious(3,3,1,2,"Must have option 1, dialog 2",2,1);
 
         dialog.finishStory();
 

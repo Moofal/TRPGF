@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @JsonPropertyOrder("TYPE")
 public class Choice extends Dialog {
 
-    private int type;
+    private String type;
     private boolean Ending;
     private int boxId;
     private int successScene;
@@ -97,11 +97,11 @@ public class Choice extends Dialog {
      *
      */
     @JsonProperty("TYPE")
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -112,24 +112,6 @@ public class Choice extends Dialog {
 
     public void setBoxId(int boxId) {
         this.boxId = boxId;
-    }
-
-    @JsonProperty("SUCCESS-SCENE")
-    public int getSuccessScene() {
-        return successScene;
-    }
-
-    public void setSuccessScene(int successScene) {
-        this.successScene = successScene;
-    }
-
-    @JsonProperty("FAIL-SCENE")
-    public int getFailScene() {
-        return failScene;
-    }
-
-    public void setFailScene(int failScene) {
-        this.failScene = failScene;
     }
 
     @JsonProperty("PREV-CHOICE")
@@ -149,7 +131,6 @@ public class Choice extends Dialog {
     public void setpDialogBoxId(int pDialogBoxId) {
         this.pDialogBoxId = pDialogBoxId;
     }
-
 
     @JsonProperty("STAT")
     public String getStat() {
@@ -176,6 +157,24 @@ public class Choice extends Dialog {
 
     public void setRewardValue(int rewardValue) {
         this.rewardValue = rewardValue;
+    }
+
+    @JsonProperty("SUCCESS-SCENE")
+    public int getSuccessScene() {
+        return successScene;
+    }
+
+    public void setSuccessScene(int successScene) {
+        this.successScene = successScene;
+    }
+
+    @JsonProperty("FAIL-SCENE")
+    public int getFailScene() {
+        return failScene;
+    }
+
+    public void setFailScene(int failScene) {
+        this.failScene = failScene;
     }
 
     @JsonIgnore @Override

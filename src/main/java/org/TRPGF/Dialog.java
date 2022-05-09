@@ -48,7 +48,7 @@ public class Dialog {
     public void addOption(int id, int dialogBoxId, String content, int successDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog);
-        choice.setType(000);
+        choice.setType("000");
         checkAndAdd(dialog, id, choice);
     }
 
@@ -64,28 +64,28 @@ public class Dialog {
     public void addOptionPrevious(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, pChoiceId, pDialogBoxId);
-        choice.setType(100);
+        choice.setType("100");
         checkAndAdd(dialog, id, choice);
     }
 
     public void addOptionPreviousRequirement(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal);
-        choice.setType(110);
+        choice.setType("110");
         checkAndAdd(dialog, id, choice);
     }
 
     public void addOptionPreviousReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int rewardVal, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, rewardVal);
-        choice.setType(101);
+        choice.setType("101");
         checkAndAdd(dialog, id, choice);
     }
 
     public void addOptionPreviousRequirementReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int statVal, int rewardValue, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal, rewardValue);
-        choice.setType(111);
+        choice.setType("111");
         checkAndAdd(dialog, id, choice);
     }
 
@@ -102,14 +102,14 @@ public class Dialog {
     public void addOptionWithRequirement(int id, int dialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal);
-        choice.setType(010);
+        choice.setType("010");
         checkAndAdd(dialog, id, choice);
     }
 
     public void addOptionWithRequirementReward(int id, int dialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal);
-        choice.setType(011);
+        choice.setType("011");
         checkAndAdd(dialog, id, choice);
     }
 
@@ -125,7 +125,7 @@ public class Dialog {
     public void addOptionWithReward(int id, int dialogBoxId, String content, String stat, int value, int successDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, stat, value);
-        choice.setType(001);
+        choice.setType("001");
         checkAndAdd(dialog, id, choice);
     }
 

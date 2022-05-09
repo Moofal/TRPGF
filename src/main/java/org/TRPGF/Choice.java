@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @JsonPropertyOrder("TYPE")
 public class Choice extends Dialog {
 
-    private String type;
+    private int type;
     private boolean Ending;
     private int boxId;
     private int successScene;
@@ -93,11 +93,11 @@ public class Choice extends Dialog {
      *
      */
     @JsonProperty("TYPE")
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

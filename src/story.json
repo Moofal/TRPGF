@@ -2,7 +2,7 @@
   "ID" : 1,
   "CONTENT" : "The man went into the woods\nHey fara into the woods\nWhen a crow sat in the meadow and crawed\nHey fara. Faltu riltu raltura\n The man thought with himself\nI wonder if that crow wants to kill me?",
   "dialogChoiceList" : [ {
-    "TYPE" : 0,
+    "TYPE" : "000",
     "ID" : 1,
     "CONTENT" : "Attack the crow",
     "BOXID" : 1,
@@ -14,7 +14,7 @@
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0
   }, {
-    "TYPE" : 0,
+    "TYPE" : "000",
     "ID" : 2,
     "CONTENT" : "Run for your life",
     "BOXID" : 1,
@@ -26,7 +26,7 @@
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0
   }, {
-    "TYPE" : 0,
+    "TYPE" : "000",
     "ID" : 3,
     "CONTENT" : "Observe",
     "BOXID" : 1,
@@ -42,7 +42,7 @@
   "ID" : 2,
   "CONTENT" : "Content 2",
   "dialogChoiceList" : [ {
-    "TYPE" : 0,
+    "TYPE" : "000",
     "ID" : 1,
     "CONTENT" : "Go to 1",
     "BOXID" : 2,
@@ -54,7 +54,7 @@
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0
   }, {
-    "TYPE" : 0,
+    "TYPE" : "000",
     "ID" : 2,
     "CONTENT" : "Go to 3",
     "BOXID" : 2,
@@ -70,19 +70,19 @@
   "ID" : 3,
   "CONTENT" : "There is a dragon in front of you what do you do",
   "dialogChoiceList" : [ {
-    "TYPE" : 8,
+    "TYPE" : "010",
     "ID" : 1,
     "CONTENT" : "Need 15 str",
     "BOXID" : 3,
-    "SUCCESS-SCENE" : 2,
-    "FAIL-SCENE" : 1,
+    "SUCCESS-SCENE" : 6,
+    "FAIL-SCENE" : 5,
     "PREV-CHOICE" : 0,
     "PREV-CHOICE-BOX" : 0,
     "STAT" : "Str",
     "STAT-REQ-VAL" : 15,
     "REWARD-VAL" : 0
   }, {
-    "TYPE" : 1,
+    "TYPE" : "001",
     "ID" : 2,
     "CONTENT" : "str+1",
     "BOXID" : 3,
@@ -94,14 +94,38 @@
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 1
   }, {
-    "TYPE" : 100,
+    "TYPE" : "100",
     "ID" : 3,
-    "CONTENT" : "Must have option 1, dialog 2",
+    "CONTENT" : "slay it",
     "BOXID" : 3,
-    "SUCCESS-SCENE" : 2,
-    "FAIL-SCENE" : 1,
+    "SUCCESS-SCENE" : 4,
+    "FAIL-SCENE" : 5,
     "PREV-CHOICE" : 1,
-    "PREV-CHOICE-BOX" : 2,
+    "PREV-CHOICE-BOX" : 3,
+    "STAT" : null,
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 0
+  } ]
+}, {
+  "ID" : 4,
+  "CONTENT" : "YOU DID IT!",
+  "dialogChoiceList" : [ ]
+}, {
+  "ID" : 5,
+  "CONTENT" : "YOU DID NOT!",
+  "dialogChoiceList" : [ ]
+}, {
+  "ID" : 6,
+  "CONTENT" : "Did you slay the dragon?",
+  "dialogChoiceList" : [ {
+    "TYPE" : "100",
+    "ID" : 1,
+    "CONTENT" : "YES!",
+    "BOXID" : 6,
+    "SUCCESS-SCENE" : 4,
+    "FAIL-SCENE" : 5,
+    "PREV-CHOICE" : 1,
+    "PREV-CHOICE-BOX" : 3,
     "STAT" : null,
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0

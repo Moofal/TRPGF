@@ -237,7 +237,6 @@ public class Screen {
             String input = Files.readString(file);
 
             JSONArray array = new JSONArray(input);
-
             return array.getJSONObject(index);
         } catch (IOException e) {
             System.out.println(e + "src/story.json");
@@ -450,7 +449,7 @@ public class Screen {
 
         int boxId;
         int optionId;
-        int nextDialogId = 0;
+        int nextDialogId = chosenOptionObject.getInt("FAIL-SCENE");
         for (int i=0; i<arrayOfDialog.length(); i++) {
             dialog = arrayOfDialog.getJSONObject(i);
             options = dialog.getJSONArray("dialogChoiceList");
@@ -465,8 +464,6 @@ public class Screen {
                             System.out.println("FOUND " + previousOptionId);
                             nextDialogId = chosenOptionObject.getInt("SUCCESS-SCENE");
                             return nextDialogId;
-                        } else {
-                            nextDialogId = chosenOptionObject.getInt("FAIL-SCENE");
                         }
                 }
             }

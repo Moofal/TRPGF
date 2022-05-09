@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Choice extends Dialog {
 
     private String type;
+    private boolean Ending;
     private int boxId;
     private int successScene;
     private int failScene;
@@ -31,11 +32,33 @@ public class Choice extends Dialog {
         this.successScene = successScene;
     }
 
-    public Choice(int id, String content, int boxId, int successScene, int pChoiceId) {
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId) {
         super(id, content);
         this.boxId = boxId;
         this.successScene = successScene;
+        this.failScene = failScene;
         this.pChoiceId = pChoiceId;
+    }
+
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, String stat, int statVal) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
+        this.pChoiceId = pChoiceId;
+        this.stat = stat;
+        this.statVal = statVal;
+    }
+
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, String stat, int statVal, int rewardValue) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
+        this.pChoiceId = pChoiceId;
+        this.stat = stat;
+        this.statVal = statVal;
+        this.rewardValue = rewardValue;
     }
 
     public Choice(int id, String content, int boxId, int successScene, String stat, int rewardValue) {

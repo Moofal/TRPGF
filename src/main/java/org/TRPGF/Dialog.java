@@ -43,15 +43,13 @@ public class Dialog {
      * @param id er id'en til dette valget
      * @param dialogBoxId er id'en til createDialogBox den er knyttet til
      * @param content er teksten til denne dialogen feks: "i will help you inkeeper!"
-     * @param nextDialog er id'en til den neste dialogen hvis du velger dette valget.
+     * @param successDialog er id'en til den neste dialogen hvis du velger dette valget.
      */
-    public void addOption(int id, int dialogBoxId, String content, int nextDialog) {
+    public void addOption(int id, int dialogBoxId, String content, int successDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, nextDialog);
-        choice.setType("Normal Choice");
-        if (dialogSizeCheck(dialog)) return;
-        if (choiceIdCheck(id, dialog)) return;
-        dialog.dialogChoiceList.add(choice);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog);
+        choice.setType("000");
+        checkAndAdd(dialog, id, choice);
     }
 
     /**
@@ -60,15 +58,28 @@ public class Dialog {
      * @param dialogBoxId er id'en til createDialogBox den er knyttet til
      * @param pChoiceId er id'en tildet forrige valget som du måtte velge for å gjøre dette valget, feks: du måtte ha valgt 1, for å velge valg 30
      * @param content er teksten til denne dialogen feks: "i will help you inkeeper!"
-     * @param nextDialog er id'en til den neste dialogen hvis du velger dette valget.
+     * @param successDialog er id'en til den neste dialogen hvis du velger dette valget.
+     * @param failDialog er id'en til den neste dialogen hvis du velger dette valget.
      */
-    public void addOptionPrevious(int id, int dialogBoxId, int pChoiceId, String content, int nextDialog) {
+    public void addOptionPrevious(int id, int dialogBoxId, int pChoiceId, String content, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, nextDialog, pChoiceId);
-        choice.setType("Previous Choice");
-        if (dialogSizeCheck(dialog)) return;
-        if (choiceIdCheck(id, dialog)) return;
-        dialog.dialogChoiceList.add(choice);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId);
+        choice.setType("100");
+        checkAndAdd(dialog, id, choice);
+    }
+
+    public void addOptionPreviousRequirement(int id, int dialogBoxId, int pChoiceId, String content, String stat, int statVal, int successDialog, int failDialog) {
+        Dialog dialog = getDialogById(dialogBoxId);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, stat, statVal);
+        choice.setType("110");
+        checkAndAdd(dialog, id, choice);
+    }
+
+    public void addOptionPreviousRequirementReward(int id, int dialogBoxId, int pChoiceId, String content, String stat, int statVal, int rewardValue, int successDialog, int failDialog) {
+        Dialog dialog = getDialogById(dialogBoxId);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, stat, statVal, rewardValue);
+        choice.setType("111");
+        checkAndAdd(dialog, id, choice);
     }
 
     /**
@@ -81,13 +92,18 @@ public class Dialog {
      * @param stat er statten som skal bli skjekket.
      * @param statVal er verdien til statten.
      */
-    public void addOptionWithRequirement(int id, int dialogBoxId, String content, int successDialog, int failDialog, String stat, int statVal) {
+    public void addOptionWithRequirement(int id, int dialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal);
-        choice.setType("Choice with Requirement");
-        if (dialogSizeCheck(dialog)) return;
-        if (choiceIdCheck(id, dialog)) return;
-        dialog.dialogChoiceList.add(choice);
+        choice.setType("010");
+        checkAndAdd(dialog, id, choice);
+    }
+
+    public void addOptionWithRequirementReward(int id, int dialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog) {
+        Dialog dialog = getDialogById(dialogBoxId);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal);
+        choice.setType("011");
+        checkAndAdd(dialog, id, choice);
     }
 
     /**
@@ -95,14 +111,18 @@ public class Dialog {
      * @param id er id'en til dette valget
      * @param dialogBoxId er id'en til createDialogBox den er knyttet til
      * @param content er teksten til denne dialogen feks: "i will help you inkeeper!"
-     * @param nextDialog er id'en til den neste dialogen hvis du velger dette valget.
+     * @param successDialog er id'en til den neste dialogen hvis du velger dette valget.
      * @param stat er statten som skal bli skjekket.
      * @param value er verdien statten skal øke med.
      */
-    public void addOptionWithReward(int id, int dialogBoxId, String content, int nextDialog, String stat, int value) {
+    public void addOptionWithReward(int id, int dialogBoxId, String content, String stat, int value, int successDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, nextDialog, stat, value);
-        choice.setType("Choice with a reward");
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, stat, value);
+        choice.setType("001");
+        checkAndAdd(dialog, id, choice);
+    }
+
+    private void checkAndAdd(Dialog dialog, int id, Choice choice) {
         if (dialogSizeCheck(dialog)) return;
         if (choiceIdCheck(id, dialog)) return;
         dialog.dialogChoiceList.add(choice);

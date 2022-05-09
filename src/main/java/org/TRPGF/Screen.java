@@ -396,9 +396,6 @@ public class Screen {
             return;
         }
         index -= 1;
-        if (index>currentOptionsJSON.length()) {
-            return;
-        }
         JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index);
         String optionType = chosenOptionObject.getString("TYPE");
 
@@ -422,7 +419,6 @@ public class Screen {
         optionChosen(optionsVBox, dialog, nextDialogID);
         updateDialogHistory(currentDialog, dialogHistory, index);
     }
-    // TODO: send med previus dialog id også for å kunne lete bedre
     private int checkIfOptionChosenPreviously(int previousOptionId, JSONObject chosenOptionObject) {
         JSONObject dialogHistory = getDialogHistory();
         assert dialogHistory != null;

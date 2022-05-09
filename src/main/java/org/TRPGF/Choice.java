@@ -13,11 +13,13 @@ import java.util.ArrayList;
 @JsonPropertyOrder("TYPE")
 public class Choice extends Dialog {
 
-    private String type;
+    private int type;
+    private boolean Ending;
     private int boxId;
     private int successScene;
     private int failScene;
     private int pChoiceId;
+    private int pDialogBoxId;
     private String stat;
     private int statVal;
     private int rewardValue;
@@ -31,11 +33,36 @@ public class Choice extends Dialog {
         this.successScene = successScene;
     }
 
-    public Choice(int id, String content, int boxId, int successScene, int pChoiceId) {
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId) {
         super(id, content);
         this.boxId = boxId;
         this.successScene = successScene;
+        this.failScene = failScene;
         this.pChoiceId = pChoiceId;
+        this.pDialogBoxId = pDialogBoxId;
+    }
+
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
+        this.pChoiceId = pChoiceId;
+        this.pDialogBoxId = pDialogBoxId;
+        this.stat = stat;
+        this.statVal = statVal;
+    }
+
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal, int rewardValue) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
+        this.pChoiceId = pChoiceId;
+        this.pDialogBoxId = pDialogBoxId;
+        this.stat = stat;
+        this.statVal = statVal;
+        this.rewardValue = rewardValue;
     }
 
     public Choice(int id, String content, int boxId, int successScene, String stat, int rewardValue) {
@@ -57,12 +84,24 @@ public class Choice extends Dialog {
 
     //-----------------------------------Getters and Setters-----------------------------------//
 
+    /**
+     * Type Cheat Sheet:
+     * 000 Normal Option
+     * 100 Previous Choice
+     * 110 Previous Choice + Requirement
+     * 101 Previous Choice + Reward
+     * 111 Previous Choice + Requirement + Reward
+     * 010 Requirement Choice
+     * 011 Requirement Choice + Reward
+     * 001 Reward Choice
+     *
+     */
     @JsonProperty("TYPE")
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -101,6 +140,16 @@ public class Choice extends Dialog {
     public void setpChoiceId(int pChoiceId) {
         this.pChoiceId = pChoiceId;
     }
+
+    @JsonProperty("PREV-CHOICE-BOX")
+    public int getpDialogBoxId() {
+        return pDialogBoxId;
+    }
+
+    public void setpDialogBoxId(int pDialogBoxId) {
+        this.pDialogBoxId = pDialogBoxId;
+    }
+
 
     @JsonProperty("STAT")
     public String getStat() {

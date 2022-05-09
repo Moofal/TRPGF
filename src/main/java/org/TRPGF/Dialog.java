@@ -75,6 +75,13 @@ public class Dialog {
         checkAndAdd(dialog, id, choice);
     }
 
+    public void addOptionPreviousReward(int id, int dialogBoxId, int pChoiceId, String content, String stat, int rewardVal, int successDialog, int failDialog) {
+        Dialog dialog = getDialogById(dialogBoxId);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, stat, rewardVal);
+        choice.setType("110");
+        checkAndAdd(dialog, id, choice);
+    }
+
     public void addOptionPreviousRequirementReward(int id, int dialogBoxId, int pChoiceId, String content, String stat, int statVal, int rewardValue, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, stat, statVal, rewardValue);

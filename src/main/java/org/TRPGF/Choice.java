@@ -80,6 +80,18 @@ public class Choice extends Dialog {
 
     //-----------------------------------Getters and Setters-----------------------------------//
 
+    /**
+     * Type Cheat Sheet:
+     * 000 Normal Option
+     * 100 Previous Choice
+     * 110 Previous Choice + Requirement
+     * 101 Previous Choice + Reward
+     * 111 Previous Choice + Requirement + Reward
+     * 010 Requirement Choice
+     * 011 Requirement Choice + Reward
+     * 001 Reward Choice
+     *
+     */
     @JsonProperty("TYPE")
     public String getType() {
         return type;

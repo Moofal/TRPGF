@@ -258,13 +258,9 @@ public class Screen {
 
     // Writing to file
     private void writeToDialogHistory(JSONObject currentDialog) {
-        JSONObject dialogHistoryObject = new JSONObject();
-        JSONArray arrayOfDialog = new JSONArray();
-        arrayOfDialog.put(currentDialog);
-        dialogHistoryObject.put("Dialog History", arrayOfDialog);
         try {
             FileWriter charCreationSettingsFile = new FileWriter("src/DialogHistory.json");
-            charCreationSettingsFile.write(dialogHistoryObject.toString());
+            charCreationSettingsFile.write(currentDialog.toString());
             charCreationSettingsFile.close();
         } catch (IOException e) {
             System.out.println("Could not find DialogHistory.json");
@@ -298,22 +294,34 @@ public class Screen {
     }
     private void updateDialogHistory(JSONObject currentDialog, Text dialogText, int index) {
         StringBuilder dialog;
-        JSONObject newDialog;
         JSONArray options;
+
+        JSONObject dialogHistoryObject;
+
         if (Objects.equals(dialogText.getText(), "")) {
             dialog = new StringBuilder(currentDialog.getString("CONTENT"));
             options = currentDialog.getJSONArray("dialogChoiceList");
-            newDialog = currentDialog;
+
+            dialogHistoryObject = new JSONObject();
+            JSONArray arrayOfDialog = new JSONArray();
+            arrayOfDialog.put(currentDialog);
+            dialogHistoryObject.put("Dialog History", arrayOfDialog);
+
+
         } else {
-            JSONObject oldDialogHistory = getDialogHistory();
-            assert oldDialogHistory != null;
-            JSONArray oldDialogArray = oldDialogHistory.getJSONArray("Dialog History");
-            oldDialogArray.put(currentDialog);
-            newDialog = oldDialogHistory;
             options = currentDialog.getJSONArray("dialogChoiceList");
             dialog = new StringBuilder(dialogText.getText());
             dialog.append(currentDialog.getString("CONTENT"));
+
+            dialogHistoryObject = getDialogHistory();
+            assert dialogHistoryObject != null;
+            JSONArray arrayOfDialog = dialogHistoryObject.getJSONArray("Dialog History");
+            arrayOfDialog.put(currentDialog);
+
         }
+
+        writeToDialogHistory(dialogHistoryObject);
+
         String option;
         for (int i=0; i<options.length(); i++) {
             option = options.getJSONObject(i).getString("CONTENT");
@@ -324,7 +332,6 @@ public class Screen {
         }
         dialog.append(" -------------------------------------------------------------- ");
         dialogText.setText(dialog.toString());
-        writeToDialogHistory(newDialog);
     }
 
     // Character info on table screen
@@ -392,28 +399,50 @@ public class Screen {
         JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index);
         String optionType = chosenOptionObject.getString("TYPE");
 
-        int nextDialogID;
+        int nextDialogID = 0;
         switch (optionType) {
             case "Normal Choice":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                optionChosen(optionsVBox, dialog, nextDialogID);
                 break;
             case "Previous Choice":
                 int previousOptionId = chosenOptionObject.getInt("PREV-CHOICE");
-                //checkIfOptionChosenPreviously(previousOptionId);
+                nextDialogID = checkIfOptionChosenPreviously(previousOptionId, chosenOptionObject);
                 break;
             case "Choice with Requirement":
-                checkRequirementAndSetScreen(optionsVBox, dialog, chosenOptionObject);
+                nextDialogID = checkRequirementAndSetScreen(chosenOptionObject);
                 break;
             case "Choice with a reward":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 updateCharacterJson(chosenOptionObject);
-                optionChosen(optionsVBox, dialog, nextDialogID);
                 break;
         }
+        optionChosen(optionsVBox, dialog, nextDialogID);
         updateDialogHistory(currentDialog, dialogHistory, index);
     }
-    private void checkRequirementAndSetScreen(VBox optionsVBox, Text dialog, JSONObject chosenOptionObject) {
+    private int checkIfOptionChosenPreviously(int previousOptionId, JSONObject chosenOptionObject) {
+        JSONObject dialogHistory = getDialogHistory();
+        assert dialogHistory != null;
+        JSONArray arrayOfDialog = dialogHistory.getJSONArray("Dialog History");
+        JSONObject dialog;
+        JSONArray options;
+        int optionId;
+        int nextDialogId = 0;
+        for (int i=0; i<arrayOfDialog.length(); i++) {
+            dialog = arrayOfDialog.getJSONObject(i);
+            options = dialog.getJSONArray("dialogChoiceList");
+            for (int l=0; l<options.length(); i++) {
+                optionId = options.getJSONObject(l).getInt("ID");
+                if (optionId == previousOptionId) {
+                    nextDialogId = chosenOptionObject.getInt("SUCCESS-SCENE");
+                } else {
+                    nextDialogId = chosenOptionObject.getInt("FAIL-SCENE");
+                }
+            }
+        }
+
+        return nextDialogId;
+    }
+    private int checkRequirementAndSetScreen(JSONObject chosenOptionObject) {
         int nextDialogID;
         JSONArray characterStats = Objects.requireNonNull(getCharacterInfo()).getJSONArray("Stats");
         String requiredStatName = chosenOptionObject.getString("STAT");
@@ -431,11 +460,10 @@ public class Screen {
             // The dialog option had no requirements
             // Getting the id of the next dialog from the chosen option
             nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-            optionChosen(optionsVBox, dialog, nextDialogID);
         } else {
             nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
-            optionChosen(optionsVBox, dialog, nextDialogID);
         }
+        return nextDialogID;
     }
     private void optionChosen(VBox optionsVBox, Text dialog, int nextDialogID) {
         // Setting the dialog text box to be the new dialog text
@@ -454,6 +482,7 @@ public class Screen {
         optionsVBox.getChildren().clear();
         setCurrentOptions(optionsVBox);
     }
+
     private void setCurrentOptions(VBox vBox) {
         double optionY = 390;
         for (int i = 0; i < currentOptions.length(); i++) {

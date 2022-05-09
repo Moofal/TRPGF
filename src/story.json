@@ -9,6 +9,7 @@
     "SUCCESS-SCENE" : 2,
     "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
+    "PREV-CHOICE-BOX" : 0,
     "STAT" : null,
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0
@@ -20,6 +21,7 @@
     "SUCCESS-SCENE" : 3,
     "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
+    "PREV-CHOICE-BOX" : 0,
     "STAT" : null,
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0
@@ -31,6 +33,7 @@
     "SUCCESS-SCENE" : 1,
     "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
+    "PREV-CHOICE-BOX" : 0,
     "STAT" : null,
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0
@@ -46,6 +49,7 @@
     "SUCCESS-SCENE" : 1,
     "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
+    "PREV-CHOICE-BOX" : 0,
     "STAT" : null,
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0
@@ -57,6 +61,7 @@
     "SUCCESS-SCENE" : 3,
     "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
+    "PREV-CHOICE-BOX" : 0,
     "STAT" : null,
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0
@@ -69,11 +74,12 @@
     "ID" : 1,
     "CONTENT" : "Need 15 str",
     "BOXID" : 3,
-    "SUCCESS-SCENE" : 12,
-    "FAIL-SCENE" : 15,
+    "SUCCESS-SCENE" : 2,
+    "FAIL-SCENE" : 2,
     "PREV-CHOICE" : 0,
+    "PREV-CHOICE-BOX" : 0,
     "STAT" : "Str",
-    "STAT-REQ-VAL" : 1,
+    "STAT-REQ-VAL" : 15,
     "REWARD-VAL" : 0
   }, {
     "TYPE" : 1,
@@ -83,6 +89,7 @@
     "SUCCESS-SCENE" : 1,
     "FAIL-SCENE" : 0,
     "PREV-CHOICE" : 0,
+    "PREV-CHOICE-BOX" : 0,
     "STAT" : "Str",
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 1
@@ -91,9 +98,10 @@
     "ID" : 3,
     "CONTENT" : "slay it",
     "BOXID" : 3,
-    "SUCCESS-SCENE" : 3,
-    "FAIL-SCENE" : 4,
-    "PREV-CHOICE" : 2,
+    "SUCCESS-SCENE" : 1,
+    "FAIL-SCENE" : 2,
+    "PREV-CHOICE" : 1,
+    "PREV-CHOICE-BOX" : 3,
     "STAT" : null,
     "STAT-REQ-VAL" : 0,
     "REWARD-VAL" : 0

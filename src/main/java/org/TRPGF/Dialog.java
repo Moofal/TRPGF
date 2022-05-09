@@ -61,30 +61,30 @@ public class Dialog {
      * @param successDialog er id'en til den neste dialogen hvis du velger dette valget.
      * @param failDialog er id'en til den neste dialogen hvis du velger dette valget.
      */
-    public void addOptionPrevious(int id, int dialogBoxId, int pChoiceId, String content, int successDialog, int failDialog) {
+    public void addOptionPrevious(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, pChoiceId, pDialogBoxId);
         choice.setType(100);
         checkAndAdd(dialog, id, choice);
     }
 
-    public void addOptionPreviousRequirement(int id, int dialogBoxId, int pChoiceId, String content, String stat, int statVal, int successDialog, int failDialog) {
+    public void addOptionPreviousRequirement(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, stat, statVal);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal);
         choice.setType(110);
         checkAndAdd(dialog, id, choice);
     }
 
-    public void addOptionPreviousReward(int id, int dialogBoxId, int pChoiceId, String content, String stat, int rewardVal, int successDialog, int failDialog) {
+    public void addOptionPreviousReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int rewardVal, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, stat, rewardVal);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, rewardVal);
         choice.setType(101);
         checkAndAdd(dialog, id, choice);
     }
 
-    public void addOptionPreviousRequirementReward(int id, int dialogBoxId, int pChoiceId, String content, String stat, int statVal, int rewardValue, int successDialog, int failDialog) {
+    public void addOptionPreviousRequirementReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int statVal, int rewardValue, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, stat, statVal, rewardValue);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal, rewardValue);
         choice.setType(111);
         checkAndAdd(dialog, id, choice);
     }

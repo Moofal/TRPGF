@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -41,6 +42,9 @@ public class Screen {
     private Pane tableScreenLayout;
     private JSONObject currentDialog;
     private JSONArray currentOptions;
+
+    private Color backgroundColor;
+    private Color accentColor;
 
 
     /**
@@ -92,6 +96,9 @@ public class Screen {
      */
     public void tableScreen() {
         tableScreenLayout = new Pane();
+
+        // This is how to change the background color of the table screen.
+        tableScreenLayout.setStyle("-fx-background-color:" + backgroundColor);
 
         Line horizontalLine = new Line();
         horizontalLine.setStartX(0.0f);
@@ -193,10 +200,13 @@ public class Screen {
         MenuItem mapBox = new MenuItem("Map");
         mapBox.setOnAction(e -> displayMapBox(mapName,mapPath));
 
+        MenuItem settings = new MenuItem("Settings");
+        settings.setOnAction(e -> displaySettings());
+
         menu.getItems().addAll(dialogHistoryMenuToggle,showImageMenuToggle);
 
         if (!Objects.equals(mapPath,"")) {
-            menu.getItems().addAll(separatorMenuItem,mapBox);
+            menu.getItems().addAll(separatorMenuItem,mapBox, settings);
         }
 
         MenuBar menuBar = new MenuBar();
@@ -397,21 +407,32 @@ public class Screen {
         }
         index -= 1;
         JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index);
-        String optionType = chosenOptionObject.getString("TYPE");
-
+        int optionType = chosenOptionObject.getInt("TYPE");
+        /*
+          Type Cheat Sheet:
+          000 Normal Option
+          100 Previous Choice
+          110 Previous Choice + Requirement
+          101 Previous Choice + Reward
+          111 Previous Choice + Requirement + Reward
+          010 Requirement Choice
+          011 Requirement Choice + Reward
+          001 Reward Choice
+         */
         int nextDialogID = 0;
         switch (optionType) {
-            case "Normal Choice":
+            case 000:
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 break;
-            case "Previous Choice":
+            case 100:
                 int previousOptionId = chosenOptionObject.getInt("PREV-CHOICE");
-                nextDialogID = checkIfOptionChosenPreviously(previousOptionId, chosenOptionObject);
+                int previousBoxId = chosenOptionObject.getInt("PREV-CHOICE-BOX");
+                nextDialogID = checkIfOptionChosenPreviously(previousOptionId, previousBoxId, chosenOptionObject);
                 break;
-            case "Choice with Requirement":
+            case 010:
                 nextDialogID = checkRequirementAndSetScreen(chosenOptionObject);
                 break;
-            case "Choice with a reward":
+            case 001:
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 updateCharacterJson(chosenOptionObject);
                 break;
@@ -419,23 +440,27 @@ public class Screen {
         optionChosen(optionsVBox, dialog, nextDialogID);
         updateDialogHistory(currentDialog, dialogHistory, index);
     }
-    private int checkIfOptionChosenPreviously(int previousOptionId, JSONObject chosenOptionObject) {
+    private int checkIfOptionChosenPreviously(int previousOptionId, int previousBoxId, JSONObject chosenOptionObject) {
         JSONObject dialogHistory = getDialogHistory();
         assert dialogHistory != null;
         JSONArray arrayOfDialog = dialogHistory.getJSONArray("Dialog History");
         JSONObject dialog;
         JSONArray options;
+        int boxId;
         int optionId;
         int nextDialogId = 0;
         for (int i=0; i<arrayOfDialog.length(); i++) {
             dialog = arrayOfDialog.getJSONObject(i);
             options = dialog.getJSONArray("dialogChoiceList");
             for (int l=0; l<options.length(); i++) {
+                boxId = options.getJSONObject(l).getInt("BOXID");
                 optionId = options.getJSONObject(l).getInt("ID");
-                if (optionId == previousOptionId) {
-                    nextDialogId = chosenOptionObject.getInt("SUCCESS-SCENE");
-                } else {
-                    nextDialogId = chosenOptionObject.getInt("FAIL-SCENE");
+                if (boxId == previousBoxId) {
+                    if (optionId == previousOptionId) {
+                        nextDialogId = chosenOptionObject.getInt("SUCCESS-SCENE");
+                    } else {
+                        nextDialogId = chosenOptionObject.getInt("FAIL-SCENE");
+                    }
                 }
             }
         }
@@ -543,6 +568,26 @@ public class Screen {
         scene.fillProperty();
 
         window.setTitle(mapName);
+        window.setScene(scene);
+        window.show();
+    }
+
+    // Setting Menu
+
+    /**
+     * Adds a settings menu for the screen
+     */
+    private void displaySettings() {
+        Stage window = new Stage();
+
+        ColorPicker colorPicker = new ColorPicker();
+
+        backgroundColor = colorPicker.getValue();
+
+        VBox vBox = new VBox(colorPicker);
+        Scene scene = new Scene(vBox, 960, 600);
+
+        window.setTitle("Settings");
         window.setScene(scene);
         window.show();
     }

@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class HelloApplication extends Application{
+public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) {
@@ -42,9 +42,13 @@ public class HelloApplication extends Application{
         dialog.addOption(1, 2, "Go to 1", 1);
         dialog.addOption(2, 2, "Go to 3", 3);
         dialog.createDialogBox(3, "There is a dragon in front of you what do you do");
-        dialog.addOptionWithRequirement(1, 3, "Need 15 str", "Str", 15, 2, 1);
+        dialog.addOptionWithRequirement(1, 3, "Need 15 str", "Str", 15, 6, 5);
         dialog.addOptionWithReward(2, 3, "str+1", "Str", 1, 1);
-        dialog.addOptionPrevious(3,3,1,2,"Must have option 1, dialog 2",2,1);
+        dialog.addOptionPrevious(3, 3, 1, 3, "slay it",4, 5);
+        dialog.createDialogBox(4, "YOU DID IT!");
+        dialog.createDialogBox(5, "YOU DID NOT!");
+        dialog.createDialogBox(6, "Did you slay the dragon?");
+        dialog.addOptionPrevious(1, 6, 1, 3, "YES!", 4, 5);
 
         dialog.finishStory();
 
@@ -58,13 +62,13 @@ public class HelloApplication extends Application{
         characterCreator.setStat("Dex", 10);
 
         characterCreator.addStat("Wisdom",0,20);
-        characterCreator.setStatGenerationManual("Wisdom");
+        characterCreator.setStat("Wisdom", 10);
 
         characterCreator.addStat("Str",0,20);
-        characterCreator.setStatGenerationManual("Str");
+        characterCreator.setStat("Str", 15);
 
         characterCreator.addStat("Con",0,20);
-        characterCreator.setStatGenerationDice("Con", 3,6);
+        characterCreator.setStat("Con", 20);
 
         characterCreator.addAttribute("Good",0);
 

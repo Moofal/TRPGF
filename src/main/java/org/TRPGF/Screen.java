@@ -407,7 +407,7 @@ public class Screen {
         }
         index -= 1;
         JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index);
-        int optionType = chosenOptionObject.getInt("TYPE");
+        String optionType = chosenOptionObject.getString("TYPE");
         /*
           Type Cheat Sheet:
           000 Normal Option
@@ -421,18 +421,18 @@ public class Screen {
          */
         int nextDialogID = 0;
         switch (optionType) {
-            case 000:
+            case "000":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 break;
-            case 100:
+            case "100":
                 int previousOptionId = chosenOptionObject.getInt("PREV-CHOICE");
                 int previousBoxId = chosenOptionObject.getInt("PREV-CHOICE-BOX");
                 nextDialogID = checkIfOptionChosenPreviously(previousOptionId, previousBoxId, chosenOptionObject);
                 break;
-            case 010:
+            case "010":
                 nextDialogID = checkRequirementAndSetScreen(chosenOptionObject);
                 break;
-            case 001:
+            case "001":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 updateCharacterJson(chosenOptionObject);
                 break;
@@ -446,21 +446,28 @@ public class Screen {
         JSONArray arrayOfDialog = dialogHistory.getJSONArray("Dialog History");
         JSONObject dialog;
         JSONArray options;
+        System.out.println("BOX TO FIND " + previousBoxId + " OPTION TO FIND " + previousOptionId);
+
         int boxId;
         int optionId;
         int nextDialogId = 0;
         for (int i=0; i<arrayOfDialog.length(); i++) {
             dialog = arrayOfDialog.getJSONObject(i);
             options = dialog.getJSONArray("dialogChoiceList");
-            for (int l=0; l<options.length(); i++) {
-                boxId = options.getJSONObject(l).getInt("BOXID");
-                optionId = options.getJSONObject(l).getInt("ID");
+            for (int l=0; l<options.length(); l++) {
+                boxId = options.getJSONObject(i).getInt("BOXID");
+                System.out.println("Boxid is " + boxId);
                 if (boxId == previousBoxId) {
-                    if (optionId == previousOptionId) {
-                        nextDialogId = chosenOptionObject.getInt("SUCCESS-SCENE");
-                    } else {
-                        nextDialogId = chosenOptionObject.getInt("FAIL-SCENE");
-                    }
+                    System.out.println("FOUND " + previousBoxId);
+                        optionId = options.getJSONObject(l).getInt("ID");
+                        System.out.println("optionId is " + optionId);
+                        if (optionId == previousOptionId) {
+                            System.out.println("FOUND " + previousOptionId);
+                            nextDialogId = chosenOptionObject.getInt("SUCCESS-SCENE");
+                            return nextDialogId;
+                        } else {
+                            nextDialogId = chosenOptionObject.getInt("FAIL-SCENE");
+                        }
                 }
             }
         }

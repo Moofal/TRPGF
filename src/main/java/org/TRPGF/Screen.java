@@ -427,7 +427,6 @@ public class Screen {
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 break;
             case "100":
-
                 if (checkIfOptionChosenPreviously(previousOptionId, previousBoxId, chosenOptionObject)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
@@ -516,7 +515,7 @@ public class Screen {
         return false;
     }
     private boolean checkRequirementAndSetScreen(JSONObject chosenOptionObject) {
-        boolean nextDialogID;
+        boolean hasRequierdStatValue;
         JSONArray characterStats = Objects.requireNonNull(getCharacterInfo()).getJSONArray("Stats");
         String requiredStatName = chosenOptionObject.getString("STAT");
         int requiredStatValue = chosenOptionObject.getInt("STAT-REQ-VAL");
@@ -529,14 +528,9 @@ public class Screen {
         }
 
         assert requiredStat != null;
-        if (requiredStat.getInt("Value") >= requiredStatValue) {
-            // The dialog option had no requirements
-            // Getting the id of the next dialog from the chosen option
-            nextDialogID = true;
-        } else {
-            nextDialogID = false;
-        }
-        return nextDialogID;
+        // sets value true is stat >= required val
+        hasRequierdStatValue = requiredStat.getInt("Value") >= requiredStatValue;
+        return hasRequierdStatValue;
     }
     private void optionChosen(VBox optionsVBox, Text dialog, int nextDialogID) {
         // Setting the dialog text box to be the new dialog text

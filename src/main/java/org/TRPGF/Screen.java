@@ -350,14 +350,19 @@ public class Screen {
         updateCharacterStatsOnTableScreen(characterStatInfo);
     }
     private void updateCharacterNameOnTableScreen(Pane layout) {
+        Label nameLabel = new Label("Name:");
+        nameLabel.setFont(Font.font("Arial",20));
+        nameLabel.relocate(740,450);
         String characterName = Objects.requireNonNull(getCharacterInfo()).getString("Name");
         Text characterNameOnBord = new Text(characterName);
         characterNameOnBord.setFont(Font.font("Arial",20));
         characterNameOnBord.relocate(800,450);
-        layout.getChildren().add(characterNameOnBord);
+        layout.getChildren().addAll(characterNameOnBord,nameLabel);
     }
     private void updateCharacterStatsOnTableScreen(VBox characterStatInfo) {
         characterStatInfo.getChildren().clear();
+        Label statLabel = new Label("Stats:");
+        characterStatInfo.getChildren().add(statLabel);
         JSONObject character = getCharacterInfo();
         assert character != null;
         JSONArray stats = character.getJSONArray("Stats");

@@ -275,23 +275,7 @@ public class Screen {
             System.out.println("Could not find DialogHistory.json");
         }
     }
-    private void updateCharacterJsonWithReward(JSONObject chosenOptionObject) {
-        String statIncreased = chosenOptionObject.getString("STAT");
-        int statIncreasedAmount = chosenOptionObject.getInt("REWARD-VAL");
-
-        JSONObject character = getCharacterInfo();
-        assert character != null;
-        JSONArray characterStats = character.getJSONArray("Stats");
-        JSONObject requiredStat;
-        for (int i=0; i<characterStats.length(); i++) {
-            String statName = characterStats.getJSONObject(i).getString("Name");
-            if (Objects.equals(statName,statIncreased)) {
-                requiredStat = characterStats.getJSONObject(i);
-                int currentStatValue = requiredStat.getInt("Value");
-                int newValue = currentStatValue+statIncreasedAmount;
-                requiredStat.put("Value", newValue);
-            }
-        }
+    private void writeToCharacterJson(JSONObject character) {
         try {
             FileWriter characterFile = new FileWriter("src/Character.json");
             characterFile.write(character.toString());
@@ -489,6 +473,25 @@ public class Screen {
         optionChosen(optionsVBox, dialog, nextDialogID);
         updateDialogHistory(currentDialog, dialogHistory, index);
     }
+    private void updateCharacterJsonWithReward(JSONObject chosenOptionObject) {
+        String statIncreased = chosenOptionObject.getString("STAT");
+        int statIncreasedAmount = chosenOptionObject.getInt("REWARD-VAL");
+
+        JSONObject character = getCharacterInfo();
+        assert character != null;
+        JSONArray characterStats = character.getJSONArray("Stats");
+        JSONObject requiredStat;
+        for (int i=0; i<characterStats.length(); i++) {
+            String statName = characterStats.getJSONObject(i).getString("Name");
+            if (Objects.equals(statName,statIncreased)) {
+                requiredStat = characterStats.getJSONObject(i);
+                int currentStatValue = requiredStat.getInt("Value");
+                int newValue = currentStatValue+statIncreasedAmount;
+                requiredStat.put("Value", newValue);
+            }
+        }
+        writeToCharacterJson(character);
+    }
     private boolean checkIfOptionChosenPreviously(int previousOptionId, int previousBoxId, JSONObject chosenOptionObject) {
         JSONObject dialogHistory = getDialogHistory();
         assert dialogHistory != null;
@@ -553,6 +556,37 @@ public class Screen {
         // This removes the old dialog options text
         optionsVBox.getChildren().clear();
         setCurrentOptions(optionsVBox);
+    }
+    private void changeAttribute(String attributeName, int value) {
+        JSONObject character = getCharacterInfo();
+        assert character != null;
+        JSONArray attributesArray = character.getJSONArray("Attributes");
+        JSONObject attribute;
+        for (int i=0; i<attributesArray.length(); i++) {
+            attribute = attributesArray.getJSONObject(i);
+            boolean sameName = Objects.equals(attribute.getString("Name"),attributeName);
+            if (sameName) {
+                int newValue = attribute.getInt("Value")+value;
+                attribute.put("Value", newValue);
+            }
+        }
+        writeToCharacterJson(character);
+    }
+    private boolean checkAttribute(String attributeName, int value) {
+        JSONObject character = getCharacterInfo();
+        assert character != null;
+        JSONArray attributesArray = character.getJSONArray("Attributes");
+        JSONObject attribute;
+        for (int i=0; i<attributesArray.length(); i++) {
+            attribute = attributesArray.getJSONObject(i);
+            boolean sameName = Objects.equals(attribute.getString("Name"),attributeName);
+            if (sameName) {
+                if (attribute.getInt("Value") >= value) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void setCurrentOptions(VBox vBox) {

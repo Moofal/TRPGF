@@ -5,13 +5,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,7 +103,7 @@ public class Screen {
         tableScreenLayout = new Pane();
 
         // This is how to change the background color of the table screen.
-        tableScreenLayout.setStyle("-fx-background-color:" + backgroundColor);
+
 
         Line horizontalLine = new Line();
         horizontalLine.setStartX(0.0f);
@@ -203,7 +206,7 @@ public class Screen {
         mapBox.setOnAction(e -> displayMapBox(mapName,mapPath));
 
         MenuItem settings = new MenuItem("Settings");
-        settings.setOnAction(e -> displaySettings());
+        settings.setOnAction(e -> displaySettings(dialogScrollPane, dialogHistory));
 
         menu.getItems().addAll(dialogHistoryMenuToggle,showImageMenuToggle);
 
@@ -219,6 +222,7 @@ public class Screen {
                 optionsVBox, characterStatInfo, menuBar,optionsLabel);
         tableScene = new Scene(tableScreenLayout, 1280, 720);
     }
+
 
     // Reading from file
     private JSONObject getTableScreenSettings() {
@@ -422,7 +426,7 @@ public class Screen {
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 break;
             case "100":
-                if (checkIfOptionChosenPreviously(previousOptionId, previousBoxId, chosenOptionObject)) {
+                if (checkIfOptionChosenPreviously(previousOptionId, previousBoxId)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
@@ -430,7 +434,7 @@ public class Screen {
                 break;
             case "110":
                 meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
-                hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId, chosenOptionObject);
+                hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (meetsRequirements && hasChosenOption) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
@@ -438,7 +442,7 @@ public class Screen {
                 }
                 break;
             case "101":
-                hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId, chosenOptionObject);
+                hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (hasChosenOption) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                     updateCharacterJsonWithReward(chosenOptionObject);
@@ -448,7 +452,7 @@ public class Screen {
                 break;
             case "111":
                 meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
-                hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId, chosenOptionObject);
+                hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (meetsRequirements && hasChosenOption) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                     updateCharacterJsonWithReward(chosenOptionObject);
@@ -498,7 +502,7 @@ public class Screen {
         }
         writeToCharacterJson(character);
     }
-    private boolean checkIfOptionChosenPreviously(int previousOptionId, int previousBoxId, JSONObject chosenOptionObject) {
+    private boolean checkIfOptionChosenPreviously(int previousOptionId, int previousBoxId) {
         JSONObject dialogHistory = getDialogHistory();
         assert dialogHistory != null;
         JSONArray arrayOfDialog = dialogHistory.getJSONArray("Dialog History");
@@ -663,19 +667,48 @@ public class Screen {
     }
 
     // Setting Menu
-
     /**
      * Adds a settings menu for the screen
      */
-    private void displaySettings() {
+    private void displaySettings(ScrollPane dialogScrollPane, ScrollPane dialogHistory) {
         Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        Pane displaySettingsPane = new Pane();
 
-        ColorPicker colorPicker = new ColorPicker();
+        ComboBox<String> comboBox = new ComboBox<>();
+        comboBox.getItems().addAll(
+                "Red","Black","Green"
+        );
+        comboBox.relocate(90,200);
+        comboBox.setEditable(true);
 
-        backgroundColor = colorPicker.getValue();
+        Label comboBoxLabel = new Label("Select the color you want the background to be. You can write the hex number or choose from a list." +
+                "\nExample: #2a742a");
+        comboBoxLabel.setFont(Font.font("Arial",15));
 
-        VBox vBox = new VBox(colorPicker);
-        Scene scene = new Scene(vBox, 960, 600);
+        Label dialogLabel = new Label("Dialog style");
+
+        Label optionsLabel = new Label("Options style");
+
+        Label statsLabel = new Label("Stats style");
+
+        Label dialogHistoryLabel = new Label("Dialog history style");
+
+        Label characterNameLabel = new Label("Character name style");
+
+
+
+        Button settingsChosenButton = new Button("Done");
+        settingsChosenButton.relocate(640,360);
+        settingsChosenButton.setOnAction(e-> {
+            dialogScrollPane.setStyle("-fx-background:" + comboBox.getValue());
+            dialogHistory.setStyle("-fx-background:" + comboBox.getValue());
+            displaySettingsPane.setStyle("-fx-background-color:" + comboBox.getValue());
+            tableScreenLayout.setStyle("-fx-background-color:" + comboBox.getValue());
+        });
+
+        displaySettingsPane.getChildren().addAll(comboBox,settingsChosenButton);
+        Scene scene = new Scene(displaySettingsPane, 1280 , 720);
 
         window.setTitle("Settings");
         window.setScene(scene);

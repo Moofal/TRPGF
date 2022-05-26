@@ -89,7 +89,7 @@ public class Screen {
     }
 
 
-    /*TODO: AttributeOptions, custom pane, dice checks for options*/
+    /*TODO: custom pane, dice checks for options*/
     /**
      * This creates the table screen where the actual game is played.
      * Here the dialog and character info is displayed and choices are made

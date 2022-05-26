@@ -1,5 +1,6 @@
 package org.TRPGF;
 
+import com.fasterxml.jackson.core.io.JsonEOFException;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -13,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileWriter;
@@ -287,13 +289,18 @@ public class Screen {
     }
     private void updateDialogHistory(JSONObject currentDialog, Text dialogText, int index) {
         StringBuilder dialog;
-        JSONArray options;
+        JSONArray options = currentDialog.getJSONArray("dialogChoiceList");
 
         JSONObject dialogHistoryObject;
 
+        for (int j=0; j<options.length(); j++) {
+            if (options.getJSONObject(j).getInt("ID") == index+1) {
+                options.getJSONObject(j).put("CHOSEN", true);
+            }
+        }
+
         if (Objects.equals(dialogText.getText(), "")) {
             dialog = new StringBuilder(currentDialog.getString("CONTENT"));
-            options = currentDialog.getJSONArray("dialogChoiceList");
 
             dialogHistoryObject = new JSONObject();
             JSONArray arrayOfDialog = new JSONArray();
@@ -302,7 +309,6 @@ public class Screen {
 
 
         } else {
-            options = currentDialog.getJSONArray("dialogChoiceList");
             dialog = new StringBuilder(dialogText.getText());
             dialog.append(currentDialog.getString("CONTENT"));
 
@@ -498,7 +504,6 @@ public class Screen {
         JSONArray arrayOfDialog = dialogHistory.getJSONArray("Dialog History");
         JSONObject dialog;
         JSONArray options;
-        //System.out.println("BOX TO FIND " + previousBoxId + " OPTION TO FIND " + previousOptionId);
 
         int boxId;
         int optionId;
@@ -507,14 +512,18 @@ public class Screen {
             options = dialog.getJSONArray("dialogChoiceList");
             for (int l=0; l<options.length(); l++) {
                 boxId = options.getJSONObject(i).getInt("BOXID");
-                //System.out.println("Boxid is " + boxId);
                 if (boxId == previousBoxId) {
-                    //System.out.println("FOUND " + previousBoxId);
                         optionId = options.getJSONObject(l).getInt("ID");
-                        //System.out.println("optionId is " + optionId);
-                        if (optionId == previousOptionId) {
-                            //System.out.println("FOUND " + previousOptionId);
-                            return true;
+                        // This catch exists because the CHOOSEN key is only added  when an option is chosen
+                        // if the option we are looking at does not have the CHOOSEN key and triggers the exception
+                        // we know that it has not been chosen before
+                        try {
+                            boolean hasBenChosen = options.getJSONObject(l).getBoolean("CHOSEN");
+                            if (optionId == previousOptionId && hasBenChosen) {
+                                return true;
+                            }
+                        } catch (JSONException e) {
+                            return false;
                         }
                 }
             }

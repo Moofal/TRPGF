@@ -1,16 +1,13 @@
 package org.TRPGF;
 
-import com.fasterxml.jackson.core.io.JsonEOFException;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -48,8 +45,11 @@ public class Screen {
     private JSONObject currentDialog;
     private JSONArray currentOptions;
 
-    private Color backgroundColor;
-    private Color accentColor;
+    private Label optionsText;
+    private Label nameLabel;
+    private Label statText;
+    private Font optionsTextFont = Font.font("Arial",20), statTextFont;
+    private Color optionsTextColor, statTextColor;
 
 
     /**
@@ -122,8 +122,7 @@ public class Screen {
         assert currentDialog != null;
         String dialogString = currentDialog.getString("CONTENT");
 
-        Text dialog = new Text(dialogString);
-        dialog.setWrappingWidth(625);
+        Label dialog = new Label(dialogString);
         dialog.setFont(Font.font("Arial", 30));
 
         ScrollPane dialogScrollPane = new ScrollPane();
@@ -138,8 +137,7 @@ public class Screen {
         dialogHistory.relocate(640,0);
         dialogHistory.setPrefSize(640,360);
 
-        Text dialogText = new Text();
-        dialogText.setWrappingWidth(625);
+        Label dialogText = new Label();
         dialogText.setFont(Font.font("Arial", 30));
         dialogHistory.setContent(dialogText);
 
@@ -206,7 +204,7 @@ public class Screen {
         mapBox.setOnAction(e -> displayMapBox(mapName,mapPath));
 
         MenuItem settings = new MenuItem("Settings");
-        settings.setOnAction(e -> displaySettings(dialogScrollPane, dialogHistory));
+        settings.setOnAction(e -> displaySettings(dialogScrollPane, dialogHistory, dialog, dialogText, optionsLabel));
 
         menu.getItems().addAll(dialogHistoryMenuToggle,showImageMenuToggle);
 
@@ -291,7 +289,7 @@ public class Screen {
             System.out.println(e+" Could not find Character.json");
         }
     }
-    private void updateDialogHistory(JSONObject currentDialog, Text dialogText, int index) {
+    private void updateDialogHistory(JSONObject currentDialog, Label dialogText, int index) {
         StringBuilder dialog;
         JSONArray options = currentDialog.getJSONArray("dialogChoiceList");
 
@@ -344,30 +342,37 @@ public class Screen {
         updateCharacterStatsOnTableScreen(characterStatInfo);
     }
     private void updateCharacterNameOnTableScreen(Pane layout) {
-        Label nameLabel = new Label("Name:");
+        layout.getChildren().remove(nameLabel);
+        String characterName = Objects.requireNonNull(getCharacterInfo()).getString("Name");
+        nameLabel = new Label("Name: " +characterName);
         nameLabel.setFont(Font.font("Arial",20));
         nameLabel.relocate(740,450);
-        String characterName = Objects.requireNonNull(getCharacterInfo()).getString("Name");
-        Text characterNameOnBord = new Text(characterName);
-        characterNameOnBord.setFont(Font.font("Arial",20));
-        characterNameOnBord.relocate(800,450);
-        layout.getChildren().addAll(characterNameOnBord,nameLabel);
+        layout.getChildren().add(nameLabel);
     }
     private void updateCharacterStatsOnTableScreen(VBox characterStatInfo) {
         characterStatInfo.getChildren().clear();
-        Label statLabel = new Label("Stats:");
-        characterStatInfo.getChildren().add(statLabel);
         JSONObject character = getCharacterInfo();
         assert character != null;
         JSONArray stats = character.getJSONArray("Stats");
 
+        statText = new Label();
+        String info;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Stats:\n");
         for (int i=0; i<stats.length(); i++) {
             JSONObject stat = stats.getJSONObject(i);
-            String info = stat.getString("Name")+" "+stat.getInt("Value");
-            Text statText = new Text();
-            statText.setText(info);
-            characterStatInfo.getChildren().add(statText);
+            info = stat.getString("Name")+" "+stat.getInt("Value")+"\n";
+            stringBuilder.append(info);
+
         }
+        statText.setText(stringBuilder.toString());
+        if (statTextFont!=null) {
+            statText.setFont(statTextFont);
+        }
+        if (statTextColor!=null) {
+            statText.setTextFill(statTextColor);
+        }
+        characterStatInfo.getChildren().add(statText);
         characterStatInfo.relocate(700,500);
     }
 
@@ -392,7 +397,7 @@ public class Screen {
     }
 
     // Option functions
-    private void attemptOption(VBox optionsVBox, TextField choice, Text dialog, JSONArray currentOptionsJSON, JSONObject currentDialog, Text dialogHistory)  {
+    private void attemptOption(VBox optionsVBox, TextField choice, Label dialog, JSONArray currentOptionsJSON, JSONObject currentDialog, Label dialogHistory)  {
         String chosenOption = choice.getText().replaceAll("[^1-3]", "");
         choice.setText("");
 
@@ -404,35 +409,39 @@ public class Screen {
             return;
         }
         index -= 1;
-        JSONObject chosenOptionObject = currentOptionsJSON.getJSONObject(index);
+        JSONObject chosenOptionObject;
+        try { chosenOptionObject= currentOptionsJSON.getJSONObject(index);} catch (JSONException e) {
+            return;
+        }
+
         String optionType = chosenOptionObject.getString("TYPE");
         /*
           Type Cheat Sheet:
-          000 Normal Option
-          100 Previous Choice
-          110 Previous Choice + Requirement
-          101 Previous Choice + Reward
-          111 Previous Choice + Requirement + Reward
-          010 Requirement Choice
-          011 Requirement Choice + Reward
-          001 Reward Choice
+          0000 Normal Option
+          1000 Previous Choice
+          1100 Previous Choice + Requirement
+          1010 Previous Choice + Reward
+          1110 Previous Choice + Requirement + Reward
+          0100 Requirement Choice
+          0110 Requirement Choice + Reward
+          0010 Reward Choice
          */
         int nextDialogID = 0;
         int previousOptionId = chosenOptionObject.getInt("PREV-CHOICE");
         int previousBoxId = chosenOptionObject.getInt("PREV-CHOICE-BOX");
         boolean meetsRequirements, hasChosenOption;
         switch (optionType) {
-            case "000":
+            case "0000":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 break;
-            case "100":
+            case "1000":
                 if (checkIfOptionChosenPreviously(previousOptionId, previousBoxId)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "110":
+            case "1100":
                 meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (meetsRequirements && hasChosenOption) {
@@ -441,7 +450,7 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "101":
+            case "1010":
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (hasChosenOption) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
@@ -450,7 +459,7 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "111":
+            case "1110":
                 meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (meetsRequirements && hasChosenOption) {
@@ -460,14 +469,14 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "010":
+            case "0100":
                 if (checkRequirementAndSetScreen(chosenOptionObject)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "011":
+            case "0110":
                 if (checkRequirementAndSetScreen(chosenOptionObject)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                     updateCharacterJsonWithReward(chosenOptionObject);
@@ -475,7 +484,7 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "001":
+            case "0010":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 updateCharacterJsonWithReward(chosenOptionObject);
                 break;
@@ -484,7 +493,7 @@ public class Screen {
         updateDialogHistory(currentDialog, dialogHistory, index);
     }
     private void updateCharacterJsonWithReward(JSONObject chosenOptionObject) {
-        String statIncreased = chosenOptionObject.getString("STAT");
+        String statIncreased = chosenOptionObject.getString("REWARD-STAT");
         int statIncreasedAmount = chosenOptionObject.getInt("REWARD-VAL");
 
         JSONObject character = getCharacterInfo();
@@ -553,7 +562,7 @@ public class Screen {
         hasRequierdStatValue = requiredStat.getInt("Value") >= requiredStatValue;
         return hasRequierdStatValue;
     }
-    private void optionChosen(VBox optionsVBox, Text dialog, int nextDialogID) {
+    private void optionChosen(VBox optionsVBox, Label dialog, int nextDialogID) {
         // Setting the dialog text box to be the new dialog text
         JSONObject nextDialogJSON = getDialog(nextDialogID);
 
@@ -610,14 +619,18 @@ public class Screen {
             vBox.getChildren().add(addOption(text, i+1, 30, optionY));
         }
     }
-    private Text addOption(String text, int optionNr, double relocateX, double relocateY) {
-        Text options = new Text();
-        options.setId("option");
-        options.setText(optionNr+ ". " + text);
-        options.relocate(relocateX,relocateY);
-        options.setFont(Font.font(20));
+    private Label addOption(String text, int optionNr, double relocateX, double relocateY) {
+        optionsText = new Label();
+        optionsText.setId("option");
+        optionsText.setText(optionNr+ ". " + text);
+        optionsText.relocate(relocateX,relocateY);
+        optionsText.setFont(optionsTextFont);
 
-        return options;
+        if (optionsTextColor!=null) {
+            optionsText.setTextFill(optionsTextColor);
+        }
+
+        return optionsText;
     }
 
     // Map box
@@ -670,44 +683,162 @@ public class Screen {
     /**
      * Adds a settings menu for the screen
      */
-    private void displaySettings(ScrollPane dialogScrollPane, ScrollPane dialogHistory) {
+    private void displaySettings(ScrollPane dialogScrollPane, ScrollPane dialogHistory, Label dialog, Label dialogText, Label optionsLabel) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         Pane displaySettingsPane = new Pane();
 
-        ComboBox<String> comboBox = new ComboBox<>();
-        comboBox.getItems().addAll(
+        ComboBox<String> backgroundColorComboBox = new ComboBox<>();
+        backgroundColorComboBox.getItems().addAll(
                 "Red","Black","Green"
         );
-        comboBox.relocate(90,200);
-        comboBox.setEditable(true);
+        backgroundColorComboBox.relocate(1,75);
+        backgroundColorComboBox.setEditable(true);
 
-        Label comboBoxLabel = new Label("Select the color you want the background to be. You can write the hex number or choose from a list." +
+        Label backgroundColorComboBoxLabel = new Label("Select the color you want the background to be." +
+                "\nYou can write the hex number or choose from a list." +
                 "\nExample: #2a742a");
-        comboBoxLabel.setFont(Font.font("Arial",15));
+        backgroundColorComboBoxLabel.setFont(Font.font("Arial",20));
+        backgroundColorComboBoxLabel.relocate(1,1);
+
 
         Label dialogLabel = new Label("Dialog style");
+        dialogLabel.relocate(1,124);
+        dialog.setFont(Font.font("Arial", 15));
 
-        Label optionsLabel = new Label("Options style");
+        ComboBox<String> dialogFontBox = new ComboBox<>();
+        dialogFontBox.getItems().addAll("Verdana","Helvetica","Times New Roman","Comic Sans MS","Impact"
+        ,"Lucida Sans Unicode", "Arial");
+        dialogFontBox.setEditable(true);
+        dialogFontBox.relocate(1,140);
+
+        TextField dialogFontSize = new TextField();
+        dialogFontSize.setText("30");
+        dialogFontSize.relocate(200,140);
+
+
+        Label optionsLabel1 = new Label("Options style");
+        optionsLabel1.setFont(Font.font("Arial",15));
+        optionsLabel1.relocate(1,175);
+
+        ComboBox<String> optionsFontBox = new ComboBox<>();
+        optionsFontBox.getItems().addAll("Verdana","Helvetica","Times New Roman","Comic Sans MS","Impact"
+                ,"Lucida Sans Unicode", "Arial");
+        optionsFontBox.setEditable(true);
+        optionsFontBox.relocate(1,193);
+
+        TextField optionsFontSize = new TextField();
+        optionsFontSize.setText("20");
+        optionsFontSize.relocate(200,193);
+
 
         Label statsLabel = new Label("Stats style");
+        statsLabel.setFont(Font.font("Arial",15));
+        statsLabel.relocate(1,226);
+
+        ComboBox<String> statsLabelFontBox = new ComboBox<>();
+        statsLabelFontBox.getItems().addAll("Verdana","Helvetica","Times New Roman","Comic Sans MS","Impact"
+                ,"Lucida Sans Unicode", "Arial");
+        statsLabelFontBox.setEditable(true);
+        statsLabelFontBox.relocate(1,243);
+
+        TextField statsLabelFontSize = new TextField();
+        statsLabelFontSize.setText("10");
+        statsLabelFontSize.relocate(200,243);
+
 
         Label dialogHistoryLabel = new Label("Dialog history style");
+        dialogHistoryLabel.setFont(Font.font("Arial",15));
+        dialogHistoryLabel.relocate(1,275);
+
+        ComboBox<String> dialogHistoryLabelFontBox = new ComboBox<>();
+        dialogHistoryLabelFontBox.getItems().addAll("Verdana","Helvetica","Times New Roman","Comic Sans MS","Impact"
+                ,"Lucida Sans Unicode", "Arial");
+        dialogHistoryLabelFontBox.setEditable(true);
+        dialogHistoryLabelFontBox.relocate(1,292);
+
+        TextField dialogHistoryLabelFontSize = new TextField();
+        dialogHistoryLabelFontSize.setText("10");
+        dialogHistoryLabelFontSize.relocate(200,292);
+
 
         Label characterNameLabel = new Label("Character name style");
+        characterNameLabel.setFont(Font.font("Arial",15));
+        characterNameLabel.relocate(1,327);
 
+        ComboBox<String> characterNameLabelFontBox = new ComboBox<>();
+        characterNameLabelFontBox.getItems().addAll("Verdana","Helvetica","Times New Roman","Comic Sans MS","Impact"
+                ,"Lucida Sans Unicode", "Arial");
+        characterNameLabelFontBox.setEditable(true);
+        characterNameLabelFontBox.relocate(1,347);
+
+        TextField characterNameLabelFontSize = new TextField();
+        characterNameLabelFontSize.setText("10");
+        characterNameLabelFontSize.relocate(200,347);
+
+
+        Label textStyle = new Label("Text color");
+        textStyle.setFont(Font.font("Arial",15));
+        textStyle.relocate(500,1);
+
+        ComboBox<String> textColorComboBox = new ComboBox<>();
+        textColorComboBox.getItems().addAll(
+                "Red","Black","Green"
+        );
+        textColorComboBox.relocate(500,75);
+        textColorComboBox.setEditable(true);
 
 
         Button settingsChosenButton = new Button("Done");
         settingsChosenButton.relocate(640,360);
+
         settingsChosenButton.setOnAction(e-> {
-            dialogScrollPane.setStyle("-fx-background:" + comboBox.getValue());
-            dialogHistory.setStyle("-fx-background:" + comboBox.getValue());
-            displaySettingsPane.setStyle("-fx-background-color:" + comboBox.getValue());
-            tableScreenLayout.setStyle("-fx-background-color:" + comboBox.getValue());
+            // Text fonts
+            double size = Double.parseDouble(dialogFontSize.getText());
+            dialog.setFont(Font.font(dialogFontBox.getValue(),size));
+
+            size = Double.parseDouble(dialogHistoryLabelFontSize.getText());
+            dialogText.setFont(Font.font(dialogHistoryLabelFontBox.getValue(),size));
+
+            size = Double.parseDouble(optionsFontSize.getText());
+            optionsTextFont = Font.font(optionsFontBox.getValue(),size);
+            optionsText.setFont(optionsTextFont);
+            optionsLabel.setFont(optionsTextFont);
+
+
+            size = Double.parseDouble(statsLabelFontSize.getText());
+            statTextFont = Font.font(statsLabelFontBox.getValue(),size);
+            statText.setFont(statTextFont);
+
+            size = Double.parseDouble(characterNameLabelFontSize.getText());
+            nameLabel.setFont(Font.font(characterNameLabelFontBox.getValue(),size));
+
+            // Text color
+            if (!Objects.equals(textColorComboBox.getValue(), "")) {
+                optionsTextColor = Color.web(textColorComboBox.getValue());
+                statTextColor = Color.web(textColorComboBox.getValue());
+
+                dialog.setTextFill(Color.web(textColorComboBox.getValue()));
+                dialogText.setTextFill(Color.web(textColorComboBox.getValue()));
+                optionsLabel.setTextFill(Color.web(textColorComboBox.getValue()));
+                nameLabel.setTextFill(Color.web(textColorComboBox.getValue()));
+                statText.setTextFill(Color.web(textColorComboBox.getValue()));
+                optionsText.setTextFill(Color.web(textColorComboBox.getValue()));
+            }
+
+            // Background Colors
+            if (!Objects.equals(backgroundColorComboBox.getValue(), "")) {
+                dialogScrollPane.setStyle("-fx-background:" + backgroundColorComboBox.getValue());
+                dialogHistory.setStyle("-fx-background:" + backgroundColorComboBox.getValue());
+                displaySettingsPane.setStyle("-fx-background-color:" + backgroundColorComboBox.getValue());
+                tableScreenLayout.setStyle("-fx-background-color:" + backgroundColorComboBox.getValue());
+            }
         });
 
-        displaySettingsPane.getChildren().addAll(comboBox,settingsChosenButton);
+        displaySettingsPane.getChildren().addAll(backgroundColorComboBox,settingsChosenButton,backgroundColorComboBoxLabel,
+                dialogLabel,dialogFontBox,dialogFontSize,optionsLabel1,optionsFontBox,optionsFontSize,textStyle,textColorComboBox,
+                statsLabel,statsLabelFontBox,statsLabelFontSize,dialogHistoryLabel,dialogHistoryLabelFontBox,dialogHistoryLabelFontSize,
+                characterNameLabel,characterNameLabelFontBox,characterNameLabelFontSize);
         Scene scene = new Scene(displaySettingsPane, 1280 , 720);
 
         window.setTitle("Settings");

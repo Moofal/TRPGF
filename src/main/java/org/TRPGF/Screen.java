@@ -422,17 +422,17 @@ public class Screen {
         int previousBoxId = chosenOptionObject.getInt("PREV-CHOICE-BOX");
         boolean meetsRequirements, hasChosenOption;
         switch (optionType) {
-            case "000":
+            case "0000":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 break;
-            case "100":
+            case "1000":
                 if (checkIfOptionChosenPreviously(previousOptionId, previousBoxId)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "110":
+            case "1100":
                 meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (meetsRequirements && hasChosenOption) {
@@ -441,7 +441,7 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "101":
+            case "1010":
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (hasChosenOption) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
@@ -450,7 +450,7 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "111":
+            case "1110":
                 meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (meetsRequirements && hasChosenOption) {
@@ -460,14 +460,14 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "010":
+            case "0100":
                 if (checkRequirementAndSetScreen(chosenOptionObject)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "011":
+            case "0110":
                 if (checkRequirementAndSetScreen(chosenOptionObject)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                     updateCharacterJsonWithReward(chosenOptionObject);
@@ -475,7 +475,7 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
-            case "001":
+            case "0010":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 updateCharacterJsonWithReward(chosenOptionObject);
                 break;
@@ -484,7 +484,7 @@ public class Screen {
         updateDialogHistory(currentDialog, dialogHistory, index);
     }
     private void updateCharacterJsonWithReward(JSONObject chosenOptionObject) {
-        String statIncreased = chosenOptionObject.getString("STAT");
+        String statIncreased = chosenOptionObject.getString("REWARD-STAT");
         int statIncreasedAmount = chosenOptionObject.getInt("REWARD-VAL");
 
         JSONObject character = getCharacterInfo();

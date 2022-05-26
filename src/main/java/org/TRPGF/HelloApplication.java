@@ -29,26 +29,22 @@ public class HelloApplication extends Application {
 
         Dialog dialog = new Dialog();
 
-        dialog.createDialogBox(1, "The man went into the woods\n" +
-                "Hey fara into the woods\n" +
-                "When a crow sat in the meadow and crawed\n" +
-                "Hey fara. Faltu riltu raltura\n " +
-                "The man thought with himself\n" +
-                "I wonder if that crow wants to kill me?");
-        dialog.addOption(1, 1, "Attack the crow", 2);
-        dialog.addOption(2, 1, "Run for your life", 3);
-        dialog.addOption(3, 1, "Observe", 1);
-        dialog.createDialogBox(2, "Content 2");
-        dialog.addOption(1, 2, "Go to 1", 1);
-        dialog.addOption(2, 2, "Go to 3", 3);
-        dialog.createDialogBox(3, "There is a dragon in front of you what do you do");
-        dialog.addOptionWithRequirement(1, 3, "Need 15 str", "Str", 15, 6, 5);
-        dialog.addOptionWithReward(2, 3, "str+1", "Str", 1, 1);
-        dialog.addOptionPrevious(3, 3, 1, 3, "slay it",4, 5);
-        dialog.createDialogBox(4, "YOU DID IT!");
-        dialog.createDialogBox(5, "YOU DID NOT!");
-        dialog.createDialogBox(6, "Did you slay the dragon?");
-        dialog.addOptionPrevious(1, 6, 1, 3, "YES!", 4, 5);
+        dialog.createDialogBox(1, "Default Content");
+        dialog.addOption(1, 1, "I GO TO 2", 2);
+        dialog.addOption(2, 1, "I GO TO 5", 5);
+        dialog.createDialogBox(2, "I AM BOX 2");
+        dialog.addOptionPrevious(1, 2, 1, 1, "Chose 1, in 1", 3, 4);
+        dialog.addOptionPreviousRequirement(2, 2, 1, 1, "CHOSE 1, IN 1, + STAT 15 STR", "Str", 15, 3, 4);
+        dialog.addOptionPreviousReward(3, 2, 1, 1, "CHOSE 1, IN 1, +2 STR", "Str", 2, 3, 4);
+        dialog.createDialogBox(3, "GOOD CHOICE");
+        dialog.addOptionWithReward(1, 3, "CON +10", "Con", 10, 6);
+        dialog.createDialogBox(4, "BAD CHOICE");
+        dialog.createDialogBox(5, "MORE OPTIONS!");
+        dialog.addOptionPreviousRequirementReward(1, 5, 1, 1, "CHOSE 1, IN 1, + STAT 15 STR +2 DEX", "Str", 15, "Dex", 2, 3, 4);
+        dialog.addOptionWithRequirement(2, 5, "STAT 15 STR", "Str", 15, 3, 4);
+        dialog.addOptionWithRequirementReward(3, 5, "STAT 15 STR, +2 DEX", "Str", 15, "Dex", 2, 3, 4);
+        dialog.createDialogBox(6, "GOOD AGAIN!");
+        dialog.addOption(1, 6, "Go back?", 1);
 
         dialog.finishStory();
 

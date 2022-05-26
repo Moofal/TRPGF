@@ -14,13 +14,17 @@ import java.util.ArrayList;
 public class Choice extends Dialog {
 
     private String type;
-    private boolean Ending;
+    private boolean endOnSuccess;
+    private int endingScreenId;
+    private int successEndingId;
+    private int failEndingId;
     private int boxId;
     private int successScene;
     private int failScene;
     private int pChoiceId;
     private int pDialogBoxId;
     private String stat;
+    private String rewardStat;
     private int statVal;
     private int rewardValue;
 
@@ -33,6 +37,12 @@ public class Choice extends Dialog {
         this.successScene = successScene;
     }
 
+    public Choice(int id, int boxId, String content, int endingScreenId) {
+        super(id, content);
+        this.boxId = boxId;
+        this.endingScreenId = endingScreenId;
+    }
+
     public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId) {
         super(id, content);
         this.boxId = boxId;
@@ -40,6 +50,18 @@ public class Choice extends Dialog {
         this.failScene = failScene;
         this.pChoiceId = pChoiceId;
         this.pDialogBoxId = pDialogBoxId;
+    }
+
+
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, boolean endOnSuccess, int endingScreenId) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
+        this.pChoiceId = pChoiceId;
+        this.pDialogBoxId = pDialogBoxId;
+        this.endOnSuccess = endOnSuccess;
+        this.endingScreenId = endingScreenId;
     }
 
     public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal) {
@@ -53,7 +75,7 @@ public class Choice extends Dialog {
         this.statVal = statVal;
     }
 
-    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal, int rewardValue) {
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal, boolean endOnSuccess, int endingScreenId) {
         super(id, content);
         this.boxId = boxId;
         this.successScene = successScene;
@@ -62,15 +84,52 @@ public class Choice extends Dialog {
         this.pDialogBoxId = pDialogBoxId;
         this.stat = stat;
         this.statVal = statVal;
-        this.rewardValue = rewardValue;
+        this.endOnSuccess = endOnSuccess;
+        this.endingScreenId = endingScreenId;
     }
 
-    public Choice(int id, String content, int boxId, int successScene, String stat, int rewardValue) {
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal, String rewardStat, int rewardValue) {
         super(id, content);
         this.boxId = boxId;
         this.successScene = successScene;
+        this.failScene = failScene;
+        this.pChoiceId = pChoiceId;
+        this.pDialogBoxId = pDialogBoxId;
         this.stat = stat;
+        this.statVal = statVal;
+        this.rewardStat = rewardStat;
         this.rewardValue = rewardValue;
+    }
+
+    public Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal, String rewardStat, int rewardValue, boolean endOnSuccess, int endingScreenId) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
+        this.pChoiceId = pChoiceId;
+        this.pDialogBoxId = pDialogBoxId;
+        this.stat = stat;
+        this.statVal = statVal;
+        this.rewardStat = rewardStat;
+        this.rewardValue = rewardValue;
+        this.endOnSuccess = endOnSuccess;
+        this.endingScreenId = endingScreenId;
+    }
+
+    public Choice(int id, String content, int boxId, int successScene, String rewardStat, int rewardValue) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.rewardStat = rewardStat;
+        this.rewardValue = rewardValue;
+    }
+    public Choice(int id, String content, int boxId, int successScene, String rewardStat, int rewardValue, int endingScreenId) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.rewardStat = rewardStat;
+        this.rewardValue = rewardValue;
+        this.endingScreenId = endingScreenId;
     }
 
     public Choice(int id, String content, int boxId, int successScene, int failScene, String stat, int statVal) {
@@ -80,6 +139,40 @@ public class Choice extends Dialog {
         this.failScene = failScene;
         this.stat = stat;
         this.statVal = statVal;
+    }
+    public Choice(int id, String content, int boxId, int successScene, int failScene, String stat, int statVal, boolean endOnSuccess, int endingScreenId) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
+        this.stat = stat;
+        this.statVal = statVal;
+        this.endOnSuccess = endOnSuccess;
+        this.endingScreenId = endingScreenId;
+    }
+
+    public Choice(int id, String content, int boxId, int successScene, int failScene, String stat, int statVal, String rewardStat, int rewardValue) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
+        this.stat = stat;
+        this.statVal = statVal;
+        this.rewardStat = rewardStat;
+        this.rewardValue = rewardValue;
+    }
+
+    public Choice(int id, String content, int boxId, int successScene, int failScene, String stat, int statVal, String rewardStat, int rewardValue, boolean endOnSuccess, int endingScreenId) {
+        super(id, content);
+        this.boxId = boxId;
+        this.successScene = successScene;
+        this.failScene = failScene;
+        this.stat = stat;
+        this.statVal = statVal;
+        this.rewardStat = rewardStat;
+        this.rewardValue = rewardValue;
+        this.endOnSuccess = endOnSuccess;
+        this.endingScreenId = endingScreenId;
     }
 
     //-----------------------------------Getters and Setters-----------------------------------//
@@ -175,6 +268,51 @@ public class Choice extends Dialog {
 
     public void setFailScene(int failScene) {
         this.failScene = failScene;
+    }
+
+    @JsonProperty("END-ON-SUCCESS")
+    public boolean isEndOnSuccess() {
+        return endOnSuccess;
+    }
+
+    public void setEndOnSuccess(boolean endOnSuccess) {
+        this.endOnSuccess = endOnSuccess;
+    }
+
+    @JsonProperty("ENDING-SCREEN-ID")
+    public int getEndingScreenId() {
+        return endingScreenId;
+    }
+
+    public void setEndingScreenId(int endingScreenId) {
+        this.endingScreenId = endingScreenId;
+    }
+
+    @JsonProperty("SUCCESS-ENDING-ID")
+    public int getSuccessEndingId() {
+        return successEndingId;
+    }
+
+    public void setSuccessEndingId(int successEndingId) {
+        this.successEndingId = successEndingId;
+    }
+
+    @JsonProperty("FAIL-ENDING-ID")
+    public int getFailEndingId() {
+        return failEndingId;
+    }
+
+    public void setFailEndingId(int failEndingId) {
+        this.failEndingId = failEndingId;
+    }
+
+    @JsonProperty("REWARD-STAT")
+    public String getRewardStat() {
+        return rewardStat;
+    }
+
+    public void setRewardStat(String rewardStat) {
+        this.rewardStat = rewardStat;
     }
 
     @JsonIgnore @Override

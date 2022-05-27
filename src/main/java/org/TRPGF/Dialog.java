@@ -104,18 +104,20 @@ public class Dialog {
         choice.setType("1101");
         checkAndAdd(dialog, id, choice);
     }
-    public void addOptionPreviousReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int rewardVal, int successDialog, int failDialog) {
+    public void addOptionPreviousReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String rewardStat, int rewardVal, int successDialog, int failDialog) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, rewardVal);
-        choice.setRewardStat(stat);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, rewardStat, rewardVal);
+        choice.setRewardStat(rewardStat);
         choice.setRewardValue(rewardVal);
         choice.setType("1010");
         checkAndAdd(dialog, id, choice);
     }
-    public void addOptionPreviousRewardEnding(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int rewardVal, int successDialog, int failDialog, boolean endOnSuccess, int endingScreenId) {
+    public void addOptionPreviousRewardEnding(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String rewardStat, int rewardVal, int successDialog, int failDialog, boolean endOnSuccess, int endingScreenId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, rewardVal, endOnSuccess, endingScreenId);
+        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, rewardStat, rewardVal, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
+        choice.setRewardStat(rewardStat);
+        choice.setRewardValue(rewardVal);
         choice.setType("1011");
         checkAndAdd(dialog, id, choice);
     }

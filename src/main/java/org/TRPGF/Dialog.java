@@ -18,6 +18,7 @@ public class Dialog {
 
     private int id;
     private String content;
+    private String imgUrl;
 
     public Dialog() {
     }
@@ -25,6 +26,11 @@ public class Dialog {
     public Dialog(int id, String content) {
         this.id = id;
         this.content = content;
+    }
+    public Dialog(int id, String content, String imgUrl) {
+        this.id = id;
+        this.content = content;
+        this.imgUrl = imgUrl;
     }
 
     /**
@@ -34,6 +40,11 @@ public class Dialog {
      */
     public void createDialogBox(int id, String content) {
         Dialog dialog = new Dialog(id, content);
+        dialogArrayList.add(dialog);
+
+    }
+    public void createDialogBoxWithImage(int id, String content, String imgUrl) {
+        Dialog dialog = new Dialog(id, content, imgUrl);
         dialogArrayList.add(dialog);
 
     }

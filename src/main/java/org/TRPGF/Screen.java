@@ -418,12 +418,19 @@ public class Screen {
         /*
           Type Cheat Sheet:
           0000 Normal Option
+          0001 Normal Ending
           1000 Previous Choice
+          1001 Previous Ending
           1100 Previous Choice + Requirement
+          1101 Previous + Requirement Ending
           1010 Previous Choice + Reward
-          1110 Previous Choice + Requirement + Reward
+          1011 Previous + Reward Ending
+          1110 Previous + Requirement + Reward Choice
+          1111 Previous + Requirement + Reward Ending
           0100 Requirement Choice
+          0101 Requirement Ending
           0110 Requirement Choice + Reward
+          0111 Requirement Choice + Reward Ending
           0010 Reward Choice
          */
         int nextDialogID = 0;

@@ -26,7 +26,6 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) throws IOException {
-
         Dialog dialog = new Dialog();
 
         // TESTING FOR ALL KNOWN OPTIONS
@@ -52,6 +51,7 @@ public class HelloApplication extends Application {
         dialog.createDialogBox(6, "GOOD AGAIN!");
         dialog.addOption(1, 6, "Go back?", 1);
          */
+
 
         dialog.finishStory();
 

@@ -44,6 +44,7 @@ public class Screen {
     private Pane tableScreenLayout;
     private JSONObject currentDialog;
     private JSONArray currentOptions;
+    private final JSONArray arrayOfEndingScreen = new JSONArray();
 
     private Label optionsText;
     private Label nameLabel;
@@ -331,7 +332,7 @@ public class Screen {
             }
             dialog.append("\n").append(i+1).append(" ").append(option);
         }
-        dialog.append(" -------------------------------------------------------------- ");
+        dialog.append("\n -------------------------------------------------------------- \n");
         dialogText.setText(dialog.toString());
     }
 
@@ -418,27 +419,60 @@ public class Screen {
         /*
           Type Cheat Sheet:
           0000 Normal Option
+          0001 Normal Ending
           1000 Previous Choice
+          1001 Previous Ending
           1100 Previous Choice + Requirement
+          1101 Previous + Requirement Ending
           1010 Previous Choice + Reward
-          1110 Previous Choice + Requirement + Reward
+          1011 Previous + Reward Ending
+          1110 Previous + Requirement + Reward Choice
+          1111 Previous + Requirement + Reward Ending
           0100 Requirement Choice
+          0101 Requirement Ending
           0110 Requirement Choice + Reward
+          0111 Requirement Choice + Reward Ending
           0010 Reward Choice
          */
         int nextDialogID = 0;
+        int endingScreenID;
         int previousOptionId = chosenOptionObject.getInt("PREV-CHOICE");
         int previousBoxId = chosenOptionObject.getInt("PREV-CHOICE-BOX");
-        boolean meetsRequirements, hasChosenOption;
+        boolean meetsRequirements, hasChosenOption, ending = false, endOnSuccess;
         switch (optionType) {
             case "0000":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                break;
+            case "0001":
+                endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                setEndingScreen(endingScreenID);
+                ending = true;
                 break;
             case "1000":
                 if (checkIfOptionChosenPreviously(previousOptionId, previousBoxId)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
+                }
+                break;
+            case "1001":
+                endOnSuccess = chosenOptionObject.getBoolean("END-ON-SUCCESS");
+                if (endOnSuccess) {
+                    if (checkIfOptionChosenPreviously(previousOptionId, previousBoxId)) {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    } else {
+                        nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
+                    }
+                } else {
+                    if (checkIfOptionChosenPreviously(previousOptionId, previousBoxId)) {
+                        nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                    } else {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    }
                 }
                 break;
             case "1100":
@@ -448,6 +482,28 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
+                }
+                break;
+            case "1101":
+                endOnSuccess = chosenOptionObject.getBoolean("END-ON-SUCCESS");
+                meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
+                hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
+                if (endOnSuccess) {
+                    if (meetsRequirements && hasChosenOption) {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    } else {
+                        nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
+                    }
+                } else {
+                    if (meetsRequirements && hasChosenOption) {
+                        nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                    } else {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    }
                 }
                 break;
             case "1010":
@@ -489,8 +545,11 @@ public class Screen {
                 updateCharacterJsonWithReward(chosenOptionObject);
                 break;
         }
-        optionChosen(optionsVBox, dialog, nextDialogID);
-        updateDialogHistory(currentDialog, dialogHistory, index);
+        if (!ending) {
+            optionChosen(optionsVBox, dialog, nextDialogID);
+            updateDialogHistory(currentDialog, dialogHistory, index);
+        }
+
     }
     private void updateCharacterJsonWithReward(JSONObject chosenOptionObject) {
         String statIncreased = chosenOptionObject.getString("REWARD-STAT");
@@ -609,6 +668,29 @@ public class Screen {
             }
         }
         return false;
+    }
+
+    private void setEndingScreen(int endingScreenID) {
+        JSONArray endingScreens = endingScreenReader();
+        JSONObject endingScreen;
+        int checkID;
+        boolean exit = false;
+        boolean startOver = false;
+        String sceneText = null;
+        for (int i = 0; i < Objects.requireNonNull(endingScreens).length(); i++) {
+            endingScreen = endingScreens.getJSONObject(i);
+            checkID = endingScreen.getInt("ID");
+            if (Objects.equals(checkID,endingScreenID)) {
+                exit = endingScreen.getBoolean("exit");
+                startOver = endingScreen.getBoolean("startOver");
+                sceneText = endingScreen.getString("sceneText");
+            }
+        }
+        setEndingScreen(sceneText,startOver,exit);
+        changeToEndingScreen();
+    }
+    private void changeToEndingScreen() {
+        stage.setScene(endingScreen);
     }
 
     private void setCurrentOptions(VBox vBox) {
@@ -758,7 +840,7 @@ public class Screen {
         dialogHistoryLabelFontBox.relocate(1,292);
 
         TextField dialogHistoryLabelFontSize = new TextField();
-        dialogHistoryLabelFontSize.setText("10");
+        dialogHistoryLabelFontSize.setText("30");
         dialogHistoryLabelFontSize.relocate(200,292);
 
 
@@ -773,7 +855,7 @@ public class Screen {
         characterNameLabelFontBox.relocate(1,347);
 
         TextField characterNameLabelFontSize = new TextField();
-        characterNameLabelFontSize.setText("10");
+        characterNameLabelFontSize.setText("20");
         characterNameLabelFontSize.relocate(200,347);
 
 
@@ -814,25 +896,30 @@ public class Screen {
             nameLabel.setFont(Font.font(characterNameLabelFontBox.getValue(),size));
 
             // Text color
-            if (!Objects.equals(textColorComboBox.getValue(), "")) {
-                optionsTextColor = Color.web(textColorComboBox.getValue());
-                statTextColor = Color.web(textColorComboBox.getValue());
+            String textColorString = textColorComboBox.getValue().trim();
+            Color textColor = Color.web(textColorString);
+            if (!Objects.equals(textColor, null)) {
+                optionsTextColor = textColor;
+                statTextColor = textColor;
 
-                dialog.setTextFill(Color.web(textColorComboBox.getValue()));
-                dialogText.setTextFill(Color.web(textColorComboBox.getValue()));
-                optionsLabel.setTextFill(Color.web(textColorComboBox.getValue()));
-                nameLabel.setTextFill(Color.web(textColorComboBox.getValue()));
-                statText.setTextFill(Color.web(textColorComboBox.getValue()));
-                optionsText.setTextFill(Color.web(textColorComboBox.getValue()));
+                dialog.setTextFill(textColor);
+                dialogText.setTextFill(textColor);
+                optionsLabel.setTextFill(textColor);
+                nameLabel.setTextFill(textColor);
+                statText.setTextFill(textColor);
+                optionsText.setTextFill(textColor);
             }
 
             // Background Colors
-            if (!Objects.equals(backgroundColorComboBox.getValue(), "")) {
-                dialogScrollPane.setStyle("-fx-background:" + backgroundColorComboBox.getValue());
-                dialogHistory.setStyle("-fx-background:" + backgroundColorComboBox.getValue());
-                displaySettingsPane.setStyle("-fx-background-color:" + backgroundColorComboBox.getValue());
-                tableScreenLayout.setStyle("-fx-background-color:" + backgroundColorComboBox.getValue());
+            String backgroundColorString = backgroundColorComboBox.getValue().trim();
+            Color backgroundColor = Color.web(backgroundColorString);
+            if (!Objects.equals(backgroundColor, null)) {
+                dialogScrollPane.setStyle("-fx-background:" + backgroundColorString);
+                dialogHistory.setStyle("-fx-background:" + backgroundColorString);
+                displaySettingsPane.setStyle("-fx-background-color:" + backgroundColorString);
+                tableScreenLayout.setStyle("-fx-background-color:" + backgroundColorString);
             }
+            window.close();
         });
 
         displaySettingsPane.getChildren().addAll(backgroundColorComboBox,settingsChosenButton,backgroundColorComboBoxLabel,
@@ -1023,7 +1110,39 @@ public class Screen {
      * @param exit is a boolean value that lets you dice if you want there to be an exit button
      *             that closes the application.
      */
-    public void endingScreen(int endingScreenId, String sceneText, boolean startOver, boolean exit) {
+    public void addEndingScreen(int endingScreenId, String sceneText, boolean startOver, boolean exit) {
+        JSONObject endingScreen = new JSONObject();
+        endingScreen.put("ID", endingScreenId);
+        endingScreen.put("sceneText", sceneText);
+        endingScreen.put("startOver", startOver);
+        endingScreen.put("exit", exit);
+
+        arrayOfEndingScreen.put(endingScreen);
+    }
+    public void finishEndingScreens() {
+        writeToEndingScreenJSON(arrayOfEndingScreen);
+    }
+    private JSONArray endingScreenReader() {
+        try {
+            Path endingScreenPath = Path.of("src/EndingScreen.json");
+            String input = Files.readString(endingScreenPath);
+            return new JSONArray(input);
+        } catch (IOException e) {
+            System.out.println(e+"\n Could not find EndingScreen.json file");
+        }
+        return null;
+    }
+    private void writeToEndingScreenJSON(JSONArray arrayOfEndingScreen) {
+        try {
+            FileWriter charCreationSettingsFile = new FileWriter("src/EndingScreen.json");
+            charCreationSettingsFile.write(arrayOfEndingScreen.toString());
+            charCreationSettingsFile.close();
+        } catch (IOException e) {
+            System.out.println("Could not find EndingScreen.json");
+        }
+    }
+
+    private void setEndingScreen(String sceneText, boolean startOver, boolean exit) {
         Pane endingPane = new Pane();
 
         Text endingText = new Text(sceneText);
@@ -1049,4 +1168,6 @@ public class Screen {
 
         endingScreen = new Scene(endingPane, 1280, 720);
     }
+
+
 }

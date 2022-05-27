@@ -476,7 +476,7 @@ public class Screen {
                 }
                 break;
             case "1100":
-                meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
+                meetsRequirements = checkRequirement(chosenOptionObject);
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (meetsRequirements && hasChosenOption) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
@@ -486,7 +486,7 @@ public class Screen {
                 break;
             case "1101":
                 endOnSuccess = chosenOptionObject.getBoolean("END-ON-SUCCESS");
-                meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
+                meetsRequirements = checkRequirement(chosenOptionObject);
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (endOnSuccess) {
                     if (meetsRequirements && hasChosenOption) {
@@ -515,8 +515,30 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
+            case "1011":
+                hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
+                endOnSuccess = chosenOptionObject.getBoolean("END-ON-SUCCESS");
+                if (endOnSuccess) {
+                    if (hasChosenOption) {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    } else {
+                        nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
+                    }
+                } else {
+                    if (hasChosenOption) {
+                        nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                        updateCharacterJsonWithReward(chosenOptionObject);
+                    } else {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    }
+                }
+                break;
             case "1110":
-                meetsRequirements = checkRequirementAndSetScreen(chosenOptionObject);
+                meetsRequirements = checkRequirement(chosenOptionObject);
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (meetsRequirements && hasChosenOption) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
@@ -525,19 +547,83 @@ public class Screen {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
+            case "1111":
+                meetsRequirements = checkRequirement(chosenOptionObject);
+                hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
+                endOnSuccess = chosenOptionObject.getBoolean("END-ON-SUCCESS");
+                if (endOnSuccess) {
+                    if (meetsRequirements && hasChosenOption) {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    } else {
+                        nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
+                    }
+                } else {
+                    if (meetsRequirements && hasChosenOption) {
+                        nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                        updateCharacterJsonWithReward(chosenOptionObject);
+                    } else {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    }
+                }
+                break;
             case "0100":
-                if (checkRequirementAndSetScreen(chosenOptionObject)) {
+                if (checkRequirement(chosenOptionObject)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
                 break;
+            case "0101":
+                endOnSuccess = chosenOptionObject.getBoolean("END-ON-SUCCESS");
+                if (endOnSuccess) {
+                    if (checkRequirement(chosenOptionObject)) {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    } else {
+                        nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
+                    }
+                } else {
+                    if (checkRequirement(chosenOptionObject)) {
+                        nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                    } else {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    }
+                }
+                break;
             case "0110":
-                if (checkRequirementAndSetScreen(chosenOptionObject)) {
+                if (checkRequirement(chosenOptionObject)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                     updateCharacterJsonWithReward(chosenOptionObject);
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
+                }
+                break;
+            case "0111":
+                endOnSuccess = chosenOptionObject.getBoolean("END-ON-SUCCESS");
+                if (endOnSuccess) {
+                    if (checkRequirement(chosenOptionObject)) {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    } else {
+                        nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
+                    }
+                } else {
+                    if (checkRequirement(chosenOptionObject)) {
+                        nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                        updateCharacterJsonWithReward(chosenOptionObject);
+                    } else {
+                        endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                        setEndingScreen(endingScreenID);
+                        ending = true;
+                    }
                 }
                 break;
             case "0010":
@@ -603,8 +689,8 @@ public class Screen {
 
         return false;
     }
-    private boolean checkRequirementAndSetScreen(JSONObject chosenOptionObject) {
-        boolean hasRequierdStatValue;
+    private boolean checkRequirement(JSONObject chosenOptionObject) {
+        boolean hasRequiredStatValue;
         JSONArray characterStats = Objects.requireNonNull(getCharacterInfo()).getJSONArray("Stats");
         String requiredStatName = chosenOptionObject.getString("STAT");
         int requiredStatValue = chosenOptionObject.getInt("STAT-REQ-VAL");
@@ -618,8 +704,8 @@ public class Screen {
 
         assert requiredStat != null;
         // sets value true is stat >= required val
-        hasRequierdStatValue = requiredStat.getInt("Value") >= requiredStatValue;
-        return hasRequierdStatValue;
+        hasRequiredStatValue = requiredStat.getInt("Value") >= requiredStatValue;
+        return hasRequiredStatValue;
     }
     private void optionChosen(VBox optionsVBox, Label dialog, int nextDialogID) {
         // Setting the dialog text box to be the new dialog text

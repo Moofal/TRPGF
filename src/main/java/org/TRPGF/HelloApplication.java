@@ -34,10 +34,12 @@ public class HelloApplication extends Application {
 
         dialog.createDialogBox(1, "Default Content");
         dialog.addOption(1,1,"www",2);
+        dialog.addOption(2,1,"sdfgdg",2);
 
         dialog.createDialogBox(2,"adsd");
-        dialog.addOptionPreviousRequirementEnding(1,2,1,1,"dd","Dex",10,1,1,true,1);
-        dialog.addOption(1,2,"asdasd",1);
+        dialog.addOptionPreviousRewardEnding(1,2,1,1,"+10 dex","Dex",10,1,1,false,1);
+        dialog.addOption(2,2,"asdasd",1);
+        dialog.addOptionWithReward(3,2,"+1 str","Str",1,1);
 
 
         dialog.finishStory();

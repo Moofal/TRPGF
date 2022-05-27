@@ -421,18 +421,18 @@ public class Screen {
           0000 Normal Option
           0001 Normal Ending
           1000 Previous Choice
-          1001 Previous Ending
+          1001 Previous + Ending
           1100 Previous Choice + Requirement
-          1101 Previous + Requirement Ending
+          1101 Previous Choice + Requirement + Ending
           1010 Previous Choice + Reward
-          1011 Previous + Reward Ending
-          1110 Previous + Requirement + Reward Choice
-          1111 Previous + Requirement + Reward Ending
-          0100 Requirement Choice
-          0101 Requirement Ending
-          0110 Requirement Choice + Reward
-          0111 Requirement Choice + Reward Ending
-          0010 Reward Choice
+          1011 Previous Choice + Reward + Ending
+          1110 Previous Choice + Requirement + Reward
+          1111 Previous Choice + Requirement + Reward + Ending
+          0100 Requirement
+          0101 Requirement + Ending
+          0110 Requirement + Reward
+          0111 Requirement  + Reward + Ending
+          0010 Reward
          */
         int nextDialogID = 0;
         int endingScreenID;
@@ -629,6 +629,13 @@ public class Screen {
             case "0010":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
                 updateCharacterJsonWithReward(chosenOptionObject);
+                break;
+            case "0011":
+                nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
+                updateCharacterJsonWithReward(chosenOptionObject);
+                endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
+                setEndingScreen(endingScreenID);
+                ending = true;
                 break;
         }
         if (!ending) {

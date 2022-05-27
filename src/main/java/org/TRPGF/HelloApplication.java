@@ -37,11 +37,7 @@ public class HelloApplication extends Application {
         dialog.addOption(2,1,"sdfgdg",2);
 
         dialog.createDialogBox(2,"adsd");
-        dialog.addOptionPreviousRewardEnding(1,2,1,1,"+10 dex","Dex",10,1,1,false,1);
-        dialog.addOption(2,2,"asdasd",1);
-        dialog.addOptionWithReward(3,2,"+1 str","Str",1,1);
-
-
+        dialog.addOptionWithRewardEnding(1,2,"+10","Dex",10,1,1);
         dialog.finishStory();
 
 

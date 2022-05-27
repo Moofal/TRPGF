@@ -109,6 +109,8 @@ public class Dialog {
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, rewardStat, rewardVal);
         choice.setRewardStat(rewardStat);
         choice.setRewardValue(rewardVal);
+        choice.setStat(null);
+        choice.setStatVal(0);
         choice.setType("1010");
         checkAndAdd(dialog, id, choice);
     }
@@ -118,6 +120,8 @@ public class Dialog {
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
         choice.setRewardStat(rewardStat);
         choice.setRewardValue(rewardVal);
+        choice.setStat(null);
+        choice.setStatVal(0);
         choice.setType("1011");
         checkAndAdd(dialog, id, choice);
     }

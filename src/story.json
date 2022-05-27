@@ -2,7 +2,7 @@
   "ID" : 1,
   "CONTENT" : "Default Content",
   "dialogChoiceList" : [ {
-    "TYPE" : "0000",
+    "TYPE" : "0010",
     "ID" : 1,
     "CONTENT" : "www",
     "END-ON-SUCCESS" : false,
@@ -15,9 +15,9 @@
     "PREV-CHOICE" : 0,
     "PREV-CHOICE-BOX" : 0,
     "STAT" : null,
-    "REWARD-STAT" : null,
+    "REWARD-STAT" : "Dex",
     "STAT-REQ-VAL" : 0,
-    "REWARD-VAL" : 0
+    "REWARD-VAL" : 11
   }, {
     "TYPE" : "0000",
     "ID" : 2,

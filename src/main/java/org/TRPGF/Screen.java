@@ -657,7 +657,17 @@ public class Screen {
             if (Objects.equals(statName,statIncreased)) {
                 requiredStat = characterStats.getJSONObject(i);
                 int currentStatValue = requiredStat.getInt("Value");
-                int newValue = currentStatValue+statIncreasedAmount;
+                int newValue = currentStatValue + statIncreasedAmount;
+
+                int maxValue = requiredStat.getInt("Max Value");
+                int minvalue = requiredStat.getInt("Min Value");
+
+                if (newValue > maxValue) {
+                    newValue = maxValue;
+                }
+                if (newValue<minvalue) {
+                    newValue = minvalue;
+                }
                 requiredStat.put("Value", newValue);
             }
         }

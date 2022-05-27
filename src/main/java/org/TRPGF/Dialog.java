@@ -18,6 +18,7 @@ public class Dialog {
 
     private int id;
     private String content;
+    private String imgUrl;
 
     public Dialog() {
     }
@@ -25,6 +26,11 @@ public class Dialog {
     public Dialog(int id, String content) {
         this.id = id;
         this.content = content;
+    }
+    public Dialog(int id, String content, String imgUrl) {
+        this.id = id;
+        this.content = content;
+        this.imgUrl = imgUrl;
     }
 
     /**
@@ -34,6 +40,11 @@ public class Dialog {
      */
     public void createDialogBox(int id, String content) {
         Dialog dialog = new Dialog(id, content);
+        dialogArrayList.add(dialog);
+
+    }
+    public void createDialogBoxWithImage(int id, String content, String imgUrl) {
+        Dialog dialog = new Dialog(id, content, imgUrl);
         dialogArrayList.add(dialog);
 
     }
@@ -90,7 +101,7 @@ public class Dialog {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
-        choice.setType("1100");
+        choice.setType("1101");
         checkAndAdd(dialog, id, choice);
     }
     public void addOptionPreviousReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int rewardVal, int successDialog, int failDialog) {
@@ -105,7 +116,7 @@ public class Dialog {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, rewardVal, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
-        choice.setType("1010");
+        choice.setType("1011");
         checkAndAdd(dialog, id, choice);
     }
     public void addOptionPreviousRequirementReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardValue, int successDialog, int failDialog) {
@@ -118,7 +129,7 @@ public class Dialog {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal, rewardStat, rewardValue, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
-        choice.setType("1110");
+        choice.setType("1111");
         checkAndAdd(dialog, id, choice);
     }
 
@@ -142,7 +153,7 @@ public class Dialog {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
-        choice.setType("0100");
+        choice.setType("0101");
         checkAndAdd(dialog, id, choice);
     }
     public void addOptionWithRequirementReward(int id, int dialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardVal, int successDialog, int failDialog) {
@@ -155,7 +166,7 @@ public class Dialog {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal, rewardStat, rewardVal, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
-        choice.setType("0110");
+        choice.setType("0111");
         checkAndAdd(dialog, id, choice);
     }
 
@@ -177,7 +188,7 @@ public class Dialog {
     public void addOptionWithRewardEnding(int id, int dialogBoxId, String content, String stat, int rewardVal, int successDialog, int endingScreenId) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, content, dialogBoxId, successDialog, stat, rewardVal, endingScreenId);
-        choice.setType("0010");
+        choice.setType("0011");
         checkAndAdd(dialog, id, choice);
     }
 

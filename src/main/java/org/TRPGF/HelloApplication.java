@@ -28,7 +28,6 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) throws IOException {
-
         Dialog dialog = new Dialog();
 
         // TESTING FOR ALL KNOWN OPTIONS
@@ -39,6 +38,7 @@ public class HelloApplication extends Application {
         dialog.createDialogBox(2,"adsd");
         dialog.addOptionPreviousRequirementEnding(1,2,1,1,"dd","Dex",10,1,1,true,1);
         dialog.addOption(1,2,"asdasd",1);
+
 
         dialog.finishStory();
 

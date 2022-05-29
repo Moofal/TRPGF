@@ -267,6 +267,15 @@ public class Dialog {
         this.content = content;
     }
 
+    @JsonProperty("IMAGE-URL")
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     public ArrayList<Choice> getDialogChoiceList() {
         return dialogChoiceList;
     }

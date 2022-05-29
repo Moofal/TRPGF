@@ -41,6 +41,7 @@ public class Screen {
     // This variable is set here so that both tableScreen an
     // characterScreen can the stat values shown on the tableScreen
     private final VBox characterStatInfo = new VBox();
+    private ImageView dialogImageView;
     private Pane tableScreenLayout;
     private JSONObject currentDialog;
     private JSONArray currentOptions;
@@ -49,8 +50,11 @@ public class Screen {
     private Label optionsText;
     private Label nameLabel;
     private Label statText;
+    private Label dialog;
+    private VBox optionsVBox;
     private Font optionsTextFont = Font.font("Arial",20), statTextFont;
     private Color optionsTextColor, statTextColor;
+
 
 
     /**
@@ -95,7 +99,7 @@ public class Screen {
     }
 
 
-    /*TODO: custom pane, dice checks for options*/
+    /*TODO: custom pane*/
     /**
      * This creates the table screen where the actual game is played.
      * Here the dialog and character info is displayed and choices are made
@@ -123,7 +127,7 @@ public class Screen {
         assert currentDialog != null;
         String dialogString = currentDialog.getString("CONTENT");
 
-        Label dialog = new Label(dialogString);
+        dialog = new Label(dialogString);
         dialog.setFont(Font.font("Arial", 30));
 
         ScrollPane dialogScrollPane = new ScrollPane();
@@ -151,25 +155,23 @@ public class Screen {
         optionsLabel.relocate(15,365);
         optionsLabel.setFont(Font.font("Arial", 20));
 
-        VBox optionsVBox = new VBox();
+        optionsVBox = new VBox();
         optionsVBox.relocate(30,390);
         setCurrentOptions(optionsVBox);
 
-        TextField choice = new TextField();
-        choice.setOnAction(e -> attemptOption(optionsVBox, choice, dialog, currentOptions, currentDialog, dialogText));
-        choice.relocate(20,600);
-
-
-        ImageView dialogImageView = new ImageView();
+        dialogImageView = new ImageView();
         dialogImageView.relocate(640,0);
+        dialogImageView.setFitWidth(640);
+        dialogImageView.setFitHeight(360);
+        dialogImageView.preserveRatioProperty();
         dialogImageView.maxHeight(640);
         dialogImageView.maxWidth(360);
 
-        /* TODO: legg til funksjon som skjekker om next dialog og starting dialog har image link, hvis de har setImage
-        *if (!currentDialog.getString("").isEmpty()) {
-         *   Image dialogImage = new Image("");
-          *  dialogImageView.setImage(dialogImage);
-        }*/
+        setDialogImage(dialogImageView);
+
+        TextField choice = new TextField();
+        choice.setOnAction(e -> attemptOption(choice, dialogText, dialogImageView));
+        choice.relocate(20,600);
 
 
         updateAllCharacterInfoOnTableScreen(tableScreenLayout);
@@ -205,7 +207,7 @@ public class Screen {
         mapBox.setOnAction(e -> displayMapBox(mapName,mapPath));
 
         MenuItem settings = new MenuItem("Settings");
-        settings.setOnAction(e -> displaySettings(dialogScrollPane, dialogHistory, dialog, dialogText, optionsLabel));
+        settings.setOnAction(e -> displaySettings(dialogScrollPane, dialogHistory, dialogText, optionsLabel));
 
         menu.getItems().addAll(dialogHistoryMenuToggle,showImageMenuToggle);
 
@@ -398,7 +400,7 @@ public class Screen {
     }
 
     // Option functions
-    private void attemptOption(VBox optionsVBox, TextField choice, Label dialog, JSONArray currentOptionsJSON, JSONObject currentDialog, Label dialogHistory)  {
+    private void attemptOption(TextField choice, Label dialogHistory, ImageView dialogImageView)  {
         String chosenOption = choice.getText().replaceAll("[^1-3]", "");
         choice.setText("");
 
@@ -406,12 +408,11 @@ public class Screen {
         try {
             index = Integer.parseInt(chosenOption);
         } catch (NumberFormatException e) {
-            System.out.println(e);
             return;
         }
         index -= 1;
         JSONObject chosenOptionObject;
-        try { chosenOptionObject= currentOptionsJSON.getJSONObject(index);} catch (JSONException e) {
+        try { chosenOptionObject = currentOptions.getJSONObject(index);} catch (JSONException e) {
             return;
         }
 
@@ -639,7 +640,7 @@ public class Screen {
                 break;
         }
         if (!ending) {
-            optionChosen(optionsVBox, dialog, nextDialogID);
+            optionChosen(optionsVBox, nextDialogID, dialogImageView);
             updateDialogHistory(currentDialog, dialogHistory, index);
         }
 
@@ -724,7 +725,7 @@ public class Screen {
         hasRequiredStatValue = requiredStat.getInt("Value") >= requiredStatValue;
         return hasRequiredStatValue;
     }
-    private void optionChosen(VBox optionsVBox, Label dialog, int nextDialogID) {
+    private void optionChosen(VBox optionsVBox, int nextDialogID, ImageView dialogImageView) {
         // Setting the dialog text box to be the new dialog text
         JSONObject nextDialogJSON = getDialog(nextDialogID);
 
@@ -740,6 +741,7 @@ public class Screen {
         // This removes the old dialog options text
         optionsVBox.getChildren().clear();
         setCurrentOptions(optionsVBox);
+        setDialogImage(dialogImageView);
     }
     private void changeAttribute(String attributeName, int value) {
         JSONObject character = getCharacterInfo();
@@ -818,6 +820,16 @@ public class Screen {
         return optionsText;
     }
 
+    private void setDialogImage(ImageView dialogImageView) {
+        try {
+            String dialogImageUrl = currentDialog.getString("IMAGE-URL");
+            Image dialogImage = new Image(dialogImageUrl);
+            dialogImageView.setImage(dialogImage);
+        } catch (JSONException ignored) {
+            dialogImageView.setImage(null);
+        }
+    }
+
     // Map box
     /**
      * Adds a map to your game for the player.
@@ -868,7 +880,7 @@ public class Screen {
     /**
      * Adds a settings menu for the screen
      */
-    private void displaySettings(ScrollPane dialogScrollPane, ScrollPane dialogHistory, Label dialog, Label dialogText, Label optionsLabel) {
+    private void displaySettings(ScrollPane dialogScrollPane, ScrollPane dialogHistory, Label dialogText, Label optionsLabel) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         Pane displaySettingsPane = new Pane();
@@ -889,7 +901,7 @@ public class Screen {
 
         Label dialogLabel = new Label("Dialog style");
         dialogLabel.relocate(1,124);
-        dialog.setFont(Font.font("Arial", 15));
+        dialogLabel.setFont(Font.font("Arial", 15));
 
         ComboBox<String> dialogFontBox = new ComboBox<>();
         dialogFontBox.getItems().addAll("Verdana","Helvetica","Times New Roman","Comic Sans MS","Impact"
@@ -1206,7 +1218,7 @@ public class Screen {
 
     /**
      * For creating ending screens, you can have multiple of these.
-     * @param endingScreenId is the id of this endingScreen..
+     * @param endingScreenId is the id of this endingScreen.
      * @param sceneText the text that is shown on this ending screen.
      * @param startOver is a boolean value that lets you dice if you want there to be a staring over button
      *                  that leads to the starting screen.
@@ -1222,6 +1234,11 @@ public class Screen {
 
         arrayOfEndingScreen.put(endingScreen);
     }
+
+    /**
+     * Writes the endings to the JSON file.
+     * This function must be written at the end of the addEndingScreen function.
+     */
     public void finishEndingScreens() {
         writeToEndingScreenJSON(arrayOfEndingScreen);
     }
@@ -1255,7 +1272,10 @@ public class Screen {
 
         Button startOverButton = new Button("Start Over");
         startOverButton.relocate(300, 200);
-        startOverButton.setOnAction(e -> stage.setScene(startingScreen));
+        startOverButton.setOnAction(e -> {
+            optionChosen(optionsVBox,1,dialogImageView);
+            stage.setScene(startingScreen);
+        });
 
         if (startOver) {
             endingPane.getChildren().add(startOverButton);

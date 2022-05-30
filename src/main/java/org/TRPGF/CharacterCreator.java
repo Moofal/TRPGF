@@ -258,7 +258,12 @@ public class CharacterCreator {
 
     private void writeCharacterToJSON(JSONArray stats, JSONArray attributes) {
         JSONObject character = new JSONObject();
-        character.put("Name", getName());
+
+        if (getName() != null) {
+            character.put("Name", getName());
+        } else {
+            character.put("Name", "");
+        }
         character.put("Stats", stats);
         character.put("Attributes", attributes);
 

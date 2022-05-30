@@ -46,8 +46,8 @@ public class HelloApplication extends Application {
 
         CharacterCreator characterCreator = new CharacterCreator();
 
-        characterCreator.setName("B");
-        //characterCreator.addNameOption();
+        //characterCreator.setName("B");
+        characterCreator.addNameOption();
 
         characterCreator.addStat("Dex",0,20);
         characterCreator.setStat("Dex", 10);

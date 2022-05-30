@@ -34,7 +34,6 @@ public class HelloApplication extends Application {
         // TESTING FOR ALL KNOWN OPTIONS
         String path = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7087ef35-84c5-472a-9ac1-c092dd681b70/d313jvn-5b4f00f8-e387-445a-8186-cdb98f203c93.jpg/v1/fill/w_1024,h_768,q_75,strp/middle_earth_map_by_kilbeth-d313jvn.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwic3ViIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl0sIm9iaiI6W1t7InBhdGgiOiIvZi83MDg3ZWYzNS04NGM1LTQ3MmEtOWFjMS1jMDkyZGQ2ODFiNzAvZDMxM2p2bi01YjRmMDBmOC1lMzg3LTQ0NWEtODE4Ni1jZGI5OGYyMDNjOTMuanBnIiwid2lkdGgiOiI8PTEwMjQiLCJoZWlnaHQiOiI8PTc2OCJ9XV19.Ulz1jIp_ifIq6To7pZ-F64LIN7S1tjPvu6wrmiVS-p8";
 
-
         for (int i = 1; i <= 250; i++) {
             dialog.createDialogBox(i, "dialog "+i);
             dialog.addOption(1,i,"Normal dialog",i+1);
@@ -46,11 +45,7 @@ public class HelloApplication extends Application {
         dialog.addOptionPrevious(1, 251, 1, 125, "sda", 1, 50);
         dialog.finishStory();
 
-
-
         CharacterCreator characterCreator = new CharacterCreator();
-
-        //characterCreator.setName("B");
         characterCreator.addNameOption();
 
         characterCreator.addStat("Dex",0,20);

@@ -15,6 +15,10 @@ import java.util.Objects;
  */
 public class CharacterCreator {
 
+    /**
+     * This class lets you decide on what will be on the character creator screen
+     * and what stats / attributes the character wil have and how the values are decided.
+     */
     public CharacterCreator() {
 
     }
@@ -188,7 +192,7 @@ public class CharacterCreator {
     }
 
     /**
-     * Decide that the value of a stat is to be set bu the player
+     * Decide that the value of a stat is to be set by the player
      * @param statName is the name of the stat.
      */
     public void setStatGenerationManual (String statName) {
@@ -201,7 +205,7 @@ public class CharacterCreator {
 
     /**
      * Add A attribute to the character.
-     * Attribute are hidden values the the players can not use but you can manipulate
+     * Attribute are hidden values that the players can not use, but you can manipulate
      * @param attributeName the name of the attribute.
      * @param startingValue the value it starts with.
      */

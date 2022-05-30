@@ -130,7 +130,7 @@ public class CharacterCreator {
         }
     }
 
-    Character character = new Character();
+    private final Character character = new Character();
 
     /**
      * Adding the option for the player to choose a name
@@ -148,7 +148,7 @@ public class CharacterCreator {
         character.setName(name);
     }
 
-    public String getName () {
+    private String getName () {
         return character.name;
     }
 

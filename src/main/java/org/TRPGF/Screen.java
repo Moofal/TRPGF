@@ -838,6 +838,7 @@ public class Screen {
      * Adds a map to your game for the player.
      * The image must be a BMP, GIF, JPEG or PNG.
      * Max height: 640px, max width: 360px.
+     * @param mapName The name of the map
      * @param imageFilePath The file path for the image.
      */
     public void addTableScreenMap(String mapName, String imageFilePath){

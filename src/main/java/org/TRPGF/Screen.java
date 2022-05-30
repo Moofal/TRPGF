@@ -32,6 +32,11 @@ import java.util.Random;
 public class Screen {
 
     private final Stage stage;
+
+    /**
+     * Constructor for the GUI of the framework
+     * @param stage Use the stage object given byt the JavaFX Start class
+     */
     public Screen(Stage stage) {
         this.stage = stage;
     }
@@ -43,10 +48,10 @@ public class Screen {
     private final VBox characterStatInfo = new VBox();
     private ImageView dialogImageView;
     private Pane tableScreenLayout;
-    private JSONObject currentDialog;
     private JSONArray currentOptions;
     private final JSONArray arrayOfEndingScreen = new JSONArray();
 
+    // Are global so that they can be styled without having a function with 10 inputs
     private Label optionsText;
     private Label nameLabel;
     private Label statText;
@@ -54,7 +59,6 @@ public class Screen {
     private VBox optionsVBox;
     private Font optionsTextFont = Font.font("Arial",20), statTextFont;
     private Color optionsTextColor, statTextColor;
-
 
 
     /**
@@ -123,7 +127,7 @@ public class Screen {
         verticalLine.setEndY(720.0f);
 
 
-        currentDialog = getDialog(1);
+        JSONObject currentDialog = getDialog(1);
         assert currentDialog != null;
         String dialogString = currentDialog.getString("CONTENT");
 
@@ -167,10 +171,10 @@ public class Screen {
         dialogImageView.maxHeight(640);
         dialogImageView.maxWidth(360);
 
-        setDialogImage(dialogImageView);
+        setDialogImage(currentDialog, dialogImageView);
 
         TextField choice = new TextField();
-        choice.setOnAction(e -> attemptOption(choice, dialogText, dialogImageView));
+        choice.setOnAction(e -> attemptOption(currentDialog, choice, dialogText, dialogImageView));
         choice.relocate(20,600);
 
 
@@ -305,14 +309,12 @@ public class Screen {
         }
 
         if (Objects.equals(dialogText.getText(), "")) {
+            System.out.println(1);
             dialog = new StringBuilder(currentDialog.getString("CONTENT"));
-
             dialogHistoryObject = new JSONObject();
             JSONArray arrayOfDialog = new JSONArray();
             arrayOfDialog.put(currentDialog);
             dialogHistoryObject.put("Dialog History", arrayOfDialog);
-
-
         } else {
             dialog = new StringBuilder(dialogText.getText());
             dialog.append(currentDialog.getString("CONTENT"));
@@ -400,7 +402,7 @@ public class Screen {
     }
 
     // Option functions
-    private void attemptOption(TextField choice, Label dialogHistory, ImageView dialogImageView)  {
+    private void attemptOption(JSONObject currentDialog,TextField choice, Label dialogHistory, ImageView dialogImageView)  {
         String chosenOption = choice.getText().replaceAll("[^1-3]", "");
         choice.setText("");
 
@@ -734,14 +736,14 @@ public class Screen {
         dialog.setText(dialogString);
 
         // Setting the dialog options to be the options for the new dialog
-        this.currentDialog = getDialog(nextDialogID);
-        assert this.currentDialog != null;
-        currentOptions = this.currentDialog.getJSONArray("dialogChoiceList");
+        JSONObject currentDialog = getDialog(nextDialogID);
+        assert currentDialog != null;
+        currentOptions = currentDialog.getJSONArray("dialogChoiceList");
 
         // This removes the old dialog options text
         optionsVBox.getChildren().clear();
         setCurrentOptions(optionsVBox);
-        setDialogImage(dialogImageView);
+        setDialogImage(currentDialog, dialogImageView);
     }
     private void changeAttribute(String attributeName, int value) {
         JSONObject character = getCharacterInfo();
@@ -820,7 +822,7 @@ public class Screen {
         return optionsText;
     }
 
-    private void setDialogImage(ImageView dialogImageView) {
+    private void setDialogImage(JSONObject currentDialog, ImageView dialogImageView) {
         try {
             String dialogImageUrl = currentDialog.getString("IMAGE-URL");
             Image dialogImage = new Image(dialogImageUrl);
@@ -1097,22 +1099,26 @@ public class Screen {
         TextField characterNameInput = new TextField();
         characterNameInput.relocate(550,300);
 
+        boolean needName = false;
         if (settings.getBoolean("Name Option")) {
+            needName = true;
             characterCreationPane.getChildren().addAll(characterNameInput,characterNameInputLabel);
         }
 
         Button doneButton = new Button("Done");
         doneButton.relocate(630, 400);
 
+        boolean finalNeedName = needName;
         doneButton.setOnAction(e -> {
             errorText.setText("");
-            if (characterNameInput.getText().trim().isEmpty()) {
+            boolean noName = characterNameInput.getText().trim().isEmpty();
+            if (noName && finalNeedName) {
                 errorText.setText("Please make a name");
                 return;
             }
             try {
                 assert character != null;
-                characterCreated(stage, character, characterNameInput, storedArray, errorText);
+                characterCreated(stage, character, characterNameInput, storedArray, errorText, finalNeedName);
                 updateAllCharacterInfoOnTableScreen(tableScreenLayout);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -1178,7 +1184,7 @@ public class Screen {
     }
 
     private void characterCreated(Stage window, JSONObject character, TextField name,
-                                  ArrayList<TextField> storedArray, Text errorText) throws IOException {
+                                  ArrayList<TextField> storedArray, Text errorText, boolean finalNeedName) throws IOException {
         JSONArray stats = character.getJSONArray("Stats");
         for (int i=0; i<stats.length(); i++) {
             JSONObject jsonStat = stats.getJSONObject(i);
@@ -1202,7 +1208,9 @@ public class Screen {
                 return;
             }
         }
-        character.put("Name", name.getText());
+        if (finalNeedName){
+            character.put("Name", name.getText());
+        }
 
         try {
             FileWriter characterFile = new FileWriter("src/Character.json");

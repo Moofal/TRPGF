@@ -4,7 +4,7 @@
   "dialogChoiceList" : [ {
     "TYPE" : "0010",
     "ID" : 1,
-    "CONTENT" : "www",
+    "CONTENT" : "Dex + 11",
     "IMAGE-URL" : null,
     "END-ON-SUCCESS" : false,
     "ENDING-SCREEN-ID" : 0,
@@ -22,7 +22,7 @@
   }, {
     "TYPE" : "0000",
     "ID" : 2,
-    "CONTENT" : "sdfgdg",
+    "CONTENT" : "Normal dialog",
     "IMAGE-URL" : null,
     "END-ON-SUCCESS" : false,
     "ENDING-SCREEN-ID" : 0,
@@ -43,23 +43,23 @@
   "ID" : 2,
   "CONTENT" : "dialog 2",
   "dialogChoiceList" : [ {
-    "TYPE" : "0011",
+    "TYPE" : "0101",
     "ID" : 1,
-    "CONTENT" : "+10",
+    "CONTENT" : "Need 20 Dex",
     "IMAGE-URL" : null,
-    "END-ON-SUCCESS" : false,
+    "END-ON-SUCCESS" : true,
     "ENDING-SCREEN-ID" : 1,
-    "SUCCESS-ENDING-ID" : 0,
+    "SUCCESS-ENDING-ID" : 1,
     "FAIL-ENDING-ID" : 0,
     "BOXID" : 2,
-    "SUCCESS-SCENE" : 1,
-    "FAIL-SCENE" : 0,
+    "SUCCESS-SCENE" : 2,
+    "FAIL-SCENE" : 1,
     "PREV-CHOICE" : 0,
     "PREV-CHOICE-BOX" : 0,
-    "STAT" : null,
-    "REWARD-STAT" : "Dex",
-    "STAT-REQ-VAL" : 0,
-    "REWARD-VAL" : 10
+    "STAT" : "Dex",
+    "REWARD-STAT" : null,
+    "STAT-REQ-VAL" : 20,
+    "REWARD-VAL" : 0
   } ],
   "IMAGE-URL" : "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7087ef35-84c5-472a-9ac1-c092dd681b70/d313jvn-5b4f00f8-e387-445a-8186-cdb98f203c93.jpg/v1/fill/w_1024,h_768,q_75,strp/middle_earth_map_by_kilbeth-d313jvn.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwic3ViIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl0sIm9iaiI6W1t7InBhdGgiOiIvZi83MDg3ZWYzNS04NGM1LTQ3MmEtOWFjMS1jMDkyZGQ2ODFiNzAvZDMxM2p2bi01YjRmMDBmOC1lMzg3LTQ0NWEtODE4Ni1jZGI5OGYyMDNjOTMuanBnIiwid2lkdGgiOiI8PTEwMjQiLCJoZWlnaHQiOiI8PTc2OCJ9XV19.Ulz1jIp_ifIq6To7pZ-F64LIN7S1tjPvu6wrmiVS-p8"
 } ]

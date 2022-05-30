@@ -135,8 +135,17 @@ public class CharacterCreator {
         character.setNameOption(true);
     }
 
+    /**
+     * If you want to decide the name of the player character
+     * Remember to not use this and addNameOption
+     * @param name The name of the player character
+     */
     public void setName (String name) {
         character.setName(name);
+    }
+
+    public String getName () {
+        return character.name;
     }
 
     /**
@@ -200,6 +209,11 @@ public class CharacterCreator {
         character.addAttribute(attributeName, startingValue);
     }
 
+    /**
+     * Write this function when you are done with the character creation.
+     * Must be written bellow the other functions.
+     * Saves all the options to the file that the screen reads from.
+     */
     public void finishCharacter() {
         JSONArray stats = new JSONArray();
         JSONArray attributes = new JSONArray();
@@ -244,7 +258,7 @@ public class CharacterCreator {
 
     private void writeCharacterToJSON(JSONArray stats, JSONArray attributes) {
         JSONObject character = new JSONObject();
-        character.put("Name", "");
+        character.put("Name", getName());
         character.put("Stats", stats);
         character.put("Attributes", attributes);
 

@@ -48,6 +48,7 @@ public class Screen {
     private final VBox characterStatInfo = new VBox();
     private ImageView dialogImageView;
     private Pane tableScreenLayout;
+    private JSONObject currentDialog;
     private JSONArray currentOptions;
     private final JSONArray arrayOfEndingScreen = new JSONArray();
 
@@ -127,7 +128,7 @@ public class Screen {
         verticalLine.setEndY(720.0f);
 
 
-        JSONObject currentDialog = getDialog(1);
+        currentDialog = getDialog(1);
         assert currentDialog != null;
         String dialogString = currentDialog.getString("CONTENT");
 
@@ -309,7 +310,6 @@ public class Screen {
         }
 
         if (Objects.equals(dialogText.getText(), "")) {
-            System.out.println(1);
             dialog = new StringBuilder(currentDialog.getString("CONTENT"));
             dialogHistoryObject = new JSONObject();
             JSONArray arrayOfDialog = new JSONArray();
@@ -689,7 +689,7 @@ public class Screen {
             dialog = arrayOfDialog.getJSONObject(i);
             options = dialog.getJSONArray("dialogChoiceList");
             for (int l=0; l<options.length(); l++) {
-                boxId = options.getJSONObject(i).getInt("BOXID");
+                boxId = options.getJSONObject(l).getInt("BOXID");
                 if (boxId == previousBoxId) {
                         optionId = options.getJSONObject(l).getInt("ID");
                         // This catch exists because the CHOOSEN key is only added  when an option is chosen
@@ -738,6 +738,7 @@ public class Screen {
         // Setting the dialog options to be the options for the new dialog
         JSONObject currentDialog = getDialog(nextDialogID);
         assert currentDialog != null;
+        this.currentDialog = currentDialog;
         currentOptions = currentDialog.getJSONArray("dialogChoiceList");
 
         // This removes the old dialog options text
@@ -837,6 +838,7 @@ public class Screen {
      * Adds a map to your game for the player.
      * The image must be a BMP, GIF, JPEG or PNG.
      * Max height: 640px, max width: 360px.
+     * @param mapName The name of the map
      * @param imageFilePath The file path for the image.
      */
     public void addTableScreenMap(String mapName, String imageFilePath){
@@ -1013,19 +1015,22 @@ public class Screen {
             nameLabel.setFont(Font.font(characterNameLabelFontBox.getValue(),size));
 
             // Text color
-            String textColorString = textColorComboBox.getValue().trim();
-            Color textColor = Color.web(textColorString);
-            if (!Objects.equals(textColor, null)) {
-                optionsTextColor = textColor;
-                statTextColor = textColor;
+            if (!textColorComboBox.getValue().isEmpty()) {
+                String textColorString = textColorComboBox.getValue().trim();
+                Color textColor = Color.web(textColorString);
+                if (!Objects.equals(textColor, null)) {
+                    optionsTextColor = textColor;
+                    statTextColor = textColor;
 
-                dialog.setTextFill(textColor);
-                dialogText.setTextFill(textColor);
-                optionsLabel.setTextFill(textColor);
-                nameLabel.setTextFill(textColor);
-                statText.setTextFill(textColor);
-                optionsText.setTextFill(textColor);
+                    dialog.setTextFill(textColor);
+                    dialogText.setTextFill(textColor);
+                    optionsLabel.setTextFill(textColor);
+                    nameLabel.setTextFill(textColor);
+                    statText.setTextFill(textColor);
+                    optionsText.setTextFill(textColor);
+                }
             }
+
 
             // Background Colors
             String backgroundColorString = backgroundColorComboBox.getValue().trim();

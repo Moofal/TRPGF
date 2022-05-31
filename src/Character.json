@@ -1,1 +1,39 @@
-{"Stats":[{"Min Value":0,"Max Value":20,"Generation Type":"Set","Value":14,"Name":"Dex"},{"Min Value":0,"Max Value":20,"Generation Type":"Set","Value":10,"Name":"Wisdom"},{"Min Value":0,"Max Value":20,"Generation Type":"Set","Value":17,"Name":"Str"},{"Min Value":0,"Max Value":200,"Generation Type":"Set","Value":80,"Name":"Con"}],"Attributes":[{"Value":0,"Name":"Good"}],"Name":"12"}
+{
+  "Stats": [
+    {
+      "Min Value": 0,
+      "Max Value": 20,
+      "Generation Type": "Set",
+      "Value": 10,
+      "Name": "Dex"
+    },
+    {
+      "Min Value": 0,
+      "Max Value": 20,
+      "Generation Type": "Manual",
+      "Value": 2,
+      "Name": "Wisdom"
+    },
+    {
+      "Min Value": 0,
+      "Max Value": 20,
+      "Generation Type": "Set",
+      "Value": 15,
+      "Name": "Str"
+    },
+    {
+      "Min Value": 0,
+      "Max Value": 20,
+      "Generation Type": "Set",
+      "Value": 20,
+      "Name": "Con"
+    }
+  ],
+  "Attributes": [
+    {
+      "Value": 0,
+      "Name": "Good"
+    }
+  ],
+  "Name": "e"
+}

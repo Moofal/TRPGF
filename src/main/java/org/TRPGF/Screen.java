@@ -1198,9 +1198,12 @@ public class Screen {
                 try {
                     int newValue = Integer.parseInt(storedArray.get(i).getText());
                     // Checks if the value of a given stat is wrong
-                    if (newValue < jsonStat.getInt("Min Value") || newValue >jsonStat.getInt("Max Value")) {
+                    int minValue = jsonStat.getInt("Min Value");
+                    int maxValue = jsonStat.getInt("Max Value");
+                    if (newValue < minValue || newValue >maxValue) {
                         String statName = jsonStat.getString("Name");
-                        errorText.setText("The value of "+statName+" is ether too high or too low");
+                        errorText.setText("The value of "+statName+" is ether too high or too low\n" +
+                                          "Must be between "+minValue+" and "+maxValue);
                         return;
                     }
                     jsonStat.put("Value", newValue);

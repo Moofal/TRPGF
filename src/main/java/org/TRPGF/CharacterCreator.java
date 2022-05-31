@@ -76,7 +76,7 @@ public class CharacterCreator {
         }
     }
 
-    private static class Attribute  {
+    private static class Attribute {
         String name;
         int value;
 
@@ -160,6 +160,23 @@ public class CharacterCreator {
      */
     public void addStat (String statName, int minValue, int maxValue) {
         character.addStat(new Stat(statName, minValue, maxValue));
+    }
+
+    /**
+     * For creating a stat and giving it a value in one function
+     * @param statName The name of the stat, case-sensitive!!
+     * @param minValue The lowest value the stat can have
+     * @param maxValue The highest value the stat can have
+     * @param startingValue The value the stat starts with
+     */
+    public void addStat (String statName, int minValue, int maxValue, int startingValue) {
+        character.addStat(new Stat(statName, minValue, maxValue));
+        for (Stat stat: character.getStats()) {
+            if (Objects.equals(stat.getName(), statName)) {
+                stat.setGenerationType("Set");
+                stat.setValue(startingValue);
+            }
+        }
     }
 
     /**

@@ -30,41 +30,7 @@ public class HelloApplication extends Application {
     public static void main(String[] args) {
         Dialog dialog = new Dialog();
 
-        dialog.createDialogBox(1,"You see a bakery and a book store");
-        dialog.addOption(1,1,"Go to the bakery",2);
-        dialog.addOption(2,1,"Go to the book store",4);
-        dialog.addOption(3,1,"go home",7);
 
-        dialog.createDialogBox(2,"You enter the bakery. There are two options for you\n" +
-                                "Cake or sweet roles");
-        dialog.addOption(1,2,"Go for the cake",3);
-        dialog.addOption(2,2,"Go for the sweet roles",3);
-
-        dialog.createDialogBox(3,"Now do you go home \nOr was there something you forgot?");
-        dialog.addOption(1,3,"Go home",7);
-        dialog.addOption(2,3,"Go to the bakery",2);
-        dialog.addOption(3,3,"Go to the book store",4);
-
-        dialog.createDialogBox(4,"You enter the book store, it is big.\n" +
-                                "You will need to look for the right book");
-        dialog.addOptionWithRequirement(1,4,"Look for the right book","Perception",12,5,6);
-
-        dialog.createDialogBox(5,"You Found it, Hurray!");
-        dialog.addOptionPrevious(1,5, 1,2,"Go outside.",7,1);
-
-        dialog.createDialogBox(6,"you did not find the book");
-        dialog.addOption(1,6,"Go outside",3);
-
-        dialog.createDialogBox(7, "You mother ask you to show if you got the cake");
-        dialog.addOptionPreviousEnding(1,7,1,2,"Show the cake",8,1,false,1);
-
-        dialog.createDialogBox(8,"You mother ask you to show if you got the book");
-        dialog.addOptionPreviousEnding(1,8,1,5,"Show the book",9,1,false,2);
-
-        dialog.createDialogBox(9, "You mom thanks you and tells you that you can rest now");
-        dialog.addOptionEnding(1,9,"Go to sleep",3);
-
-        dialog.finishStory();
 
         CharacterCreator characterCreator = CharacterCreator.getSingleInstance();
         characterCreator.addNameOption();

@@ -13,168 +13,74 @@ import java.util.ArrayList;
 @JsonPropertyOrder("TYPE")
 public class Choice extends Dialog {
 
-    private String type;
-    private boolean endOnSuccess;
-    private int endingScreenId;
-    private int successEndingId;
-    private int failEndingId;
-    private int boxId;
-    private int successScene;
-    private int failScene;
+    private int dialogBoxId;
     private int pChoiceId;
     private int pDialogBoxId;
     private String stat;
-    private String rewardStat;
     private int statVal;
+    private String rewardStat;
     private int rewardValue;
+    private int failDialogBoxId;
+    private int successDialogBoxId;
+    private boolean endOnSuccess;
+    private int successEndingId;
+    private int failEndingId;
+    private int endingScreenId;
+    private String type;
 
     Choice() {
     }
 
-    protected Choice(int id, String content, int boxId, int successScene) {
+    protected Choice(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, String stat, int statVal, String rewardStat, int rewardValue, int failDialogBoxId, int successDialogBoxId, boolean endOnSuccess, int endingScreenId) {
         super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-    }
-
-    protected Choice(int id, int boxId, String content, int endingScreenId) {
-        super(id, content);
-        this.boxId = boxId;
-        this.endingScreenId = endingScreenId;
-    }
-
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
+        this.dialogBoxId = dialogBoxId;
         this.pChoiceId = pChoiceId;
         this.pDialogBoxId = pDialogBoxId;
-    }
-
-
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, boolean endOnSuccess, int endingScreenId) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
-        this.pChoiceId = pChoiceId;
-        this.pDialogBoxId = pDialogBoxId;
+        this.stat = stat;
+        this.statVal = statVal;
+        this.rewardStat = rewardStat;
+        this.rewardValue = rewardValue;
+        this.failDialogBoxId = failDialogBoxId;
+        this.successDialogBoxId = successDialogBoxId;
         this.endOnSuccess = endOnSuccess;
         this.endingScreenId = endingScreenId;
     }
-
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
-        this.pChoiceId = pChoiceId;
-        this.pDialogBoxId = pDialogBoxId;
-        this.stat = stat;
-        this.statVal = statVal;
+    protected Choice(int id, int dialogBoxId, String content, int successDialogBoxId) {
+        this(id, dialogBoxId, content, 0, 0, null, 0, null, 0, 0, successDialogBoxId, false, 0);
+    }
+    protected Choice(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, int successDialogBoxId, int failDialogBoxId) {
+        this(id, dialogBoxId, content, pChoiceId, pDialogBoxId, null, 0, null, 0, failDialogBoxId, successDialogBoxId, false, 0);
+    }
+    protected Choice(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, int successDialogBoxId, int failDialogBoxId, boolean endOnSuccess, int endingScreenId) {
+        this(id, dialogBoxId, content, pChoiceId, pDialogBoxId, null, 0, null, 0, failDialogBoxId, successDialogBoxId, endOnSuccess, endingScreenId);
+    }
+    protected Choice(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, String stat, int statVal, int successDialogBoxId, int failDialogBoxId) {
+        this(id, dialogBoxId, content, pChoiceId, pDialogBoxId, stat, statVal, null, 0, failDialogBoxId, successDialogBoxId, false, 0);
+    }
+    protected Choice(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, String stat, int statVal, int successDialogBoxId, int failDialogBoxId,  boolean endOnSuccess, int endingScreenId) {
+        this(id, dialogBoxId, content, pChoiceId, pDialogBoxId, stat, statVal, null, 0, failDialogBoxId, successDialogBoxId, endOnSuccess, endingScreenId);
+    }
+    protected Choice(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, String stat, int statVal, String rewardStat, int rewardVal, int successDialogBoxId, int failDialogBoxId) {
+        this(id, dialogBoxId, content, pChoiceId, pDialogBoxId, stat, statVal, rewardStat, rewardVal, failDialogBoxId, successDialogBoxId, false, 0);
+    }
+    protected Choice(int id, int dialogBoxId, String content, String stat, int statVal, int successDialogBoxId, int failDialogBoxId) {
+        this(id, dialogBoxId, content, 0, 0, stat, statVal, null, 0, failDialogBoxId, successDialogBoxId, false, 0);
+    }
+    protected Choice(int id, int dialogBoxId, String content, String stat, int statVal, int successDialogBoxId, int failDialogBoxId, boolean endOnSuccess, int endingScreenId) {
+        this(id, dialogBoxId, content, 0, 0, stat, statVal, null, 0, failDialogBoxId, successDialogBoxId, endOnSuccess, endingScreenId);
+    }
+    protected Choice(int id, int dialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardVal, int successDialogBoxId, int failDialogBoxId) {
+        this(id, dialogBoxId, content, 0, 0, stat, statVal, rewardStat, rewardVal, failDialogBoxId, successDialogBoxId, false, 0);
+    }
+    protected Choice(int id, int dialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardVal, int successDialogBoxId, int failDialogBoxId, boolean endOnSuccess, int endingScreenId) {
+        this(id, dialogBoxId, content, 0, 0, stat, statVal, rewardStat, rewardVal, failDialogBoxId, successDialogBoxId, endOnSuccess, endingScreenId);
+    }
+    protected Choice(int id, int dialogBoxId, String content, String rewardStat, int rewardValue, int successDialogBoxId) {
+        this(id, dialogBoxId, content, 0, 0, null, 0, rewardStat, rewardValue, 0, successDialogBoxId, false, 0);
     }
 
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal, boolean endOnSuccess, int endingScreenId) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
-        this.pChoiceId = pChoiceId;
-        this.pDialogBoxId = pDialogBoxId;
-        this.stat = stat;
-        this.statVal = statVal;
-        this.endOnSuccess = endOnSuccess;
-        this.endingScreenId = endingScreenId;
-    }
 
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal, String rewardStat, int rewardValue) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
-        this.pChoiceId = pChoiceId;
-        this.pDialogBoxId = pDialogBoxId;
-        this.stat = stat;
-        this.statVal = statVal;
-        this.rewardStat = rewardStat;
-        this.rewardValue = rewardValue;
-    }
-
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, int pChoiceId, int pDialogBoxId, String stat, int statVal, String rewardStat, int rewardValue, boolean endOnSuccess, int endingScreenId) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
-        this.pChoiceId = pChoiceId;
-        this.pDialogBoxId = pDialogBoxId;
-        this.stat = stat;
-        this.statVal = statVal;
-        this.rewardStat = rewardStat;
-        this.rewardValue = rewardValue;
-        this.endOnSuccess = endOnSuccess;
-        this.endingScreenId = endingScreenId;
-    }
-
-    protected Choice(int id, String content, int boxId, int successScene, String rewardStat, int rewardValue) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.rewardStat = rewardStat;
-        this.rewardValue = rewardValue;
-    }
-    protected Choice(int id, String content, int boxId, String rewardStat, int rewardValue, int endingScreenId) {
-        super(id, content);
-        this.boxId = boxId;
-        this.rewardStat = rewardStat;
-        this.rewardValue = rewardValue;
-        this.endingScreenId = endingScreenId;
-    }
-
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, String stat, int statVal) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
-        this.stat = stat;
-        this.statVal = statVal;
-    }
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, String stat, int statVal, boolean endOnSuccess, int endingScreenId) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
-        this.stat = stat;
-        this.statVal = statVal;
-        this.endOnSuccess = endOnSuccess;
-        this.endingScreenId = endingScreenId;
-    }
-
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, String stat, int statVal, String rewardStat, int rewardValue) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
-        this.stat = stat;
-        this.statVal = statVal;
-        this.rewardStat = rewardStat;
-        this.rewardValue = rewardValue;
-    }
-
-    protected Choice(int id, String content, int boxId, int successScene, int failScene, String stat, int statVal, String rewardStat, int rewardValue, boolean endOnSuccess, int endingScreenId) {
-        super(id, content);
-        this.boxId = boxId;
-        this.successScene = successScene;
-        this.failScene = failScene;
-        this.stat = stat;
-        this.statVal = statVal;
-        this.rewardStat = rewardStat;
-        this.rewardValue = rewardValue;
-        this.endOnSuccess = endOnSuccess;
-        this.endingScreenId = endingScreenId;
-    }
-
-    //-----------------------------------Getters and Setters-----------------------------------//
+//-----------------------------------Getters and Setters-----------------------------------//
 
     /**
      * This gets used by Jackson.databind to make JSON Files.
@@ -192,12 +98,12 @@ public class Choice extends Dialog {
      * This gets used by Jackson.databind to make JSON Files.
      */
     @JsonProperty("BOXID")
-    public int getBoxId() {
-        return boxId;
+    public int getDialogBoxId() {
+        return dialogBoxId;
     }
 
-    protected void setBoxId(int boxId) {
-        this.boxId = boxId;
+    protected void setDialogBoxId(int dialogBoxId) {
+        this.dialogBoxId = dialogBoxId;
     }
 
     /**
@@ -264,24 +170,24 @@ public class Choice extends Dialog {
      * This gets used by Jackson.databind to make JSON Files.
      */
     @JsonProperty("SUCCESS-SCENE")
-    public int getSuccessScene() {
-        return successScene;
+    public int getSuccessDialogBoxId() {
+        return successDialogBoxId;
     }
 
-    protected void setSuccessScene(int successScene) {
-        this.successScene = successScene;
+    protected void setSuccessDialogBoxId(int successDialogBoxId) {
+        this.successDialogBoxId = successDialogBoxId;
     }
 
     /**
      * This gets used by Jackson.databind to make JSON Files.
      */
     @JsonProperty("FAIL-SCENE")
-    public int getFailScene() {
-        return failScene;
+    public int getFailDialogBoxId() {
+        return failDialogBoxId;
     }
 
-    protected void setFailScene(int failScene) {
-        this.failScene = failScene;
+    protected void setFailDialogBoxId(int failDialogBoxId) {
+        this.failDialogBoxId = failDialogBoxId;
     }
 
     /**
@@ -363,12 +269,12 @@ public class Choice extends Dialog {
         return "{" +
                 " type=" + type +
                 " id=" + super.getId() +
-                ", boxId=" + boxId +
+                ", boxId=" + dialogBoxId +
                 ", content=" + super.getContent() +
                 ", stat='" + stat + '\'' +
                 ", statVal=" + statVal +
                 ", pChoiceId=" + pChoiceId +
-                ", nextScene=" + successScene +
+                ", nextScene=" + successDialogBoxId +
                 '}';
     }
 }

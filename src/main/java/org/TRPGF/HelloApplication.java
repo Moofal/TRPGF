@@ -28,9 +28,36 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         Dialog dialog = new Dialog();
-        dialog.createDialogBox(1,"");
 
+        /*
+        // TESTING FOR SOME OPTIONS
+        dialog.createDialogBox(1, "Default Content");
+        dialog.addOption(1, 1, "I GO TO 2", 2);
+        dialog.addOption(2, 1, "I GO TO 5", 5);
 
+        dialog.createDialogBox(2, "I AM BOX 2");
+        dialog.addOptionPrevious(1, 2, "Chose 1, in 1", 1, 1,  3, 4);
+        dialog.addOptionPreviousRequirement(2, 2, "CHOSE 1, IN 1, + STAT 15 STR", 1, 1, "Str", 15, 3, 4);
+        dialog.addOptionPreviousReward(3, 2, "CHOSE 1, IN 1, +2 STR", 1, 1, "Str", 2, 3, 4);
+
+        dialog.createDialogBox(3, "GOOD CHOICE");
+        dialog.addOptionWithReward(1, 3, "CON +10", "Con", 10, 6);
+        dialog.createDialogBox(4, "BAD CHOICE");
+        dialog.addOptionEnding(1, 4, "You Died.", 2);
+
+        dialog.createDialogBox(5, "MORE OPTIONS!");
+        dialog.addOptionPreviousRequirementReward(1, 5, "CHOSE 1, IN 1, + STAT 15 STR +2 DEX", 1, 1,  "Str", 15, "Dex", 2, 3, 4);
+        dialog.addOptionWithRequirement(2, 5, "STAT 15 STR", "Str", 15, 3, 4);
+        dialog.addOptionWithRequirementReward(3, 5, "STAT 15 STR, +2 DEX", "Str", 15, "Dex", 2, 3, 4);
+
+        dialog.createDialogBox(6, "GOOD AGAIN!");
+        dialog.addOption(1, 6, "Go back?", 1);
+        //Ending on success means if you meet the requirements then the game will end, likewise you can set it to false and end the game if you do not meet the requirements
+        dialog.addOptionPreviousRequirementEnding(2, 6,  "Chose 1 in 1, >+ 15 Str, ENDING 1", 1, 1, "Str", 15, 1, 1, true, 1);
+
+         */
+
+        // You have to have finishStory last because it compiles all the functions into one datafile for the table screen to display.
         dialog.finishStory();
 
         CharacterCreator characterCreator = CharacterCreator.getSingleInstance();

@@ -28,8 +28,8 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         Dialog dialog = new Dialog();
-        dialog.createDialogBox(1,"");
-
+        dialog.createDialogBox(1,"dialgo 1");
+        dialog.addOptionWithReward(1,1,"+1str","Str",1,1);
 
         dialog.finishStory();
 

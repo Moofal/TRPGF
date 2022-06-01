@@ -1,6 +1,24 @@
 [ {
   "ID" : 1,
-  "CONTENT" : "",
-  "dialogChoiceList" : [ ],
+  "CONTENT" : "dialgo 1",
+  "dialogChoiceList" : [ {
+    "TYPE" : "0010",
+    "ID" : 1,
+    "CONTENT" : "+1str",
+    "IMAGE-URL" : null,
+    "END-ON-SUCCESS" : false,
+    "ENDING-SCREEN-ID" : 0,
+    "SUCCESS-ENDING-ID" : 0,
+    "FAIL-ENDING-ID" : 0,
+    "BOXID" : 1,
+    "SUCCESS-SCENE" : 1,
+    "FAIL-SCENE" : 0,
+    "PREV-CHOICE" : 0,
+    "PREV-CHOICE-BOX" : 0,
+    "STAT" : null,
+    "REWARD-STAT" : "Str",
+    "STAT-REQ-VAL" : 0,
+    "REWARD-VAL" : 1
+  } ],
   "IMAGE-URL" : null
 } ]

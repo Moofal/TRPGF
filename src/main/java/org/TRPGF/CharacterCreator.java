@@ -246,6 +246,24 @@ public class CharacterCreator {
         JSONArray stats = new JSONArray();
         JSONArray attributes = new JSONArray();
 
+        convertCharacterStatsToJSON(stats);
+
+        convertCharacterAttributesToJSON(attributes);
+
+        writeCharacterCreationToJSON(stats);
+        writeCharacterToJSON(stats, attributes);
+    }
+
+    private void convertCharacterAttributesToJSON(JSONArray attributes) {
+        for (Attribute attribute: character.getAttributes()) {
+            JSONObject jsonAttribute = new JSONObject();
+            jsonAttribute.put("Name", attribute.getName());
+            jsonAttribute.put("Value", attribute.getValue());
+            attributes.put(jsonAttribute);
+        }
+    }
+
+    private void convertCharacterStatsToJSON(JSONArray stats) {
         for (Stat stat: character.getStats()) {
             JSONObject jsonStat = new JSONObject();
             jsonStat.put("Max Value",stat.getMaxValue());
@@ -258,16 +276,6 @@ public class CharacterCreator {
             jsonStat.put("Name", stat.getName());
             stats.put(jsonStat);
         }
-
-        for (Attribute attribute: character.getAttributes()) {
-            JSONObject jsonAttribute = new JSONObject();
-            jsonAttribute.put("Name", attribute.getName());
-            jsonAttribute.put("Value", attribute.getValue());
-            attributes.put(jsonAttribute);
-        }
-
-        writeCharacterCreationToJSON(stats);
-        writeCharacterToJSON(stats, attributes);
     }
 
     private void writeCharacterCreationToJSON(JSONArray stats) {

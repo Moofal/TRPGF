@@ -301,7 +301,6 @@ public class Screen {
             FileWriter characterFile = new FileWriter("src/Character.json");
             characterFile.write(character.toString());
             characterFile.close();
-            updateCharacterStatsOnTableScreen(characterStatInfo);
         } catch (IOException e) {
             System.out.println(e+" Could not find Character.json");
         }
@@ -684,6 +683,7 @@ public class Screen {
             }
         }
         writeToCharacterJson(character);
+        updateCharacterStatsOnTableScreen(characterStatInfo);
     }
     private boolean checkIfOptionChosenPreviously(int previousOptionId, int previousBoxId) {
         JSONObject dialogHistory = getDialogHistory();
@@ -1199,6 +1199,7 @@ public class Screen {
 
     private void characterCreated(Stage window, JSONObject character, TextField name,
                                   ArrayList<TextField> storedArray, Text errorText, boolean finalNeedName) throws IOException {
+        // Checks if stats are written correctly
         JSONArray stats = character.getJSONArray("Stats");
         for (int i=0; i<stats.length(); i++) {
             JSONObject jsonStat = stats.getJSONObject(i);
@@ -1225,17 +1226,12 @@ public class Screen {
                 return;
             }
         }
+
         if (finalNeedName){
             character.put("Name", name.getText());
         }
 
-        try {
-            FileWriter characterFile = new FileWriter("src/Character.json");
-            characterFile.write(character.toString());
-            characterFile.close();
-        } catch (IOException e) {
-            errorText.setText(e+" Could not find the Character.json file.");
-        }
+        writeToCharacterJson(character);
 
         window.setScene(tableScene);
     }

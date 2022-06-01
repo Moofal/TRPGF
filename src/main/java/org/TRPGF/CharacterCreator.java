@@ -233,7 +233,7 @@ public class CharacterCreator {
      * @param attributeName the name of the attribute.
      * @param startingValue the value it starts with.
      */
-    public void addAttribute(String attributeName, int startingValue) {
+    protected void addAttribute(String attributeName, int startingValue) {
         character.addAttribute(attributeName, startingValue);
     }
 

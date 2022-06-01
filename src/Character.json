@@ -1,1 +1,1 @@
-{"Stats":[{"Min Value":0,"Max Value":20,"Generation Type":"Set","Value":10,"Name":"Dex"},{"Min Value":0,"Max Value":20,"Generation Type":"Manual","Value":1,"Name":"Wisdom"},{"Min Value":0,"Max Value":20,"Generation Type":"Set","Value":20,"Name":"Str"},{"Min Value":0,"Max Value":20,"Generation Type":"Set","Value":20,"Name":"Con"}],"Attributes":[{"Value":0,"Name":"Good"}],"Name":"d"}
+{"Stats":[{"Min Value":0,"Max Value":20,"Generation Type":"Manual","Value":13,"Name":"Perception"}],"Attributes":[],"Name":"d"}

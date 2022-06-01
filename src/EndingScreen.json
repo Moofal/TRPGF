@@ -1,1 +1,1 @@
-[{"exit":true,"startOver":true,"sceneText":"The end","ID":1},{"exit":false,"startOver":true,"sceneText":"The end 2","ID":2}]
+[{"exit":true,"startOver":true,"sceneText":"You forgot the cake \n do you want try again?","ID":1},{"exit":true,"startOver":true,"sceneText":"You forgot the book \n do you want try again?","ID":2},{"exit":true,"startOver":true,"sceneText":"You did it!","ID":3}]

@@ -521,7 +521,7 @@ public class Screen {
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (hasChosenOption) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                    updateCharacterJsonWithReward(chosenOptionObject);
+                    updateCharacterWithReward(chosenOptionObject);
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
@@ -540,7 +540,7 @@ public class Screen {
                 } else {
                     if (hasChosenOption) {
                         nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                        updateCharacterJsonWithReward(chosenOptionObject);
+                        updateCharacterWithReward(chosenOptionObject);
                     } else {
                         endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
                         setEndingScreen(endingScreenID);
@@ -553,7 +553,7 @@ public class Screen {
                 hasChosenOption = checkIfOptionChosenPreviously(previousOptionId, previousBoxId);
                 if (meetsRequirements && hasChosenOption) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                    updateCharacterJsonWithReward(chosenOptionObject);
+                    updateCharacterWithReward(chosenOptionObject);
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
@@ -573,7 +573,7 @@ public class Screen {
                 } else {
                     if (meetsRequirements && hasChosenOption) {
                         nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                        updateCharacterJsonWithReward(chosenOptionObject);
+                        updateCharacterWithReward(chosenOptionObject);
                     } else {
                         endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
                         setEndingScreen(endingScreenID);
@@ -611,7 +611,7 @@ public class Screen {
             case "0110":
                 if (checkRequirement(chosenOptionObject)) {
                     nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                    updateCharacterJsonWithReward(chosenOptionObject);
+                    updateCharacterWithReward(chosenOptionObject);
                 } else {
                     nextDialogID = chosenOptionObject.getInt("FAIL-SCENE");
                 }
@@ -629,7 +629,7 @@ public class Screen {
                 } else {
                     if (checkRequirement(chosenOptionObject)) {
                         nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                        updateCharacterJsonWithReward(chosenOptionObject);
+                        updateCharacterWithReward(chosenOptionObject);
                     } else {
                         endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
                         setEndingScreen(endingScreenID);
@@ -639,11 +639,11 @@ public class Screen {
                 break;
             case "0010":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                updateCharacterJsonWithReward(chosenOptionObject);
+                updateCharacterWithReward(chosenOptionObject);
                 break;
             case "0011":
                 nextDialogID = chosenOptionObject.getInt("SUCCESS-SCENE");
-                updateCharacterJsonWithReward(chosenOptionObject);
+                updateCharacterWithReward(chosenOptionObject);
                 endingScreenID = chosenOptionObject.getInt("ENDING-SCREEN-ID");
                 setEndingScreen(endingScreenID);
                 ending = true;
@@ -655,7 +655,7 @@ public class Screen {
         }
 
     }
-    private void updateCharacterJsonWithReward(JSONObject chosenOptionObject) {
+    private void updateCharacterWithReward(JSONObject chosenOptionObject) {
         String statIncreased = chosenOptionObject.getString("REWARD-STAT");
         int statIncreasedAmount = chosenOptionObject.getInt("REWARD-VAL");
 
@@ -701,8 +701,8 @@ public class Screen {
                 boxId = options.getJSONObject(l).getInt("BOXID");
                 if (boxId == previousBoxId) {
                         optionId = options.getJSONObject(l).getInt("ID");
-                        // This catch exists because the CHOOSEN key is only added  when an option is chosen
-                        // if the option we are looking at does not have the CHOOSEN key and triggers the exception
+                        // This catch exists because the CHOSEN key is only added  when an option is chosen
+                        // if the option we are looking at does not have the CHOSEN key and triggers the exception
                         // we know that it has not been chosen before
                         try {
                             boolean hasBenChosen = options.getJSONObject(l).getBoolean("CHOSEN");
@@ -1024,7 +1024,7 @@ public class Screen {
             nameLabel.setFont(Font.font(characterNameLabelFontBox.getValue(),size));
 
             // Text color
-            if (!textColorComboBox.getValue().isEmpty()) {
+            if (textColorComboBox.getValue()!=null) {
                 String textColorString = textColorComboBox.getValue().trim();
                 Color textColor = Color.web(textColorString);
                 if (!Objects.equals(textColor, null)) {
@@ -1043,13 +1043,16 @@ public class Screen {
 
             // Background Colors
             String backgroundColorString = backgroundColorComboBox.getValue().trim();
-            Color backgroundColor = Color.web(backgroundColorString);
-            if (!Objects.equals(backgroundColor, null)) {
-                dialogScrollPane.setStyle("-fx-background:" + backgroundColorString);
-                dialogHistory.setStyle("-fx-background:" + backgroundColorString);
-                displaySettingsPane.setStyle("-fx-background-color:" + backgroundColorString);
-                tableScreenLayout.setStyle("-fx-background-color:" + backgroundColorString);
+            if (!backgroundColorString.equals("")) {
+                Color backgroundColor = Color.web(backgroundColorString);
+                if (!Objects.equals(backgroundColor, null)) {
+                    dialogScrollPane.setStyle("-fx-background:" + backgroundColorString);
+                    dialogHistory.setStyle("-fx-background:" + backgroundColorString);
+                    displaySettingsPane.setStyle("-fx-background-color:" + backgroundColorString);
+                    tableScreenLayout.setStyle("-fx-background-color:" + backgroundColorString);
+                }
             }
+
             window.close();
         });
 
@@ -1294,6 +1297,9 @@ public class Screen {
         Button startOverButton = new Button("Start Over");
         startOverButton.relocate(300, 200);
         startOverButton.setOnAction(e -> {
+            JSONObject noHistory = new JSONObject();
+            noHistory.put("Dialog History", new JSONArray());
+            writeToDialogHistory(noHistory);
             optionChosen(optionsVBox,1,dialogImageView);
             stage.setScene(startingScreen);
         });

@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * This class handles everything with dialog.
+ * This class is a constructor class for dialog.
  */
-@JsonPropertyOrder({"ID", "CONTENT", "CHOICES"})
+@JsonPropertyOrder({"ID", "CONTENT", "IMAGE-URL", "CHOICES"})
 public class Dialog {
 
     private ArrayList<Choice> dialogChoiceList = new ArrayList<>();
@@ -65,11 +64,11 @@ public class Dialog {
      * @param id is the id for this current option, option id's are relative, so they have to be in order, and only use 1, 2 or 3.
      * @param dialogBoxId is the id of the dialog it is in relation to.
      * @param content is the text that will be displayed for example: "I will help you innkeeper!"
-     * @param successDialog is the id of the next dialog on a successful choice
+     * @param successDialogBoxId is the id of the next dialog on a successful choice
      */
-    public void addOption(int id, int dialogBoxId, String content, int successDialog) {
+    public void addOption(int id, int dialogBoxId, String content, int successDialogBoxId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog);
+        Choice choice = new Choice(id, dialogBoxId, content, successDialogBoxId);
         choice.setType("0000");
         checkAndAdd(dialog, id, choice);
     }
@@ -83,6 +82,8 @@ public class Dialog {
     public void addOptionEnding(int id, int dialogBoxId, String content, int endingScreenID) {
         Dialog dialog = getDialogById(dialogBoxId);
         Choice choice = new Choice(id, dialogBoxId, content, endingScreenID);
+        choice.setSuccessDialogBoxId(0);
+        choice.setEndingScreenId(endingScreenID);
         choice.setType("0001");
         checkAndAdd(dialog, id, choice);
     }
@@ -91,15 +92,15 @@ public class Dialog {
      * where if you chose A get to go to B, if you did not choose A, you get routed to C
      * @param id is the id for this current option
      * @param dialogBoxId is the id of the dialog it is in relation to.
-     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialog
-     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialogBoxId
+     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      */
-    public void addOptionPrevious(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, int successDialog, int failDialog) {
+    public void addOptionPrevious(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, int successDialogBoxId, int failDialogBoxId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, pChoiceId, pDialogBoxId);
+        Choice choice = new Choice(id, dialogBoxId, content, pChoiceId, pDialogBoxId, successDialogBoxId, failDialogBoxId);
         choice.setType("1000");
         checkAndAdd(dialog, id, choice);
     }
@@ -109,18 +110,18 @@ public class Dialog {
      * this one ends the game based on if you did or did not pass
      * @param id is the id for this current option
      * @param dialogBoxId is the id of the dialog it is in relation to.
-     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialog
-     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialogBoxId
+     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      * @param endOnSuccess is a boolean value where true means the game ends if u clear the requirements,
      *                    false means the game ends if u fail the requirements
      * @param endingScreenId is the id for the ending screen that will be shown
      */
-    public void addOptionPreviousEnding(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, int successDialog, int failDialog, boolean endOnSuccess, int endingScreenId) {
+    public void addOptionPreviousEnding(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, int successDialogBoxId, int failDialogBoxId, boolean endOnSuccess, int endingScreenId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, pChoiceId, pDialogBoxId, endOnSuccess, endingScreenId);
+        Choice choice = new Choice(id, dialogBoxId, content, pChoiceId, pDialogBoxId,  successDialogBoxId, failDialogBoxId, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
         choice.setType("1001");
         checkAndAdd(dialog, id, choice);
@@ -129,17 +130,17 @@ public class Dialog {
      * Creates a dialog with a requirement of a stat having to be greater than or equal to n, in addition to having chosen an option beforehand
      * @param id is the id for this current option
      * @param dialogBoxId is the id of the dialog it is in relation to.
-     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialog
-     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
+     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialogBoxId
+     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param stat is the name of the stat used in character creation, this is case-sensitive!!!
      * @param statVal is the value of what your stat has to be greater than or equal to >=
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      */
-    public void addOptionPreviousRequirement(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog) {
+    public void addOptionPreviousRequirement(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, String stat, int statVal, int successDialogBoxId, int failDialogBoxId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal);
+        Choice choice = new Choice(id, dialogBoxId, content, pChoiceId, pDialogBoxId, stat, statVal, successDialogBoxId, failDialogBoxId);
         choice.setType("1100");
         checkAndAdd(dialog, id, choice);
     }
@@ -148,20 +149,20 @@ public class Dialog {
      * this ends the game
      * @param id is the id for this current option
      * @param dialogBoxId is the id of the dialog it is in relation to.
-     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialog
-     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
+     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialogBoxId
+     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param stat is the name of the stat used in character creation, this is case-sensitive!!!
      * @param statVal is the value of what your stat has to be greater than or equal to >=
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      * @param endOnSuccess is a boolean value where true means the game ends if u clear the requirements,
      *                    false means the game ends if u fail the requirements
      * @param endingScreenId is the id for the ending screen that will be shown
      */
-    public void addOptionPreviousRequirementEnding(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog, boolean endOnSuccess, int endingScreenId) {
+    public void addOptionPreviousRequirementEnding(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, String stat, int statVal, int successDialogBoxId, int failDialogBoxId, boolean endOnSuccess, int endingScreenId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal, endOnSuccess, endingScreenId);
+        Choice choice = new Choice(id, dialogBoxId, content, pChoiceId, pDialogBoxId, stat, statVal, successDialogBoxId, failDialogBoxId, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
         choice.setType("1101");
         checkAndAdd(dialog, id, choice);
@@ -170,18 +171,18 @@ public class Dialog {
      * Creates a dialog with a reward for a stat, if you have chosen a specific option previouslyc
      * @param id is the id for this current option
      * @param dialogBoxId is the id of the dialog it is in relation to.
-     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialog
-     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
+     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialogBoxId
+     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param rewardStat is the name of the stat used in character creation, this is case-sensitive!!!
      *                   this stat will be the one to be rewarded + or -
      * @param rewardVal is the value that the stat will increase or decrease by
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      */
-    public void addOptionPreviousReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String rewardStat, int rewardVal, int successDialog, int failDialog) {
+    public void addOptionPreviousReward(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, String rewardStat, int rewardVal, int successDialogBoxId, int failDialogBoxId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, rewardStat, rewardVal);
+        Choice choice = new Choice(id, dialogBoxId, content, pChoiceId, pDialogBoxId, rewardStat, rewardVal, successDialogBoxId, failDialogBoxId);
         choice.setRewardStat(rewardStat);
         choice.setRewardValue(rewardVal);
         choice.setStat(null);
@@ -194,21 +195,21 @@ public class Dialog {
      * this ends the game
      * @param id is the id for this current option
      * @param dialogBoxId is the id of the dialog it is in relation to.
-     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialog
-     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
+     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialogBoxId
+     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param rewardStat is the name of the stat used in character creation, this is case-sensitive!!!
      *                   this stat will be the one to be rewarded + or -
      * @param rewardVal is the value that the stat will increase or decrease by
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      * @param endOnSuccess is a boolean value where true means the game ends if u clear the requirements,
      *                    false means the game ends if u fail the requirements
      * @param endingScreenId is the id for the ending screen that will be shown
      */
-    public void addOptionPreviousRewardEnding(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String rewardStat, int rewardVal, int successDialog, int failDialog, boolean endOnSuccess, int endingScreenId) {
+    public void addOptionPreviousRewardEnding(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, String rewardStat, int rewardVal, int successDialogBoxId, int failDialogBoxId, boolean endOnSuccess, int endingScreenId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, rewardStat, rewardVal, endOnSuccess, endingScreenId);
+        Choice choice = new Choice(id, dialogBoxId, content, pChoiceId, pDialogBoxId, rewardStat, rewardVal, successDialogBoxId, failDialogBoxId, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
         choice.setRewardStat(rewardStat);
         choice.setRewardValue(rewardVal);
@@ -221,20 +222,20 @@ public class Dialog {
      * Creates an option where you need to have chosen an option previously, and meet the stat requirements for it, with a reward.
      * @param id is the id for this current option
      * @param dialogBoxId is the id of the dialog it is in relation to.
-     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialog
-     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
+     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialogBoxId
+     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param stat is the name of the stat used in character creation, this is case-sensitive!!!
      * @param statVal is the value of what your stat has to be greater than or equal to >=
      * @param rewardStat is the name of the stat used in character creation, this is case-sensitive!!!
      *                   this stat will be the one to be rewarded + or -
      * @param rewardVal is the value that the stat will increase or decrease by
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      */
-    public void addOptionPreviousRequirementReward(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardVal, int successDialog, int failDialog) {
+    public void addOptionPreviousRequirementReward(int id, int dialogBoxId, String content, int pChoiceId, int pDialogBoxId, String stat, int statVal, String rewardStat, int rewardVal, int successDialogBoxId, int failDialogBoxId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal, rewardStat, rewardVal);
+        Choice choice = new Choice(id, dialogBoxId, content, pChoiceId, pDialogBoxId, stat, statVal, rewardStat, rewardVal, successDialogBoxId, failDialogBoxId);
         choice.setType("1110");
         checkAndAdd(dialog, id, choice);
     }
@@ -243,23 +244,23 @@ public class Dialog {
      * this ends the game
      * @param id is the id for this current option
      * @param dialogBoxId is the id of the dialog it is in relation to.
-     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialog
-     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
+     * @param pChoiceId is the id of the previous option having to be chosen for it to go to successDialogBoxId
+     * @param pDialogBoxId is the id of the previous dialog pChoiceId is in relation to
      * @param stat is the name of the stat used in character creation, this is case-sensitive!!!
      * @param statVal is the value of what your stat has to be greater than or equal to >=
      * @param rewardStat is the name of the stat used in character creation, this is case-sensitive!!!
      *                   this stat will be the one to be rewarded + or -
      * @param rewardVal is the value that the stat will increase or decrease by
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      * @param endOnSuccess is a boolean value where true means the game ends if u clear the requirements,
      *                    false means the game ends if u fail the requirements
      * @param endingScreenId is the id for the ending screen that will be shown
      */
-    public void addOptionPreviousRequirementRewardEnding(int id, int dialogBoxId, int pChoiceId, int pDialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardVal, int successDialog, int failDialog, boolean endOnSuccess, int endingScreenId) {
+    public void addOptionPreviousRequirementRewardEnding(int id, int dialogBoxId,  String content, int pChoiceId, int pDialogBoxId, String stat, int statVal, String rewardStat, int rewardVal, int successDialogBoxId, int failDialogBoxId, boolean endOnSuccess, int endingScreenId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog,  pChoiceId, pDialogBoxId, stat, statVal, rewardStat, rewardVal, endOnSuccess, endingScreenId);
+        Choice choice = new Choice(id, dialogBoxId, content, pChoiceId, pDialogBoxId, stat, statVal, rewardStat, rewardVal, failDialogBoxId, successDialogBoxId, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
         choice.setType("1111");
         checkAndAdd(dialog, id, choice);
@@ -271,12 +272,12 @@ public class Dialog {
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
      * @param stat is the name of the stat used in character creation, this is case-sensitive!!!
      * @param statVal is the value of what your stat has to be greater than or equal to >=
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      */
-    public void addOptionWithRequirement(int id, int dialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog) {
+    public void addOptionWithRequirement(int id, int dialogBoxId, String content, String stat, int statVal, int successDialogBoxId, int failDialogBoxId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal);
+        Choice choice = new Choice(id, dialogBoxId, content, stat, statVal, successDialogBoxId, failDialogBoxId);
         choice.setType("0100");
         checkAndAdd(dialog, id, choice);
     }
@@ -288,15 +289,15 @@ public class Dialog {
      * @param content is the text that will be displayed for example: "I chose 1 in dialog 3"
      * @param stat is the name of the stat used in character creation, this is case-sensitive!!!
      * @param statVal is the value of what your stat has to be greater than or equal to >=
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      * @param endOnSuccess is a boolean value where true means the game ends if u clear the requirements,
      *                    false means the game ends if u fail the requirements
      * @param endingScreenId is the id for the ending screen that will be shown
      */
-    public void addOptionWithRequirementEnding(int id, int dialogBoxId, String content, String stat, int statVal, int successDialog, int failDialog, boolean endOnSuccess, int endingScreenId) {
+    public void addOptionWithRequirementEnding(int id, int dialogBoxId, String content, String stat, int statVal, int successDialogBoxId, int failDialogBoxId, boolean endOnSuccess, int endingScreenId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal, endOnSuccess, endingScreenId);
+        Choice choice = new Choice(id, dialogBoxId, content, stat, statVal, successDialogBoxId, failDialogBoxId, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
         choice.setType("0101");
         checkAndAdd(dialog, id, choice);
@@ -311,12 +312,12 @@ public class Dialog {
      * @param rewardStat is the name of the stat used in character creation, this is case-sensitive!!!
      *                   this stat will be the one to be rewarded + or -
      * @param rewardVal is the value that the stat will increase or decrease by
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      */
-    public void addOptionWithRequirementReward(int id, int dialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardVal, int successDialog, int failDialog) {
+    public void addOptionWithRequirementReward(int id, int dialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardVal, int successDialogBoxId, int failDialogBoxId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal, rewardStat, rewardVal);
+        Choice choice = new Choice(id, dialogBoxId, content, stat, statVal, rewardStat, rewardVal, successDialogBoxId, failDialogBoxId);
         choice.setType("0110");
         checkAndAdd(dialog, id, choice);
     }
@@ -331,15 +332,15 @@ public class Dialog {
      * @param rewardStat is the name of the stat used in character creation, this is case-sensitive!!!
      *                   this stat will be the one to be rewarded + or -
      * @param rewardVal is the value that the stat will increase or decrease by
-     * @param successDialog is the next dialog if you clear the requirements
-     * @param failDialog is the next dialog if you did not clear the requirements
+     * @param successDialogBoxId is the next dialog if you clear the requirements
+     * @param failDialogBoxId is the next dialog if you did not clear the requirements
      * @param endOnSuccess is a boolean value where true means the game ends if u clear the requirements,
      *                    false means the game ends if u fail the requirements
      * @param endingScreenId is the id for the ending screen that will be shown
      */
-    public void addOptionWithRequirementRewardEnding(int id, int dialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardVal, int successDialog, int failDialog, boolean endOnSuccess, int endingScreenId) {
+    public void addOptionWithRequirementRewardEnding(int id, int dialogBoxId, String content, String stat, int statVal, String rewardStat, int rewardVal, int successDialogBoxId, int failDialogBoxId, boolean endOnSuccess, int endingScreenId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, failDialog, stat, statVal, rewardStat, rewardVal, endOnSuccess, endingScreenId);
+        Choice choice = new Choice(id, dialogBoxId, content, stat, statVal, rewardStat, rewardVal, failDialogBoxId, successDialogBoxId, endOnSuccess, endingScreenId);
         setEndingType(dialogBoxId, endOnSuccess, endingScreenId, choice);
         choice.setType("0111");
         checkAndAdd(dialog, id, choice);
@@ -352,11 +353,11 @@ public class Dialog {
      * @param rewardStat is the name of the stat used in character creation, this is case-sensitive!!!
      *                   this stat will be the one to be rewarded + or -
      * @param rewardVal is the value that the stat will increase or decrease by
-     * @param successDialog is the next dialog
+     * @param successDialogBoxId is the next dialog
      */
-    public void addOptionWithReward(int id, int dialogBoxId, String content, String rewardStat, int rewardVal, int successDialog) {
+    public void addOptionWithReward(int id, int dialogBoxId, String content, String rewardStat, int rewardVal, int successDialogBoxId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, successDialog, rewardStat, rewardVal);
+        Choice choice = new Choice(id, dialogBoxId, content, rewardStat, rewardVal, successDialogBoxId);
         choice.setType("0010");
         checkAndAdd(dialog, id, choice);
     }
@@ -373,7 +374,9 @@ public class Dialog {
      */
     public void addOptionWithRewardEnding(int id, int dialogBoxId, String content, String rewardStat, int rewardVal, int endingScreenId) {
         Dialog dialog = getDialogById(dialogBoxId);
-        Choice choice = new Choice(id, content, dialogBoxId, rewardStat, rewardVal, endingScreenId);
+        Choice choice = new Choice(id, dialogBoxId, content, rewardStat, rewardVal, endingScreenId);
+        choice.setSuccessDialogBoxId(0);
+        choice.setEndingScreenId(endingScreenId);
         choice.setType("0011");
         checkAndAdd(dialog, id, choice);
     }
@@ -413,10 +416,10 @@ public class Dialog {
     private void setEndingType(int dialogBoxId, boolean endOnSuccess, int endingScreenId, Choice choice) {
         if (endOnSuccess) {
             choice.setSuccessEndingId(endingScreenId);
-            choice.setSuccessScene(dialogBoxId);
+            choice.setSuccessDialogBoxId(dialogBoxId);
         } else {
             choice.setFailEndingId(endingScreenId);
-            choice.setFailScene(dialogBoxId);
+            choice.setFailDialogBoxId(dialogBoxId);
         }
     }
 
@@ -436,6 +439,8 @@ public class Dialog {
     }
 
 
+    //-----------------------------------Getters and Setters-----------------------------------//
+
     /**
      * This gets used by Jackson.databind to make JSON Files.
      */
@@ -443,11 +448,11 @@ public class Dialog {
     public int getId() {
         return id;
     }
-    //-----------------------------------Getters and Setters-----------------------------------//
 
     protected void setId(int id) {
         this.id = id;
     }
+
     /**
      * This gets used by Jackson.databind to make JSON Files.
      */
@@ -459,6 +464,7 @@ public class Dialog {
     protected void setContent(String content) {
         this.content = content;
     }
+
     /**
      * This gets used by Jackson.databind to make JSON Files.
      */
@@ -470,6 +476,7 @@ public class Dialog {
     protected void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
     /**
      * This gets used by Jackson.databind to make JSON Files.
      */

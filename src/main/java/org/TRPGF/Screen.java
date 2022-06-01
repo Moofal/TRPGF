@@ -33,12 +33,21 @@ public class Screen {
 
     private final Stage stage;
 
+    private static Screen singleScreenInstance = null;
+
+    private Screen(Stage stage) {
+        this.stage = stage;
+    }
+
     /**
-     * Constructor for the GUI of the framework
+     * Returns the single instance of the constructor for the GUI of the framework
      * @param stage Use the stage object given byt the JavaFX Start class
      */
-    public Screen(Stage stage) {
-        this.stage = stage;
+    public static Screen getSingleInstance(Stage stage) {
+        if (singleScreenInstance == null) {
+            singleScreenInstance = new Screen(stage);
+        }
+        return singleScreenInstance;
     }
 
     private Scene startingScreen, tableScene, characterCreatorScreen, endingScreen;

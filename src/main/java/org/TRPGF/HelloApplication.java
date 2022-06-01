@@ -2,14 +2,12 @@ package org.TRPGF;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 
 public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        Screen screen = new Screen(stage);
+        Screen screen = Screen.getSingleInstance(stage);
 
         screen.startingScreen("Kråkevisa", "The man went into the woods\n" +
                 "Hey fara into the woods\n" +
@@ -35,7 +33,7 @@ public class HelloApplication extends Application {
 
         dialog.finishStory();
 
-        CharacterCreator characterCreator = new CharacterCreator();
+        CharacterCreator characterCreator = CharacterCreator.getSingleInstance();
 
         characterCreator.setName("B");
         characterCreator.addNameOption();

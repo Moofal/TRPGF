@@ -1,1 +1,220 @@
-{"Dialog History":[{"IMAGE-URL":null,"dialogChoiceList":[{"IMAGE-URL":null,"FAIL-ENDING-ID":0,"BOXID":1,"FAIL-SCENE":0,"CHOSEN":true,"ENDING-SCREEN-ID":0,"STAT-REQ-VAL":0,"PREV-CHOICE":0,"PREV-CHOICE-BOX":0,"SUCCESS-ENDING-ID":0,"STAT":null,"REWARD-STAT":null,"END-ON-SUCCESS":false,"REWARD-VAL":0,"ID":1,"CONTENT":"1.1","SUCCESS-SCENE":3,"TYPE":"0000"}],"ID":1,"CONTENT":"Default Content"},{"IMAGE-URL":null,"dialogChoiceList":[{"IMAGE-URL":null,"FAIL-ENDING-ID":0,"BOXID":3,"FAIL-SCENE":0,"CHOSEN":true,"ENDING-SCREEN-ID":0,"STAT-REQ-VAL":0,"PREV-CHOICE":0,"PREV-CHOICE-BOX":0,"SUCCESS-ENDING-ID":0,"STAT":null,"REWARD-STAT":null,"END-ON-SUCCESS":false,"REWARD-VAL":0,"ID":1,"CONTENT":"1.3","SUCCESS-SCENE":2,"TYPE":"0000"}],"ID":2,"CONTENT":"content 2"},{"IMAGE-URL":null,"dialogChoiceList":[{"IMAGE-URL":null,"FAIL-ENDING-ID":0,"BOXID":2,"FAIL-SCENE":0,"CHOSEN":true,"ENDING-SCREEN-ID":0,"STAT-REQ-VAL":0,"PREV-CHOICE":0,"PREV-CHOICE-BOX":0,"SUCCESS-ENDING-ID":0,"STAT":null,"REWARD-STAT":null,"END-ON-SUCCESS":false,"REWARD-VAL":0,"ID":1,"CONTENT":"","SUCCESS-SCENE":1,"TYPE":"0000"}],"ID":3,"CONTENT":"asd"},{"IMAGE-URL":null,"dialogChoiceList":[{"IMAGE-URL":null,"FAIL-ENDING-ID":0,"BOXID":1,"FAIL-SCENE":0,"CHOSEN":true,"ENDING-SCREEN-ID":0,"STAT-REQ-VAL":0,"PREV-CHOICE":0,"PREV-CHOICE-BOX":0,"SUCCESS-ENDING-ID":0,"STAT":null,"REWARD-STAT":null,"END-ON-SUCCESS":false,"REWARD-VAL":0,"ID":1,"CONTENT":"1.1","SUCCESS-SCENE":3,"TYPE":"0000"}],"ID":1,"CONTENT":"Default Content"},{"IMAGE-URL":null,"dialogChoiceList":[{"IMAGE-URL":null,"FAIL-ENDING-ID":0,"BOXID":3,"FAIL-SCENE":0,"CHOSEN":true,"ENDING-SCREEN-ID":0,"STAT-REQ-VAL":0,"PREV-CHOICE":0,"PREV-CHOICE-BOX":0,"SUCCESS-ENDING-ID":0,"STAT":null,"REWARD-STAT":null,"END-ON-SUCCESS":false,"REWARD-VAL":0,"ID":1,"CONTENT":"1.3","SUCCESS-SCENE":2,"TYPE":"0000"}],"ID":2,"CONTENT":"content 2"},{"IMAGE-URL":null,"dialogChoiceList":[{"IMAGE-URL":null,"FAIL-ENDING-ID":0,"BOXID":2,"FAIL-SCENE":0,"CHOSEN":true,"ENDING-SCREEN-ID":0,"STAT-REQ-VAL":0,"PREV-CHOICE":0,"PREV-CHOICE-BOX":0,"SUCCESS-ENDING-ID":0,"STAT":null,"REWARD-STAT":null,"END-ON-SUCCESS":false,"REWARD-VAL":0,"ID":1,"CONTENT":"","SUCCESS-SCENE":1,"TYPE":"0000"}],"ID":3,"CONTENT":"asd"},{"IMAGE-URL":null,"dialogChoiceList":[{"IMAGE-URL":null,"FAIL-ENDING-ID":0,"BOXID":1,"FAIL-SCENE":0,"CHOSEN":true,"ENDING-SCREEN-ID":0,"STAT-REQ-VAL":0,"PREV-CHOICE":0,"PREV-CHOICE-BOX":0,"SUCCESS-ENDING-ID":0,"STAT":null,"REWARD-STAT":null,"END-ON-SUCCESS":false,"REWARD-VAL":0,"ID":1,"CONTENT":"1.1","SUCCESS-SCENE":3,"TYPE":"0000"}],"ID":1,"CONTENT":"Default Content"},{"IMAGE-URL":null,"dialogChoiceList":[{"IMAGE-URL":null,"FAIL-ENDING-ID":0,"BOXID":3,"FAIL-SCENE":0,"CHOSEN":true,"ENDING-SCREEN-ID":0,"STAT-REQ-VAL":0,"PREV-CHOICE":0,"PREV-CHOICE-BOX":0,"SUCCESS-ENDING-ID":0,"STAT":null,"REWARD-STAT":null,"END-ON-SUCCESS":false,"REWARD-VAL":0,"ID":1,"CONTENT":"1.3","SUCCESS-SCENE":2,"TYPE":"0000"}],"ID":2,"CONTENT":"content 2"}]}
+{
+  "Dialog History": [
+    {
+      "IMAGE-URL": null,
+      "dialogChoiceList": [
+        {
+          "IMAGE-URL": null,
+          "FAIL-ENDING-ID": 0,
+          "BOXID": 1,
+          "FAIL-SCENE": 0,
+          "CHOSEN": true,
+          "ENDING-SCREEN-ID": 0,
+          "STAT-REQ-VAL": 0,
+          "PREV-CHOICE": 0,
+          "PREV-CHOICE-BOX": 0,
+          "SUCCESS-ENDING-ID": 0,
+          "STAT": null,
+          "REWARD-STAT": null,
+          "END-ON-SUCCESS": false,
+          "REWARD-VAL": 0,
+          "ID": 1,
+          "CONTENT": "1.1",
+          "SUCCESS-SCENE": 3,
+          "TYPE": "0000"
+        }
+      ],
+      "ID": 1,
+      "CONTENT": "Default Content"
+    },
+    {
+      "IMAGE-URL": null,
+      "dialogChoiceList": [
+        {
+          "IMAGE-URL": null,
+          "FAIL-ENDING-ID": 0,
+          "BOXID": 3,
+          "FAIL-SCENE": 0,
+          "CHOSEN": true,
+          "ENDING-SCREEN-ID": 0,
+          "STAT-REQ-VAL": 0,
+          "PREV-CHOICE": 0,
+          "PREV-CHOICE-BOX": 0,
+          "SUCCESS-ENDING-ID": 0,
+          "STAT": null,
+          "REWARD-STAT": null,
+          "END-ON-SUCCESS": false,
+          "REWARD-VAL": 0,
+          "ID": 1,
+          "CONTENT": "1.3",
+          "SUCCESS-SCENE": 2,
+          "TYPE": "0000"
+        }
+      ],
+      "ID": 2,
+      "CONTENT": "content 2"
+    },
+    {
+      "IMAGE-URL": null,
+      "dialogChoiceList": [
+        {
+          "IMAGE-URL": null,
+          "FAIL-ENDING-ID": 0,
+          "BOXID": 2,
+          "FAIL-SCENE": 0,
+          "CHOSEN": true,
+          "ENDING-SCREEN-ID": 0,
+          "STAT-REQ-VAL": 0,
+          "PREV-CHOICE": 0,
+          "PREV-CHOICE-BOX": 0,
+          "SUCCESS-ENDING-ID": 0,
+          "STAT": null,
+          "REWARD-STAT": null,
+          "END-ON-SUCCESS": false,
+          "REWARD-VAL": 0,
+          "ID": 1,
+          "CONTENT": "",
+          "SUCCESS-SCENE": 1,
+          "TYPE": "0000"
+        }
+      ],
+      "ID": 3,
+      "CONTENT": "asd"
+    },
+    {
+      "IMAGE-URL": null,
+      "dialogChoiceList": [
+        {
+          "IMAGE-URL": null,
+          "FAIL-ENDING-ID": 0,
+          "BOXID": 1,
+          "FAIL-SCENE": 0,
+          "CHOSEN": true,
+          "ENDING-SCREEN-ID": 0,
+          "STAT-REQ-VAL": 0,
+          "PREV-CHOICE": 0,
+          "PREV-CHOICE-BOX": 0,
+          "SUCCESS-ENDING-ID": 0,
+          "STAT": null,
+          "REWARD-STAT": null,
+          "END-ON-SUCCESS": false,
+          "REWARD-VAL": 0,
+          "ID": 1,
+          "CONTENT": "1.1",
+          "SUCCESS-SCENE": 3,
+          "TYPE": "0000"
+        }
+      ],
+      "ID": 1,
+      "CONTENT": "Default Content"
+    },
+    {
+      "IMAGE-URL": null,
+      "dialogChoiceList": [
+        {
+          "IMAGE-URL": null,
+          "FAIL-ENDING-ID": 0,
+          "BOXID": 3,
+          "FAIL-SCENE": 0,
+          "CHOSEN": true,
+          "ENDING-SCREEN-ID": 0,
+          "STAT-REQ-VAL": 0,
+          "PREV-CHOICE": 0,
+          "PREV-CHOICE-BOX": 0,
+          "SUCCESS-ENDING-ID": 0,
+          "STAT": null,
+          "REWARD-STAT": null,
+          "END-ON-SUCCESS": false,
+          "REWARD-VAL": 0,
+          "ID": 1,
+          "CONTENT": "1.3",
+          "SUCCESS-SCENE": 2,
+          "TYPE": "0000"
+        }
+      ],
+      "ID": 2,
+      "CONTENT": "content 2"
+    },
+    {
+      "IMAGE-URL": null,
+      "dialogChoiceList": [
+        {
+          "IMAGE-URL": null,
+          "FAIL-ENDING-ID": 0,
+          "BOXID": 2,
+          "FAIL-SCENE": 0,
+          "CHOSEN": true,
+          "ENDING-SCREEN-ID": 0,
+          "STAT-REQ-VAL": 0,
+          "PREV-CHOICE": 0,
+          "PREV-CHOICE-BOX": 0,
+          "SUCCESS-ENDING-ID": 0,
+          "STAT": null,
+          "REWARD-STAT": null,
+          "END-ON-SUCCESS": false,
+          "REWARD-VAL": 0,
+          "ID": 1,
+          "CONTENT": "",
+          "SUCCESS-SCENE": 1,
+          "TYPE": "0000"
+        }
+      ],
+      "ID": 3,
+      "CONTENT": "asd"
+    },
+    {
+      "IMAGE-URL": null,
+      "dialogChoiceList": [
+        {
+          "IMAGE-URL": null,
+          "FAIL-ENDING-ID": 0,
+          "BOXID": 1,
+          "FAIL-SCENE": 0,
+          "CHOSEN": true,
+          "ENDING-SCREEN-ID": 0,
+          "STAT-REQ-VAL": 0,
+          "PREV-CHOICE": 0,
+          "PREV-CHOICE-BOX": 0,
+          "SUCCESS-ENDING-ID": 0,
+          "STAT": null,
+          "REWARD-STAT": null,
+          "END-ON-SUCCESS": false,
+          "REWARD-VAL": 0,
+          "ID": 1,
+          "CONTENT": "1.1",
+          "SUCCESS-SCENE": 3,
+          "TYPE": "0000"
+        }
+      ],
+      "ID": 1,
+      "CONTENT": "Default Content"
+    },
+    {
+      "IMAGE-URL": null,
+      "dialogChoiceList": [
+        {
+          "IMAGE-URL": null,
+          "FAIL-ENDING-ID": 0,
+          "BOXID": 3,
+          "FAIL-SCENE": 0,
+          "CHOSEN": true,
+          "ENDING-SCREEN-ID": 0,
+          "STAT-REQ-VAL": 0,
+          "PREV-CHOICE": 0,
+          "PREV-CHOICE-BOX": 0,
+          "SUCCESS-ENDING-ID": 0,
+          "STAT": null,
+          "REWARD-STAT": null,
+          "END-ON-SUCCESS": false,
+          "REWARD-VAL": 0,
+          "ID": 1,
+          "CONTENT": "1.3",
+          "SUCCESS-SCENE": 2,
+          "TYPE": "0000"
+        }
+      ],
+      "ID": 2,
+      "CONTENT": "content 2"
+    }
+  ]
+}

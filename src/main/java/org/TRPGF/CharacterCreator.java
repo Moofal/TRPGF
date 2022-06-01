@@ -15,12 +15,19 @@ import java.util.Objects;
  */
 public class CharacterCreator {
 
+    private static CharacterCreator singleInstance = null;
+
+    private CharacterCreator() {}
+
     /**
      * This class lets you decide on what will be on the character creator screen
      * and what stats / attributes the character wil have and how the values are decided.
      */
-    public CharacterCreator() {
+    public static CharacterCreator getSingleInstance() {
+        if (singleInstance == null)
+            singleInstance = new CharacterCreator();
 
+        return singleInstance;
     }
 
     private static class Stat {

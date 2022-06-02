@@ -213,21 +213,26 @@ public class Screen {
 
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
 
-        assert tableScreenSettings != null;
-        String mapPath = tableScreenSettings.getString("Map");
-        String mapName = tableScreenSettings.getString("Map Name");
 
-        MenuItem mapBox = new MenuItem("Map");
-        mapBox.setOnAction(e -> displayMapBox(mapName,mapPath));
+        if (tableScreenSettings != null) {
+            String mapPath = tableScreenSettings.getString("Map");
+            String mapName = tableScreenSettings.getString("Map Name");
+
+            MenuItem mapBox = new MenuItem("Map");
+            mapBox.setOnAction(e -> displayMapBox(mapName,mapPath));
+            if (!Objects.equals(mapPath,"")) {
+                menu.getItems().add(mapBox);
+            }
+        }
+
+
 
         MenuItem settings = new MenuItem("Settings");
         settings.setOnAction(e -> displaySettings(dialogScrollPane, dialogHistory, dialogText, optionsLabel));
 
         menu.getItems().addAll(dialogHistoryMenuToggle,showImageMenuToggle);
+        menu.getItems().addAll(separatorMenuItem, settings);
 
-        if (!Objects.equals(mapPath,"")) {
-            menu.getItems().addAll(separatorMenuItem,mapBox, settings);
-        }
 
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(menu);

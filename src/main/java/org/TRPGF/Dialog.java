@@ -7,10 +7,13 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * This class is a constructor class for dialog.
+ * This class handles everything to do with Dialog.
  */
 @JsonPropertyOrder({"ID", "CONTENT", "IMAGE-URL", "CHOICES"})
 public class Dialog {
+
+    private static Dialog singleInstance = null;
+
 
     private ArrayList<Choice> dialogChoiceList = new ArrayList<>();
     private ArrayList<Dialog> dialogArrayList = new ArrayList<>();
@@ -19,20 +22,22 @@ public class Dialog {
     private String content;
     private String imgUrl;
 
-    /**
-     * This instances a new dialog which you have to use for all the options and dialog.
-     */
-    public Dialog() {
+    protected Dialog() {
     }
 
     protected Dialog(int id, String content) {
         this.id = id;
         this.content = content;
     }
-    private Dialog(int id, String content, String imgUrl) {
-        this.id = id;
-        this.content = content;
-        this.imgUrl = imgUrl;
+
+    /**
+     * This instances a new dialog which you have to use for all the options and dialog.
+     */
+    public static Dialog getSingleInstance() {
+        if (singleInstance == null)
+            singleInstance = new Dialog();
+
+        return singleInstance;
     }
 
     //Dialog
@@ -53,9 +58,9 @@ public class Dialog {
      * @param imgUrl is the absolute path for an image
      */
     public void createDialogBoxWithImage(int id, String content, String imgUrl) {
-        Dialog dialog = new Dialog(id, content, imgUrl);
+        Dialog dialog = new Dialog(id, content);
+        dialog.setImgUrl(imgUrl);
         dialogArrayList.add(dialog);
-
     }
 
     // Options

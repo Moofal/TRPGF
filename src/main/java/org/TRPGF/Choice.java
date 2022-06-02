@@ -45,6 +45,7 @@ public class Choice extends Dialog {
         this.endOnSuccess = endOnSuccess;
         this.endingScreenId = endingScreenId;
     }
+
     protected Choice(int id, int dialogBoxId, String content, int successDialogBoxId) {
         this(id, dialogBoxId, content, 0, 0, null, 0, null, 0, 0, successDialogBoxId, false, 0);
     }
@@ -248,6 +249,16 @@ public class Choice extends Dialog {
 
     protected void setRewardStat(String rewardStat) {
         this.rewardStat = rewardStat;
+    }
+
+    @JsonIgnore @Override
+    public String getImgUrl() {
+        return super.getImgUrl();
+    }
+
+    @JsonIgnore @Override
+    protected void setImgUrl(String imgUrl) {
+        super.setImgUrl(imgUrl);
     }
 
     /**

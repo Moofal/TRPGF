@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"org.TRPGF","l":"CharacterCreator"},{"p":"org.TRPGF","l":"Choice"},{"p":"org.TRPGF","l":"Dialog"},{"p":"org.TRPGF","l":"Screen"}];updateSearchResults();
